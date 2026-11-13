@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
+import { RefreshDouble } from 'iconoir-react';
+import { CORE_SNIPPET } from '../data';
+import { Code, CopyButton, GitHubIcon, REPO } from '../ui';
 import { Burst } from './Burst';
-import { CopyButton, GitHubIcon, REPO } from '../ui';
 
 /**
  * The ending: the one line, the one command, and the burst.
  *
- * The burst waits until the section is properly on screen, so it arrives as
- * an answer to the line rather than as decoration somewhere off to the side.
- * Pressing the button throws it again — the same reflex a demo button should
- * have.
+ * Three things, each with its own job and its own affordance: the command to
+ * copy, a button to throw the blobs again because that is the fun part, and a
+ * plain link to the source. The burst is a toy, so its button looks like a toy;
+ * the repo is a link, so it gets the mark and a link's own treatment.
+ *
+ * The burst waits until the section is properly on screen, so it arrives as an
+ * answer to the line rather than as decoration off to the side.
  */
 export function Ending() {
   const ref = useRef<HTMLElement>(null);
@@ -39,16 +44,22 @@ export function Ending() {
 
       <div className="fin">
         <h2>Two lines is all it takes.</h2>
+        {/* The claim, then the evidence: the two lines, rather than asking the
+            reader to take "two lines" on faith. */}
+        <Code code={CORE_SNIPPET} className="fin-code" />
         <div className="cta">
           <CopyButton className="btn primary code" text="npm i blobbies" label="npm i blobbies" />
           <button type="button" className="btn" onClick={() => setRun((n) => n + 1)}>
-            <GitHubIcon /> Throw them again
+            <RefreshDouble width={15} height={15} aria-hidden="true" /> Throw them again
           </button>
         </div>
         <p className="meta">
-          MIT · no dependencies ·{' '}
+          <span>MIT</span>
+          <i aria-hidden="true">·</i>
+          <span>No dependencies</span>
+          <i aria-hidden="true">·</i>
           <a href={REPO} target="_blank" rel="noreferrer">
-            SouravInsights/blobbies
+            <GitHubIcon size={13} /> SouravInsights/blobbies
           </a>
         </p>
       </div>

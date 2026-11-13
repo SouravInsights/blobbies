@@ -97,6 +97,7 @@ export function Film() {
             <p>Same name, same face — at any size, on any device.</p>
           </div>
           <div className="film-beat" style={{ '--in': 0.68, '--out': 1.4 } as CSSProperties}>
+            <h3>How many are there?</h3>
             <p className="film-number" data-count-to={TOTAL}>
               0
             </p>
@@ -104,6 +105,7 @@ export function Film() {
               {BUILDS.toLocaleString('en-US')} builds × {EYE_PAIRS.toLocaleString('en-US')} eye pairs,
               before the rotation and the offset.
             </p>
+            <p className="film-quiet">Far more than you will ever need.</p>
           </div>
         </div>
       </div>

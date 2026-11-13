@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Check, Copy, Github, MoonSat, SunLight } from 'iconoir-react';
 import { LETTER_PATHS, STROKE_WIDTH, INK_COLOR, LETTER_BOX } from 'blobbies';
+import { highlight, highlightShell } from './highlight';
 
 export const REPO = 'https://github.com/SouravInsights/blobbies';
 
@@ -46,6 +47,26 @@ export function CopyButton(props: { text: string; label: string; className?: str
       )}
       {state === 'idle' ? label : state === 'copied' ? 'Copied' : 'Copy failed'}
     </button>
+  );
+}
+
+/** A highlighted code block. Plain text where there is nothing to say. */
+export function Code({ code, lang = 'ts', className }: { code: string; lang?: 'ts' | 'sh'; className?: string }) {
+  const tokens = useMemo(() => (lang === 'sh' ? highlightShell(code) : highlight(code)), [code, lang]);
+  return (
+    <pre className={className ? `code ${className}` : 'code'}>
+      <code>
+        {tokens.map((token, i) =>
+          token.cls ? (
+            <span key={i} className={token.cls}>
+              {token.text}
+            </span>
+          ) : (
+            token.text
+          ),
+        )}
+      </code>
+    </pre>
   );
 }
 

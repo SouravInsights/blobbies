@@ -86,14 +86,14 @@ export function Hero() {
 
       <div className="hello" ref={copyRef}>
         <h1>Any name becomes a face.</h1>
-        <p className="lede">The same name always draws the same one.</p>
+        <p className="lede">Same name, same face. Every time.</p>
         <div className="cta">
           <CopyButton className="btn primary code" text="npm i blobbies" label="npm i blobbies" />
           <a className="btn" href={REPO} target="_blank" rel="noreferrer">
             <GitHubIcon /> Source
           </a>
         </div>
-        <p className="meta">No dependencies · TypeScript · MIT</p>
+        <p className="meta">Deterministic SVG avatars · zero dependencies · 1.4 KB each</p>
       </div>
 
       <span className="cue" aria-hidden="true" />

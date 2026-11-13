@@ -584,24 +584,52 @@ main > * {
   letter-spacing: -0.028em;
   text-wrap: balance;
 }
+.fin-code {
+  margin-top: clamp(22px, 3vh, 30px);
+  padding: 14px 18px;
+  border: 0;
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
+  text-align: left;
+  font-size: 12.5px;
+  color: var(--secondary);
+}
 .fin .cta {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: clamp(26px, 4vh, 40px);
+  margin-top: clamp(22px, 3.4vh, 34px);
   font-size: 13.5px;
 }
 .fin .meta {
-  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 14px;
+  margin-top: 20px;
   font: 12.5px/1.6 var(--mono);
   color: var(--tertiary);
 }
+/* A real node rather than a ::before, so the same separator works before a
+   link without the dot landing inside the link's own underline. */
+.fin .meta i {
+  font-style: normal;
+  color: var(--quaternary);
+}
 .fin .meta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--secondary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   text-decoration-color: var(--quaternary);
+  transition: color var(--fade);
+}
+.fin .meta a:hover {
+  color: var(--ink);
 }
 
 /* --- the burst --------------------------------------------------------- */
@@ -842,11 +870,21 @@ pre.code {
 pre.code .k {
   color: var(--ink);
 }
-pre.code .s {
+pre.code .s,
+pre.code .n,
+pre.code .l {
   color: var(--accent);
+}
+pre.code .t,
+pre.code .f {
+  color: oklch(0.82 0.012 300);
+}
+pre.code .p {
+  color: var(--quaternary);
 }
 pre.code .c {
   color: var(--quaternary);
+  font-style: italic;
 }
 .code-head {
   display: flex;
@@ -1300,70 +1338,168 @@ pre.code {
 
 .api {
   display: grid;
-  gap: 20px;
-  width: min(960px, 100%);
+  gap: 36px;
+  width: min(880px, 100%);
 }
-.api-row {
+
+.api-install {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 .api-note {
   color: var(--tertiary);
-  font-size: 14px;
-}
-.api-blocks {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.tables {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-}
-.table-block {
-  display: grid;
-  align-content: start;
-  gap: 10px;
-  min-width: 0;
-}
-.tables table {
-  width: 100%;
-  border-collapse: collapse;
   font-size: 13.5px;
 }
-.tables th,
-.tables td {
-  text-align: left;
-  vertical-align: top;
-  padding: 9px 10px;
+
+/* --- the samples: one panel, four tabs --------------------------------- */
+
+.api-code {
+  display: grid;
+  gap: 14px;
+}
+.api-tablist {
+  display: flex;
+  gap: 2px;
+}
+.api-tablist button {
+  padding: 7px 13px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--tertiary);
+  font: 13px/1 var(--mono);
+  letter-spacing: 0.01em;
+  transition: color var(--fade), background-color var(--fade);
+}
+.api-tablist button:hover {
+  color: var(--ink);
+}
+.api-tablist button[aria-selected='true'] {
+  background: var(--raised);
+  color: var(--ink);
+}
+
+.api-panel {
+  display: grid;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  overflow: hidden;
+}
+.api-panel figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
   border-bottom: 1px solid var(--line-soft);
-  color: var(--secondary);
-  /* A table's width is a suggestion, not a cap: a long identifier such as
-     `renderAvatarSvg(name, options?)` sets the min-content width and pushes the
-     whole thing past the viewport. `anywhere` is the one value that feeds back
-     into intrinsic sizing, so the table can actually be 100%. */
+}
+.api-panel .code {
+  padding: 18px 16px;
+  border: 0;
+  background: none;
+}
+
+/* --- the reference: rows, not tables ----------------------------------- */
+
+.api-ref {
+  display: grid;
+  gap: 34px;
+}
+.api-group-head {
+  display: grid;
+  gap: 3px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.api-group-head code {
+  font: 13px/1 var(--mono);
+  font-weight: 500;
+  color: var(--ink);
+}
+.api-group-head span {
+  color: var(--tertiary);
+  font-size: 13.5px;
+}
+
+.api-ref dl,
+.api-options-list {
+  display: grid;
+  margin: 0;
+}
+.api-ref dl > div,
+.api-options-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 15.5rem) minmax(0, 1fr);
+  gap: 20px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.api-ref dl > div:last-child,
+.api-options-list > div:last-child {
+  border-bottom: 0;
+}
+.api-ref dt,
+.api-options-list dt {
+  margin: 0;
+  min-width: 0;
+}
+.api-ref dt code {
+  font: 12.5px/1.5 var(--mono);
+  color: var(--ink);
+  /* A signature is one token: it breaks between characters rather than
+     setting a min-content width the row then has to honour. */
   overflow-wrap: anywhere;
 }
-.tables thead th {
-  font: 11px/1 var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--tertiary);
+.api-ref dd {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 13.5px;
+  line-height: 1.5;
 }
-.tables tbody th {
-  color: var(--ink);
-  font-weight: 500;
+
+.api-options-list dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 0;
 }
-.tables code {
-  font: 12px/1.5 var(--mono);
+.api-type {
+  font: 12.5px/1.5 var(--mono);
+  color: var(--secondary);
+  overflow-wrap: anywhere;
 }
-@media (max-width: 900px) {
-  .api-blocks,
-  .tables {
+.api-default {
+  font: 12.5px/1.5 var(--mono);
+  color: var(--secondary);
+}
+/* The word is the label, the value is the content: two weights, not one. */
+.api-default::before {
+  content: 'default ';
+  color: var(--quaternary);
+}
+
+@media (max-width: 720px) {
+  .api-ref dl > div,
+  .api-options-list > div {
     grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}
+
+/* Stacked, the separators have nothing to separate — they just trail. */
+@media (max-width: 520px) {
+  .fin .meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .fin .meta i {
+    display: none;
   }
 }
 
@@ -1503,6 +1639,11 @@ footer a:hover {
   max-width: 46ch;
   color: var(--tertiary);
   font-size: clamp(14px, 1.15vw, 16px);
+}
+/* The reassurance under the number, a step quieter than the explanation. */
+.film-beat .film-quiet {
+  margin-top: 2px;
+  color: var(--quaternary);
 }
 
 /* Specificity matters here: `.film-beat p` below would otherwise win and set
