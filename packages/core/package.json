@@ -1,0 +1,55 @@
+{
+  "name": "blobbies",
+  "version": "0.1.0",
+  "description": "Deterministic, cute SVG blobby avatars generated from a name. Zero dependencies.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "keywords": [
+    "avatar",
+    "avatars",
+    "svg",
+    "initials",
+    "blob",
+    "generator",
+    "deterministic",
+    "profile"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blobbies/blobbies.git",
+    "directory": "packages/core"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./motion": {
+      "types": "./dist/motion.d.ts",
+      "import": "./dist/motion.js",
+      "require": "./dist/motion.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "preview:letters": "tsx scripts/preview-letters.ts",
+    "preview:avatars": "tsx scripts/preview-avatars.ts",
+    "preview:blink": "tsx scripts/preview-blink.ts"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "tsx": "^4.19.2"
+  }
+}
