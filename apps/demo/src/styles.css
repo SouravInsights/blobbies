@@ -31,9 +31,11 @@
   --sans: 'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* One springy curve for anything that pops, one short curve for colour. */
+  /* One springy curve for anything that pops, one short curve for colour, and
+     SwiftUI's easeOut for anything that has to leave the frame smoothly. */
   --spring: cubic-bezier(0.3, 1.4, 0.5, 1);
   --fade: 150ms ease;
+  --oe: cubic-bezier(0, 0, 0.58, 1);
 
   --radius: 14px;
   --gap: clamp(96px, 11vw, 140px);
@@ -168,6 +170,13 @@ main > * {
   line-height: 1.34;
   font-weight: 500;
   letter-spacing: -0.02em;
+}
+/* A shorter queue than the film's: an intro is read once, not scrubbed. */
+.lead .w {
+  transition-duration: 0.42s;
+}
+.lead[data-s='said'] .w {
+  transition-delay: calc(var(--d, 0ms) + var(--i) * 42ms);
 }
 .lead p {
   color: var(--tertiary);
@@ -1621,12 +1630,61 @@ footer a:hover {
   display: grid;
   justify-items: center;
   gap: 10px;
-  /* A trapezoid from two clamps: fade in over about a sixth of the timeline,
-     hold, fade out over the next sixth. One expression, no keyframes. */
-  opacity: calc(
-    clamp(0, calc((var(--p) - var(--in)) * 6), 1) *
-      clamp(0, calc((var(--out) - var(--p)) * 6), 1)
-  );
+}
+
+/* A sentence's words sharpen in together, 55ms apart, and blur back out the
+   other way. The stagger is the whole effect: every word carries its own index
+   and every line carries a base delay, so the second line follows the first.
+   The container's state is what a transition needs to fire on. `wait` — not
+   yet said — is this base state and nothing else; `said` arrives, `gone`
+   leaves. The film's beats replace one another rather than stacking, so there
+   is no half-said state to sit between them.
+
+   Any container can opt in with `.says`, which is the film's beats and the
+   section intros. Nothing else needs to know how it works. */
+.says .w {
+  display: inline-block;
+  opacity: 0;
+  /* Ratios rather than pixels: a line of any size leaves and arrives by the
+     same share of itself, which is what keeps the small lines from looking
+     busier than the large ones. */
+  filter: blur(0.16em);
+  translate: 0 0.1em;
+  transition:
+    opacity 0.55s var(--oe),
+    filter 0.55s var(--oe),
+    translate 0.55s var(--oe);
+}
+.says h2 .w,
+.says h3 .w {
+  --d: 0ms;
+}
+.says p .w {
+  --d: 130ms;
+}
+.says[data-s='said'] .w {
+  opacity: 1;
+  filter: none;
+  translate: 0 0;
+  transition-delay: calc(var(--d, 0ms) + var(--i) * 55ms);
+}
+.says[data-s='gone'] .w {
+  filter: blur(0.24em);
+  translate: 0 -0.12em;
+  transition-duration: 0.4s;
+}
+
+/* The number is not made of words, so it arrives on its own. */
+.film-copy .film-number {
+  opacity: 0;
+  translate: 0 0.08em;
+  transition:
+    opacity 0.6s var(--oe) 0.1s,
+    translate 0.6s var(--oe) 0.1s;
+}
+.film-beat[data-s='said'] .film-number {
+  opacity: 1;
+  translate: 0 0;
 }
 .film-beat h3 {
   font-size: clamp(22px, 2.9vw, 38px);
@@ -1646,10 +1704,24 @@ footer a:hover {
   color: var(--quaternary);
 }
 
+/* The question and its answer must not be the same voice. The answer is the
+   payload, so the question steps back: lighter, quieter, and a size below. */
+/* One step under the ink, so the ladder is secondary → ink → tertiary →
+   quaternary with nothing sitting on the same rung. */
+.film-beat .film-ask {
+  font-size: clamp(17px, 1.5vw, 21px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--secondary);
+}
+
 /* Specificity matters here: `.film-beat p` below would otherwise win and set
    the number in body type. */
 .film-copy .film-number {
-  font-size: clamp(48px, 9.5vw, 120px);
+  /* Tight to its question, roomy to its explanation: the two that belong
+     together read together. */
+  margin: -4px 0 6px;
+  font-size: clamp(48px, 9.5vw, 118px);
   font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 1;
@@ -1695,7 +1767,13 @@ footer a:hover {
   .film-beat {
     position: static;
     grid-area: auto;
+  }
+  .says .w,
+  .film-copy .film-number {
     opacity: 1;
+    filter: none;
+    translate: none;
+    transition: none;
   }
   .film-beat + .film-beat {
     margin-top: 56px;

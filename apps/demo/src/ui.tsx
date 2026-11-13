@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import { Check, Copy, Github, MoonSat, SunLight } from 'iconoir-react';
 import { LETTER_PATHS, STROKE_WIDTH, INK_COLOR, LETTER_BOX } from 'blobbies';
 import { highlight, highlightShell } from './highlight';
@@ -47,6 +55,49 @@ export function CopyButton(props: { text: string; label: string; className?: str
       )}
       {state === 'idle' ? label : state === 'copied' ? 'Copied' : 'Copy failed'}
     </button>
+  );
+}
+
+/**
+ * A line, split into words so CSS can stagger them.
+ *
+ * Each word is its own inline-block with an index, which is all the film needs:
+ * the line's parent carries the state, and every word reads `--i` for its own
+ * place in the queue. The spaces stay as text nodes between them, so the line
+ * breaks between words and the words never run together.
+ *
+ * The whole line is laid out from the first frame — only opacity, blur and
+ * offset change — so nothing reflows as it is said.
+ */
+/** Eight words' worth of wait, which is the pause a full stop makes. */
+const STOP = 8;
+
+export function Words({ text }: { text: string }) {
+  const words = useMemo(() => {
+    const out: Array<{ word: string; i: number }> = [];
+    let i = 0;
+    // A sentence is a run of words; the counter skips a beat at the end of one,
+    // so the next arrives as its own thought rather than as more of the last.
+    for (const sentence of text.match(/[^.!?]+[.!?]*/g) ?? [text]) {
+      for (const word of sentence.trim().split(/\s+/).filter(Boolean)) {
+        out.push({ word, i: i++ });
+      }
+      i += STOP;
+    }
+    return out;
+  }, [text]);
+
+  return (
+    <>
+      {words.map(({ word, i }, k) => (
+        <Fragment key={`${word}-${i}`}>
+          {k > 0 ? ' ' : null}
+          <span className="w" style={{ '--i': i } as CSSProperties}>
+            {word}
+          </span>
+        </Fragment>
+      ))}
+    </>
   );
 }
 

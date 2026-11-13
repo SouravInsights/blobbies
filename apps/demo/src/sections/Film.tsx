@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 import { Avatar } from '@blobbies/react';
 import { BUILDS, EYE_PAIRS, TOTAL, buildNames } from '../data';
 import { layoutField, type Blob } from '../motion/field';
+import { Words } from '../ui';
 
 const NAMES = buildNames(160);
 
@@ -88,24 +89,37 @@ export function Film() {
         </div>
 
         <div className="film-copy" ref={copyRef}>
-          <div className="film-beat" style={{ '--in': -0.3, '--out': 0.34 } as CSSProperties}>
-            <h3>Every one of these is a name.</h3>
-            <p>A hash of it decides the rest.</p>
+          <div className="film-beat says" style={{ '--in': -0.3, '--out': 0.34 } as CSSProperties}>
+            <h3>
+              <Words text="Every one of these is a name." />
+            </h3>
+            <p>
+              <Words text="A hash of it decides the rest." />
+            </p>
           </div>
-          <div className="film-beat" style={{ '--in': 0.3, '--out': 0.68 } as CSSProperties}>
-            <h3>The only face that name can draw.</h3>
-            <p>Same name, same face — at any size, on any device.</p>
+          <div className="film-beat says" style={{ '--in': 0.3, '--out': 0.68 } as CSSProperties}>
+            <h3>
+              <Words text="The only face that name can draw." />
+            </h3>
+            <p>
+              <Words text="Same name, same face — at any size, on any device." />
+            </p>
           </div>
-          <div className="film-beat" style={{ '--in': 0.68, '--out': 1.4 } as CSSProperties}>
-            <h3>How many are there?</h3>
+          <div className="film-beat says" style={{ '--in': 0.68, '--out': 1.4 } as CSSProperties}>
+            <h3 className="film-ask">
+              <Words text="How many are there?" />
+            </h3>
             <p className="film-number" data-count-to={TOTAL}>
               0
             </p>
             <p>
-              {BUILDS.toLocaleString('en-US')} builds × {EYE_PAIRS.toLocaleString('en-US')} eye pairs,
-              before the rotation and the offset.
+              <Words
+                text={`${BUILDS.toLocaleString('en-US')} builds × ${EYE_PAIRS.toLocaleString('en-US')} eye pairs, before the rotation and the offset.`}
+              />
             </p>
-            <p className="film-quiet">Far more than you will ever need.</p>
+            <p className="film-quiet">
+              <Words text="Far more than you will ever need." />
+            </p>
           </div>
         </div>
       </div>
@@ -114,7 +128,13 @@ export function Film() {
 }
 
 /**
- * Writes `--p`, the scroll position through the film, once per frame.
+ * Writes `--p`, the scroll position through the film, once per frame, and puts
+ * each beat into one of three states: waiting, being said, or gone.
+ *
+ * The state is an attribute rather than a number because a transition needs a
+ * change of state to fire on — that is what lets each word carry its own delay
+ * and arrive on its own. Nothing about the words is computed here; this only
+ * says which line is being spoken.
  *
  * The position is followed rather than assigned: `--p` eases toward the real
  * scroll offset with a 105 ms time constant, so a wheel's stepped deltas arrive
@@ -131,6 +151,13 @@ function useFilmProgress(ref: React.RefObject<HTMLElement | null>): void {
     let value = 0;
     let last = 0;
 
+    // Read once: the beats' windows never change.
+    const beats = [...el.querySelectorAll<HTMLElement>('.film-beat')].map((node) => ({
+      node,
+      from: Number(node.style.getPropertyValue('--in')) || 0,
+      to: Number(node.style.getPropertyValue('--out')) || 1,
+    }));
+
     const goalOf = (): number => {
       const total = el.offsetHeight - window.innerHeight;
       return total > 0 ? Math.min(1, Math.max(0, -el.getBoundingClientRect().top / total)) : 0;
@@ -143,6 +170,11 @@ function useFilmProgress(ref: React.RefObject<HTMLElement | null>): void {
       const goal = goalOf();
       value = Math.abs(goal - value) < 0.0008 ? goal : value + (goal - value) * (1 - Math.exp(-dt / 105));
       el.style.setProperty('--p', value.toFixed(4));
+
+      for (const beat of beats) {
+        const state = value < beat.from ? 'wait' : value < beat.to ? 'said' : 'gone';
+        if (beat.node.dataset.s !== state) beat.node.dataset.s = state;
+      }
 
       const count = el.querySelector<HTMLElement>('[data-count-to]');
       if (count) {
@@ -162,6 +194,7 @@ function useFilmProgress(ref: React.RefObject<HTMLElement | null>): void {
     // On the first frame there is nothing to ease from: land where the page is.
     value = goalOf();
     el.style.setProperty('--p', value.toFixed(4));
+    for (const beat of beats) beat.node.dataset.s = 'wait';
     frame(performance.now());
 
     window.addEventListener('scroll', kick, { passive: true });
