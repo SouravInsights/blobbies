@@ -10,6 +10,7 @@ export {
 } from './render.js';
 export type { ResolvedAvatar } from './render.js';
 export { PALETTE, BACKDROP_COLOR, INK_COLOR, BLUSH_COLOR } from './palette.js';
+export { LETTER_PATHS, LETTER_BOX, STROKE_WIDTH, INK_WIDTH, hasLetterPath } from './letters.js';
 export { hashString, cyrb53, mulberry32, createRng } from './hash.js';
 export type {
   AvatarOptions,

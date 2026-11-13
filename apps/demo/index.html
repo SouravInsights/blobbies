@@ -1,9 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blobbies — demo</title>
+    <title>Blobbies — every name gets a face</title>
+    <meta
+      name="description"
+      content="Turn any name into a deterministic SVG avatar. Two initials become the eyes, a seeded egg becomes the body. Zero dependencies, 1.4 KB per avatar, blink in pure CSS."
+    />
+    <meta name="author" content="Sourav Nanda" />
+    <meta name="theme-color" content="#15121b" />
+    <link rel="canonical" href="https://blobbies.vercel.app/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Blobbies — every name gets a face" />
+    <meta
+      property="og:description"
+      content="Deterministic SVG avatars from a name. Two letters become the eyes, a seeded egg becomes the body. Zero dependencies."
+    />
+    <meta property="og:url" content="https://blobbies.vercel.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Blobbies — every name gets a face" />
+    <meta
+      name="twitter:description"
+      content="Deterministic SVG avatars from a name. Blink in pure CSS, eyes that follow the cursor. 1.4 KB, zero dependencies."
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "Blobbies",
+        "description": "Deterministic SVG avatars generated from a name.",
+        "programmingLanguage": "TypeScript",
+        "codeRepository": "https://github.com/SouravInsights/blobbies",
+        "license": "https://opensource.org/licenses/MIT",
+        "author": { "@type": "Person", "name": "Sourav Nanda", "url": "https://github.com/SouravInsights" }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,70 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Avatar } from '@blobbies/react';
-import type { AvatarAnimate } from '@blobbies/react';
+import { Alpha } from './sections/Alpha';
+import { Api, Footer } from './sections/Api';
+import { Behaviour } from './sections/Behaviour';
+import { Colony } from './sections/Colony';
+import { Hero } from './sections/Hero';
+import {
+  DEFAULTS,
+  Playground,
+  avatarPropsFrom,
+  type Controls,
+} from './sections/Playground';
+import { Alphabet, Derivation, SpecimenData } from './sections/Specimens';
+import { buildNames } from './data';
 
-const FIRST = [
-  'Ada', 'Grace', 'Sourav', 'Ira', 'John', 'Jane', 'Linus', 'Maya', 'Nina', 'Omar',
-  'Priya', 'Quinn', 'Rosa', 'Sam', 'Tara', 'Uma', 'Vera', 'Wes', 'Xiu', 'Yara', 'Zoe',
-  'Ken', 'Lena', 'Milo', 'Nadia', 'Owen', 'Pia', 'Rex', 'Sofia', 'Theo', 'Ula',
-];
-const LAST = [
-  'Nanda', 'Hopper', 'Lovelace', 'Doe', 'Chen', 'Singh', 'Patel', 'Khan', 'Ali',
-  'Garcia', 'Rossi', 'Muller', 'Novak', 'Silva', 'Haddad', 'Kim', 'Nakamura',
-  'Okafor', 'Petrov', 'Dubois',
-];
+const STRESS = buildNames(200);
 
-const SAMPLE_NAMES: string[] = Array.from({ length: 60 }, (_, i) => {
-  const first = FIRST[(i * 3) % FIRST.length] as string;
-  const last = LAST[(i * 7 + 1) % LAST.length] as string;
-  return i % 9 === 0 ? first : `${first} ${last}`;
-});
-
-const STRESS_NAMES: string[] = Array.from({ length: 200 }, (_, i) => {
-  const first = FIRST[(i * 5) % FIRST.length] as string;
-  const last = LAST[(i * 11 + 3) % LAST.length] as string;
-  return `${first} ${last}`;
-});
-
-type Flag = 'auto' | 'on' | 'off';
-
-interface Controls {
-  animate: AvatarAnimate;
-  blink: Flag;
-  follow: Flag;
-  blinkMin: number;
-  blinkMax: number;
-  followRange: number;
-  smoothing: number;
-  idleTimeout: number;
-  size: number;
-  rounded: boolean;
-  paused: boolean;
-  respectReducedMotion: boolean;
-  wink: boolean;
-  glance: boolean;
-  surprise: boolean;
-}
-
-const DEFAULTS: Controls = {
-  animate: 'all',
-  blink: 'auto',
-  follow: 'auto',
-  blinkMin: 2500,
-  blinkMax: 6000,
-  followRange: 6,
-  smoothing: 0.15,
-  idleTimeout: 2500,
-  size: 128,
-  rounded: false,
-  paused: false,
-  respectReducedMotion: true,
-  wink: true,
-  glance: true,
-  surprise: true,
-};
-
-function flagValue(flag: Flag): boolean | undefined {
-  return flag === 'auto' ? undefined : flag === 'on';
+/** Ten-pixel mark: the disk, the egg, two eyes. Same construction as the real thing. */
+function Mark({ size = 22 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true" focusable="false">
+      <circle cx="50" cy="50" r="50" fill="var(--mark-disk)" />
+      <ellipse cx="50" cy="60" rx="41" ry="38" fill="#FFD43B" />
+      <circle cx="38" cy="55" r="5" fill="#1c1c1c" />
+      <circle cx="62" cy="55" r="5" fill="#1c1c1c" />
+    </svg>
+  );
 }
 
 export function App(): JSX.Element {
@@ -73,16 +34,21 @@ export function App(): JSX.Element {
     [],
   );
   const [name, setName] = useState(() => params.get('name') ?? 'Sourav Nanda');
-  const [dark, setDark] = useState(() => params.get('theme') !== 'light');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
+    params.get('theme') === 'light' ? 'light' : 'dark',
+  );
   const [stress, setStress] = useState(() => params.get('stress') === '1');
-  const [copied, setCopied] = useState(false);
-  const [c, setC] = useState<Controls>(DEFAULTS);
+  const [controls, setControls] = useState<Controls>(DEFAULTS);
 
-  const set = <K extends keyof Controls>(key: K, value: Controls[K]): void =>
-    setC((prev) => ({ ...prev, [key]: value }));
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#15121b' : '#f6f3ec');
+  }, [theme]);
 
-  // Debug helper for automated screenshots: ?pointer=x,y fires a synthetic
-  // pointermove so cursor-follow can be captured headlessly.
+  // Screenshot hook: ?pointer=x,y fires a synthetic pointer so the follow tier
+  // can be captured headlessly. Harmless in normal use.
   useEffect(() => {
     const pointer = params.get('pointer');
     if (!pointer) return undefined;
@@ -91,231 +57,87 @@ export function App(): JSX.Element {
       window.dispatchEvent(new MouseEvent('pointermove', { clientX: x ?? 0, clientY: y ?? 0 }));
     };
     fire();
-    const timer = setTimeout(fire, 600);
-    return () => clearTimeout(timer);
+    const t = window.setTimeout(fire, 600);
+    return () => window.clearTimeout(t);
   }, [params]);
 
-  const avatarProps = useMemo(
-    () => ({
-      animate: c.animate,
-      blink: flagValue(c.blink),
-      follow: flagValue(c.follow),
-      blinkInterval: [Math.min(c.blinkMin, c.blinkMax), Math.max(c.blinkMin, c.blinkMax)] as [
-        number,
-        number,
-      ],
-      followRange: c.followRange,
-      smoothing: c.smoothing,
-      idleTimeout: c.idleTimeout,
-      rounded: c.rounded,
-      paused: c.paused,
-      respectReducedMotion: c.respectReducedMotion,
-      wink: c.wink,
-      glance: c.glance,
-      surprise: c.surprise,
-    }),
-    [
-      c.animate,
-      c.blink,
-      c.follow,
-      c.blinkMin,
-      c.blinkMax,
-      c.followRange,
-      c.smoothing,
-      c.idleTimeout,
-      c.rounded,
-      c.paused,
-      c.respectReducedMotion,
-      c.wink,
-      c.glance,
-      c.surprise,
-    ],
-  );
+  // Screenshot hook: ?scroll=<px> jumps to a position after paint so individual
+  // viewports can be captured headlessly.
+  useEffect(() => {
+    const y = Number(params.get('scroll') ?? '0');
+    if (!y) return undefined;
+    const t = window.setTimeout(() => window.scrollTo(0, y), 120);
+    return () => window.clearTimeout(t);
+  }, [params]);
 
-  const installSnippet = `npm i blobbies @blobbies/react
-
-import { Avatar } from '@blobbies/react'
-
-<Avatar name="${name}" animate="all" wink />`;
-
-  const copy = async (): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(installSnippet);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1200);
-    } catch {
-      /* clipboard unavailable */
-    }
-  };
+  const nav = [
+    ['Colony', '#colony'],
+    ['Behaviour', '#behaviour'],
+    ['Alphabet', '#alphabet'],
+    ['Playground', '#playground'],
+    ['API', '#api'],
+  ] as const;
 
   return (
-    <div className={dark ? 'app dark' : 'app light'}>
+    <div className="page">
+      <a className="skip" href="#main">
+        Skip to content
+      </a>
+
       <header className="topbar">
-        <div>
-          <h1>Blobbies</h1>
-          <p>Deterministic, cute SVG avatars. Blink (CSS) + cursor follow (JS).</p>
-        </div>
-        <div className="topbar-actions">
-          <button type="button" onClick={() => setStress((s) => !s)}>
-            {stress ? '← Back to demo' : '200-avatar stress test'}
-          </button>
-          <button type="button" onClick={() => setDark((d) => !d)}>
-            {dark ? '☀ Light' : '☾ Dark'}
+        <a className="brand" href="#top">
+          <Mark />
+          <span>blobbies</span>
+        </a>
+        <nav className="topnav" aria-label="Sections">
+          {nav.map(([label, href]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        <div className="topbar-end">
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance`}
+          >
+            {theme === 'dark' ? '☀' : '☾'}
           </button>
         </div>
       </header>
 
-      {stress ? (
-        <section className="stress">
-          <p className="hint">
-            200 avatars, all animated (blink + follow). Pointer moves must stay smooth — motion is
-            written to CSS variables, never through React state.
-          </p>
-          <div className="grid stress-grid">
-            {STRESS_NAMES.map((n, i) => (
-              <Avatar key={`${n}-${i}`} name={n} size={56} {...avatarProps} />
-            ))}
-          </div>
-        </section>
-      ) : (
-        <main className="layout">
-          <aside className="panel">
-            <label className="field">
-              <span>Name</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Type a name…" />
-            </label>
-
-            <label className="field">
-              <span>Animate</span>
-              <select
-                value={String(c.animate)}
-                onChange={(e) =>
-                  set(
-                    'animate',
-                    (e.target.value === 'false' ? false : e.target.value) as AvatarAnimate,
-                  )
-                }
-              >
-                <option value="false">Off (static)</option>
-                <option value="blink">Blink only</option>
-                <option value="follow">Follow only</option>
-                <option value="all">Blink + follow</option>
-              </select>
-            </label>
-
-            <div className="row">
-              <label className="field">
-                <span>Blink</span>
-                <select value={c.blink} onChange={(e) => set('blink', e.target.value as Flag)}>
-                  <option value="auto">auto</option>
-                  <option value="on">on</option>
-                  <option value="off">off</option>
-                </select>
-              </label>
-              <label className="field">
-                <span>Follow</span>
-                <select value={c.follow} onChange={(e) => set('follow', e.target.value as Flag)}>
-                  <option value="auto">auto</option>
-                  <option value="on">on</option>
-                  <option value="off">off</option>
-                </select>
-              </label>
-            </div>
-
-            <Slider label={`Blink min — ${c.blinkMin}ms`} min={500} max={8000} step={100} value={c.blinkMin} onChange={(v) => set('blinkMin', v)} />
-            <Slider label={`Blink max — ${c.blinkMax}ms`} min={500} max={12000} step={100} value={c.blinkMax} onChange={(v) => set('blinkMax', v)} />
-            <Slider label={`Follow range — ${c.followRange}`} min={0} max={14} step={0.5} value={c.followRange} onChange={(v) => set('followRange', v)} />
-            <Slider label={`Smoothing — ${c.smoothing}`} min={0.02} max={1} step={0.01} value={c.smoothing} onChange={(v) => set('smoothing', v)} />
-            <Slider label={`Idle timeout — ${c.idleTimeout}ms`} min={0} max={8000} step={100} value={c.idleTimeout} onChange={(v) => set('idleTimeout', v)} />
-            <Slider label={`Size — ${c.size}px`} min={32} max={220} step={4} value={c.size} onChange={(v) => set('size', v)} />
-
-            <div className="checks">
-              <Check label="Rounded" checked={c.rounded} onChange={(v) => set('rounded', v)} />
-              <Check label="Paused" checked={c.paused} onChange={(v) => set('paused', v)} />
-              <Check label="Respect reduced motion" checked={c.respectReducedMotion} onChange={(v) => set('respectReducedMotion', v)} />
-              <Check label="Wink on click" checked={c.wink} onChange={(v) => set('wink', v)} />
-              <Check label="Idle glance" checked={c.glance} onChange={(v) => set('glance', v)} />
-              <Check label="Surprise up close" checked={c.surprise} onChange={(v) => set('surprise', v)} />
-            </div>
-
-            <div className="snippet">
-              <div className="snippet-head">
-                <span>Install &amp; use</span>
-                <button type="button" onClick={copy}>
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
-              </div>
-              <pre>{installSnippet}</pre>
-            </div>
-          </aside>
-
-          <section className="stage">
-            <div className="hero">
-              <Avatar name={name || '?'} size={c.size} {...avatarProps} />
-              <div className="hero-meta">
-                <strong>{name || '(empty)'}</strong>
-                <span>Move your cursor around the page. Click for a wink.</span>
-              </div>
-            </div>
-
-            <h2>60 sample names</h2>
-            <div className="grid samples">
-              {SAMPLE_NAMES.map((n) => (
-                <button
-                  type="button"
-                  className="sample"
-                  key={n}
-                  onClick={() => setName(n)}
-                  title={n}
-                >
-                  <Avatar name={n} size={72} {...avatarProps} />
-                  <small>{n}</small>
-                </button>
+      <main id="main">
+        {stress ? (
+          <section className="stress">
+            <h1 className="plate-title">200 avatars, all animated.</h1>
+            <p className="plate-lede">
+              Motion is written to CSS variables by a single shared loop. React never re-renders on
+              pointer movement.
+            </p>
+            <div className="stress-grid">
+              {STRESS.map((n, i) => (
+                <Avatar key={`${n}-${i}`} name={n} size={52} {...avatarPropsFrom(controls)} />
               ))}
             </div>
           </section>
-        </main>
-      )}
+        ) : (
+          <>
+            <Hero name={name} />
+            <Colony />
+            <Derivation name={name} setName={setName} />
+            <Behaviour name={name} />
+            <Alphabet />
+            <SpecimenData name={name} />
+            <Playground value={controls} onChange={setControls} onAdopt={setName} />
+            <Alpha />
+            <Api />
+          </>
+        )}
+      </main>
+
+      <Footer />
     </div>
-  );
-}
-
-function Slider(props: {
-  label: string;
-  min: number;
-  max: number;
-  step: number;
-  value: number;
-  onChange: (v: number) => void;
-}): JSX.Element {
-  return (
-    <label className="field slider">
-      <span>{props.label}</span>
-      <input
-        type="range"
-        min={props.min}
-        max={props.max}
-        step={props.step}
-        value={props.value}
-        onChange={(e) => props.onChange(Number(e.target.value))}
-      />
-    </label>
-  );
-}
-
-function Check(props: {
-  label: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}): JSX.Element {
-  return (
-    <label className="check">
-      <input
-        type="checkbox"
-        checked={props.checked}
-        onChange={(e) => props.onChange(e.target.checked)}
-      />
-      <span>{props.label}</span>
-    </label>
   );
 }

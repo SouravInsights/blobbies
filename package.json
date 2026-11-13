@@ -5,13 +5,14 @@
   "type": "module",
   "packageManager": "pnpm@10.11.0",
   "scripts": {
-    "build": "pnpm -r --filter \"./packages/*\" build",
+    "build": "pnpm -r build",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "dev": "pnpm --filter blobbies-demo dev",
     "preview:letters": "pnpm --filter blobbies preview:letters",
     "preview:avatars": "pnpm --filter blobbies preview:avatars",
-    "preview:blink": "pnpm --filter blobbies preview:blink"
+    "preview:blink": "pnpm --filter blobbies preview:blink",
+    "build:packages": "pnpm -r --filter \"./packages/*\" build"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
@@ -23,6 +24,8 @@
     "node": ">=18"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
