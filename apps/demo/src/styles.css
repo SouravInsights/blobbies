@@ -128,11 +128,23 @@ figure {
 
 main {
   display: grid;
+  /* One explicit column, not an implicit auto one. An implicit auto column
+     sizes to the max-content of its items, so a child that is wider than the
+     padded box (the hero field, the film) made the whole column 16px wider
+     than the gutter and ate the right padding. */
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: var(--gap);
   padding: 0 max(clamp(16px, 4vw, 24px), env(safe-area-inset-left))
     calc(56px + env(safe-area-inset-bottom)) max(clamp(16px, 4vw, 24px), env(safe-area-inset-right));
   overflow-x: clip;
+}
+
+/* Every direct child of the grid must be allowed to shrink below its
+   max-content width, or the column keeps growing. */
+main > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .col {

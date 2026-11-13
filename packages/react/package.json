@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blobbies/blobbies.git",
+    "url": "git+https://github.com/SouravInsights/blobbies.git",
     "directory": "packages/react"
   },
   "main": "./dist/index.cjs",
