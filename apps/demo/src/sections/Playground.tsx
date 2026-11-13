@@ -1,7 +1,7 @@
 import { Avatar } from '@blobbies/react';
 import type { AvatarAnimate } from '@blobbies/react';
 import { buildNames } from '../data';
-import { Plate, useReveal } from '../ui';
+import { Lead } from './Lead';
 
 export type Flag = 'auto' | 'on' | 'off';
 
@@ -43,9 +43,7 @@ export const DEFAULTS: Controls = {
 
 const GALLERY = buildNames(60);
 
-function flagValue(flag: Flag): boolean | undefined {
-  return flag === 'auto' ? undefined : flag === 'on';
-}
+const flagValue = (f: Flag): boolean | undefined => (f === 'auto' ? undefined : f === 'on');
 
 export function avatarPropsFrom(c: Controls) {
   return {
@@ -69,13 +67,13 @@ export function avatarPropsFrom(c: Controls) {
 }
 
 const ANIMATE_OPTIONS: Array<{ value: AvatarAnimate; label: string }> = [
-  { value: false, label: 'Off — static SVG' },
-  { value: 'blink', label: 'Blink — CSS only' },
-  { value: 'follow', label: 'Follow — JS' },
-  { value: 'all', label: 'All — blink + follow' },
+  { value: false, label: 'Off — static' },
+  { value: 'blink', label: 'Blink only' },
+  { value: 'follow', label: 'Follow only' },
+  { value: 'all', label: 'Blink + follow' },
 ];
 
-/** Plate 06 — the playground. Every option is live; the gallery re-renders from it. */
+/** Every dial, wired straight through to the specimens beside it. */
 export function Playground({
   value,
   onChange,
@@ -85,30 +83,17 @@ export function Playground({
   onChange: (next: Controls) => void;
   onAdopt: (name: string) => void;
 }) {
-  const ref = useReveal<HTMLDivElement>();
   const set = <K extends keyof Controls>(key: K, v: Controls[K]): void =>
     onChange({ ...value, [key]: v });
 
-  const snippet = `renderAvatarSvg('Sourav Nanda', {
-  animate: ${value.animate === false ? 'false' : `'${value.animate}'`},
-  blinkInterval: [${Math.min(value.blinkMin, value.blinkMax)}, ${Math.max(value.blinkMin, value.blinkMax)}],
-  followRange: ${value.followRange},
-  smoothing: ${value.smoothing},
-  idleTimeout: ${value.idleTimeout},${value.wink ? '\n  wink: true,' : ''}${value.glance ? '\n  glance: true,' : ''}${value.surprise ? '\n  surprise: true,' : ''}
-})`;
-
   return (
-    <Plate
-      index="Plate 06 · Playground"
-      id="playground"
-      title="Turn every dial."
-      lede="Each option below is wired straight through to the live specimens on the right."
-    >
+    <section className="section" id="playground">
+      <Lead title="Turn every dial." note="All of it runs on the same shared loop." />
       <div className="play">
-        <div className="controls" ref={ref} data-reveal>
+        <div className="controls">
           <div className="control-group">
             <label className="field">
-              <span className="label">Animate</span>
+              <span>Animate</span>
               <select
                 value={String(value.animate)}
                 onChange={(e) =>
@@ -124,7 +109,7 @@ export function Playground({
             </label>
             <div className="field-pair">
               <label className="field">
-                <span className="label">Blink</span>
+                <span>Blink</span>
                 <select value={value.blink} onChange={(e) => set('blink', e.target.value as Flag)}>
                   <option value="auto">auto</option>
                   <option value="on">on</option>
@@ -132,7 +117,7 @@ export function Playground({
                 </select>
               </label>
               <label className="field">
-                <span className="label">Follow</span>
+                <span>Follow</span>
                 <select value={value.follow} onChange={(e) => set('follow', e.target.value as Flag)}>
                   <option value="auto">auto</option>
                   <option value="on">on</option>
@@ -159,25 +144,31 @@ export function Playground({
             <Check label="Glance when idle" checked={value.glance} onChange={(v) => set('glance', v)} />
             <Check label="Surprise up close" checked={value.surprise} onChange={(v) => set('surprise', v)} />
           </div>
-
-          <pre className="controls-snippet">{snippet}</pre>
         </div>
 
         <div className="play-stage">
           <div className="play-hero">
-            <Avatar name="Sourav Nanda" size={value.size} {...avatarPropsFrom(value)} style={{ width: `min(${value.size}px, 42vw)`, height: 'auto' }} />
+            <Avatar
+              name="Sourav Nanda"
+              size={value.size}
+              {...avatarPropsFrom(value)}
+              style={{ width: `min(${value.size}px, 40vw)`, height: 'auto' }}
+            />
+            <code>
+              {value.animate === false ? 'static' : value.animate} · {value.size}px
+            </code>
           </div>
           <div className="gallery">
             {GALLERY.map((n) => (
-              <button type="button" className="gallery-cell" key={n} title={`Use ${n}`} onClick={() => onAdopt(n)}>
-                <Avatar name={n} size={56} {...avatarPropsFrom(value)} />
-                <span className="gallery-name">{n}</span>
+              <button key={n} type="button" title={`Use ${n}`} onClick={() => onAdopt(n)}>
+                <Avatar name={n} size={52} {...avatarPropsFrom(value)} />
+                <span>{n}</span>
               </button>
             ))}
           </div>
         </div>
       </div>
-    </Plate>
+    </section>
   );
 }
 
@@ -191,10 +182,10 @@ function Range(props: {
   onChange: (v: number) => void;
 }) {
   return (
-    <label className="field range">
+    <label className="field">
       <span className="range-head">
-        <span className="label">{props.label}</span>
-        <span className="range-value">
+        <span className="k">{props.label}</span>
+        <span className="v">
           {props.value}
           {props.suffix ?? ''}
         </span>
@@ -215,7 +206,7 @@ function Check(props: { label: string; checked: boolean; onChange: (v: boolean) 
   return (
     <label className="check">
       <input type="checkbox" checked={props.checked} onChange={(e) => props.onChange(e.target.checked)} />
-      <span className="check-box" aria-hidden="true" />
+      <i aria-hidden="true" />
       <span>{props.label}</span>
     </label>
   );

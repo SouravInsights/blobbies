@@ -2,7 +2,6 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { avatarDataUri } from 'blobbies';
 
-import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/instrument-sans';
 import '@fontsource-variable/geist-mono';
 import './styles.css';
