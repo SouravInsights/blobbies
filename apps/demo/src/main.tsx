@@ -7,6 +7,11 @@ import '@fontsource-variable/geist-mono';
 import './styles.css';
 
 import { App } from './App';
+import { installSprings } from './motion/spring';
+
+// Every spring the page uses, sampled into a CSS easing and written to :root
+// once. A real spring then runs on the compositor, with no JS per frame.
+installSprings(document.documentElement);
 
 /**
  * The favicon is a blobbie, so the tab is already on-brand before the page

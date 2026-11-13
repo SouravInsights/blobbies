@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Avatar } from '@blobbies/react';
 import { Api, Footer } from './sections/Api';
 import { Draws } from './sections/Draws';
+import { Ending } from './sections/Ending';
 import { Film } from './sections/Film';
 import { Hero } from './sections/Hero';
 import { Playground, DEFAULTS, avatarPropsFrom, type Controls } from './sections/Playground';
@@ -121,6 +122,7 @@ export function App(): JSX.Element {
             <Playground value={controls} onChange={setControls} onAdopt={setName} />
             <Draws name={name} onPick={setName} />
             <Api />
+            <Ending />
           </>
         )}
       </main>

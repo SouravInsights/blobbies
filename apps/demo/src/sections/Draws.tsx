@@ -16,16 +16,7 @@ export function Draws({ name, onPick }: { name: string; onPick: (name: string) =
       <div className="dq-grid">
         {GLYPHS.map((ch) => (
           <button key={ch} type="button" onClick={() => onPick(ch)} title={`Draw “${ch}”`}>
-            <span
-              style={{
-                display: 'grid',
-                placeItems: 'center',
-                width: 52,
-                height: 52,
-                borderRadius: '50%',
-                background: '#ece6da',
-              }}
-            >
+            <span className="dq-chip">
               <Glyph char={ch} size={34} />
             </span>
           </button>
