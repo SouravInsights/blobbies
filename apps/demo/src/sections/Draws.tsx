@@ -17,7 +17,7 @@ export function Draws({ name, onPick }: { name: string; onPick: (name: string) =
         {GLYPHS.map((ch) => (
           <button key={ch} type="button" onClick={() => onPick(ch)} title={`Draw “${ch}”`}>
             <span className="dq-chip">
-              <Glyph char={ch} size={34} />
+              <Glyph char={ch} />
             </span>
           </button>
         ))}

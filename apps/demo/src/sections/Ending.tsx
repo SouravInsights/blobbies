@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { RefreshDouble } from 'iconoir-react';
 import { Burst } from './Burst';
+import { NPM } from '../data';
 import { CopyButton, GitHubIcon, REPO } from '../ui';
 
 /**
@@ -49,14 +50,22 @@ export function Ending() {
             <RefreshDouble width={15} height={15} aria-hidden="true" /> Throw them again
           </button>
         </div>
+        {/* The last line of the page carries the footer's job too. It used to
+            be repeated below in a footer of its own, which cost a hundred
+            pixels under a full-height section — enough that the ending could
+            never sit centred in the viewport. */}
         <p className="meta">
           <span>MIT</span>
           <i aria-hidden="true">·</i>
-          <span>No dependencies</span>
+          <a href={NPM} target="_blank" rel="noreferrer">
+            npm
+          </a>
           <i aria-hidden="true">·</i>
           <a href={REPO} target="_blank" rel="noreferrer">
             <GitHubIcon size={13} /> SouravInsights/blobbies
           </a>
+          <i aria-hidden="true">·</i>
+          <a href="#top">Back to top</a>
         </p>
       </div>
     </section>

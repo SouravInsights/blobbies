@@ -1,4 +1,5 @@
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
+import { Check as CheckIcon } from 'iconoir-react';
 import * as RadixSelect from '@radix-ui/react-select';
 import * as RadixSlider from '@radix-ui/react-slider';
 
@@ -120,9 +121,10 @@ export function Check({
         onCheckedChange={(v) => onChange(v === true)}
       >
         <RadixCheckbox.Indicator className="checkbox-indicator">
-          <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M2.5 6.4 5 8.9l4.5-5.3" />
-          </svg>
+          {/* The page's own icon set, at the page's stroke weight. A
+              hand-rolled tick at 2px on an 11px grid is nearly a fifth of the
+              mark thick — three times the weight of every other icon here. */}
+          <CheckIcon width={12} height={12} aria-hidden="true" />
         </RadixCheckbox.Indicator>
       </RadixCheckbox.Root>
       <span>{label}</span>

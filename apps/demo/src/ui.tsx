@@ -1,6 +1,7 @@
 import {
   Fragment,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -8,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Check, Copy, Github, MoonSat, SunLight } from 'iconoir-react';
-import { LETTER_PATHS, STROKE_WIDTH, INK_COLOR, LETTER_BOX } from 'blobbies';
+import { BACKDROP_COLOR, INK_COLOR, LETTER_PATHS, STROKE_WIDTH, LETTER_BOX } from 'blobbies';
 import { highlight, highlightShell } from './highlight';
 
 export const REPO = 'https://github.com/SouravInsights/blobbies';
@@ -121,14 +122,87 @@ export function Code({ code, lang = 'ts', className }: { code: string; lang?: 't
   );
 }
 
-/** A single glyph from the library's own path data. */
-export function Glyph({ char, size = 44 }: { char: string; size?: number }) {
+/**
+ * The mark: one blobbie, built out of the library's own geometry.
+ *
+ * It is not a drawing of an avatar — it is an avatar. The same egg path, the
+ * same disk it is clipped to, the same ink, at the same places. The one thing
+ * it leaves out is the initials: the eyes of a real avatar are letterforms,
+ * and at sixteen pixels a letterform is a smudge, so the mark is the face
+ * without the name on it.
+ *
+ * The mouth is what it used to be missing. A disk, an egg and two dots is a
+ * shape; a disk, an egg, two dots and a smile is a face.
+ */
+const MARK_BLOB =
+  'M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.2 -24 38 0 38C24 38 44 25.2 44 10.18Z';
+
+/** The face, in the library's own ink at the library's own coordinates. */
+const MARK_FACE =
+  '<circle cx="38" cy="56.2" r="7.5"/><circle cx="61" cy="56.2" r="7.5"/>' +
+  '<path transform="translate(50 78)" d="M-9 0 A9 7 0 0 0 9 0 Z"/>';
+
+export function Mark({ size = 22 }: { size?: number }) {
+  // Sanitised because React's ids carry colons, which are legal in an id but
+  // not in the functional notation this is used in.
+  const clip = `mk-${useId().replace(/:/g, '')}`;
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id={clip}>
+          <circle cx="50" cy="50" r="50" />
+        </clipPath>
+      </defs>
+      <circle cx="50" cy="50" r="50" fill={BACKDROP_COLOR} />
+      {/* Clipped to the disk exactly as the library clips a real one, so the
+          egg can never poke out of the circle. */}
+      <g clipPath={`url(#${clip})`}>
+        <g transform="translate(50 61.09)">
+          <path d={MARK_BLOB} fill="#FFD43B" />
+        </g>
+      </g>
+      <g fill={INK_COLOR} dangerouslySetInnerHTML={{ __html: MARK_FACE }} />
+    </svg>
+  );
+}
+
+/** The same mark as a data URI, for the tab. */
+export function markDataUri(size = 64): string {
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}">` +
+    `<circle cx="50" cy="50" r="50" fill="${BACKDROP_COLOR}"/>` +
+    `<clipPath id="m"><circle cx="50" cy="50" r="50"/></clipPath>` +
+    `<g clip-path="url(#m)"><g transform="translate(50 61.09)">` +
+    `<path d="${MARK_BLOB}" fill="#FFD43B"/></g></g>` +
+    `<g fill="${INK_COLOR}">${MARK_FACE}</g></svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+/**
+ * The box the glyphs' ink actually occupies inside the 24-unit authoring box,
+ * measured across all thirty-six: the paths themselves, plus half the stroke
+ * that sits outside them. It is taller than it is wide, and its centre is not
+ * the box's centre.
+ */
+const INK = { x: 0.75, y: -0.3, w: 23.5, h: 25.05 };
+const INK_CX = INK.x + INK.w / 2;
+const INK_CY = INK.y + INK.h / 2;
+
+/**
+ * A single glyph from the library's own path data, fitted to its container.
+ *
+ * Sizing it by the authoring box rather than by the ink is what used to clip
+ * these: the ink is 25 units tall in a 24-unit viewBox before any padding, so
+ * anything that scaled the box up cut the tops and bottoms off. This scales by
+ * the ink, on its own centre, and leaves the size to CSS.
+ */
+export function Glyph({ char, pad = 0.05 }: { char: string; pad?: number }) {
   const d = LETTER_PATHS[char];
   if (!d) return null;
-  const s = (size / LETTER_BOX.width) * 0.8;
+  const s = (24 * (1 - pad * 2)) / Math.max(INK.w, INK.h);
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
-      <g transform={`translate(${(24 - 24 * s) / 2} ${(24 - 24 * s) / 2}) scale(${s})`}>
+    <svg viewBox="0 0 24 24" className="glyph" aria-hidden="true" focusable="false">
+      <g transform={`translate(12 12) scale(${s.toFixed(4)}) translate(${-INK_CX} ${-INK_CY})`}>
         <path
           d={d}
           fill="none"

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Avatar } from '@blobbies/react';
 import { Menu } from 'iconoir-react';
-import { Api, Footer } from './sections/Api';
+import { Api } from './sections/Api';
 import { Draws } from './sections/Draws';
 import { Ending } from './sections/Ending';
 import { Film } from './sections/Film';
@@ -9,7 +9,7 @@ import { Hero } from './sections/Hero';
 import { Playground, DEFAULTS, avatarPropsFrom, type Controls } from './sections/Playground';
 import { QuickStart } from './sections/QuickStart';
 import { buildNames } from './data';
-import { GitHubIcon, ThemeIcon, REPO } from './ui';
+import { GitHubIcon, Mark, ThemeIcon, REPO } from './ui';
 
 const STRESS = buildNames(200);
 
@@ -20,18 +20,6 @@ const SECTIONS = [
   ['#draws', 'Glyphs'],
   ['#api', 'API'],
 ] as const;
-
-/** The mark is built the same way an avatar is: disk, egg, two eyes. */
-function Mark({ size = 20 }: { size?: number }) {
-  return (
-    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true">
-      <circle cx="50" cy="50" r="50" fill="#2f2f2f" />
-      <ellipse cx="50" cy="60" rx="41" ry="38" fill="#FFD43B" />
-      <circle cx="38" cy="55" r="5.5" fill="#1c1c1c" />
-      <circle cx="62" cy="55" r="5.5" fill="#1c1c1c" />
-    </svg>
-  );
-}
 
 export function App(): JSX.Element {
   const params = useMemo(
@@ -184,7 +172,6 @@ export function App(): JSX.Element {
         )}
       </main>
 
-      <Footer />
     </div>
   );
 }

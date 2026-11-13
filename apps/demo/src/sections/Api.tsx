@@ -9,7 +9,7 @@ import {
   REACT_SNIPPET,
   TYPES_SNIPPET,
 } from '../data';
-import { Code, CopyButton, GitHubIcon, REPO } from '../ui';
+import { Code, CopyButton, REPO } from '../ui';
 import { Lead } from './Lead';
 
 /**
@@ -105,40 +105,14 @@ export function Api() {
         </div>
 
         <p className="api-foot">
-          Every option has a deterministic default, so anything you leave out still draws the same face.
-          Try them in the <a href="#playground">playground</a>, or read the tables on{' '}
+          Every option has a deterministic default. Try them in the{' '}
+          <a href="#playground">playground</a>, or read the full tables on{' '}
           <a href={NPM} target="_blank" rel="noreferrer">
             npm
-          </a>{' '}
-          and{' '}
-          <a href={REPO} target="_blank" rel="noreferrer">
-            <GitHubIcon size={13} /> GitHub
           </a>
           .
         </p>
       </div>
     </section>
-  );
-}
-
-export function Footer() {
-  return (
-    <footer>
-      <nav>
-        <a href={REPO} target="_blank" rel="noreferrer">
-          <GitHubIcon size={13} /> GitHub
-        </a>
-        <a href={NPM} target="_blank" rel="noreferrer">
-          npm
-        </a>
-        <a href="#top">Back to top</a>
-      </nav>
-      <span>
-        MIT · made by{' '}
-        <a href="https://github.com/SouravInsights" target="_blank" rel="noreferrer">
-          @souravinsights
-        </a>
-      </span>
-    </footer>
   );
 }

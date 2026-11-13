@@ -142,7 +142,9 @@ main {
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: var(--gap);
-  padding: 0 var(--pad-r) calc(56px + env(safe-area-inset-bottom)) var(--pad-l);
+  /* No bottom padding: the page ends on a full-height section that brings its
+     own, and anything here would sit under it as dead space. */
+  padding: 0 var(--pad-r) 0 var(--pad-l);
   overflow-x: clip;
 }
 
@@ -1118,8 +1120,16 @@ pre.code {
   place-items: center;
   width: 100%;
   aspect-ratio: 1;
+  /* The padding is the glyph's margin inside the chip; the glyph fills what is
+     left of the circle and does its own optical fitting. */
+  padding: 15%;
   border-radius: 50%;
   background: var(--swatch);
+}
+.glyph {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .dq-grid button {
   border: 0;
@@ -1169,27 +1179,59 @@ pre.code {
 }
 .controls {
   display: grid;
-  gap: 18px;
-  padding: 18px;
+  gap: 16px;
+  padding: 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   position: sticky;
   top: 76px;
   max-height: calc(100dvh - 100px);
-  overflow: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* A scrollbar drawn to the panel's own measure: a 4px pill in a 14px lane,
+   inset from the rounded corners by the track's margin. `background-clip` is
+   what makes the transparent border read as an inset rather than as a
+   thicker bar. */
+.controls::-webkit-scrollbar {
+  width: 14px;
+}
+.controls::-webkit-scrollbar-track {
+  margin: 16px 0;
+  background: transparent;
+}
+.controls::-webkit-scrollbar-thumb {
+  border: 5px solid transparent;
+  border-radius: 99px;
+  background-color: var(--line);
+  background-clip: padding-box;
+}
+.controls::-webkit-scrollbar-thumb:hover {
+  background-color: var(--tertiary);
+}
+/* Firefox has no ::-webkit-scrollbar, and Chrome ignores the two standard
+   properties the moment they are set — so they go only where the pseudo-
+   elements do not exist, rather than fighting them. */
+@supports not selector(::-webkit-scrollbar) {
+  .controls,
+  .api-panel .code {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
 }
 .control-group {
   display: grid;
-  gap: 12px;
+  gap: 11px;
 }
 .control-group + .control-group {
-  padding-top: 16px;
+  padding-top: 14px;
   border-top: 1px solid var(--line-soft);
 }
 .field {
   display: grid;
-  gap: 7px;
+  gap: 6px;
 }
 .field-pair {
   display: grid;
@@ -1439,12 +1481,13 @@ pre.code {
   width: min(820px, 100%);
 }
 
-/* Stacked, not side by side: the note is about the command above it, and reads
-   as a caption when it sits under it. Beside it, it reads as a second thing. */
+/* Centred, like the lead above it: the two statements open the section and the
+   two technical things — the tabs and the panel — follow underneath. */
 .api-install {
   display: grid;
-  justify-items: start;
-  gap: 10px;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
 }
 .api-note {
   color: var(--tertiary);
@@ -1461,6 +1504,7 @@ pre.code {
 .api-tablist {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 2px;
 }
 .api-tablist button {
@@ -1515,15 +1559,17 @@ pre.code {
   /* The reference block is tall enough to want its own room on a phone. */
   max-height: min(58vh, 560px);
   overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
 }
 
+/* Centred like everything above the panel, and narrower: a centred paragraph
+   wants a shorter measure than a left-aligned one, or the eye loses the line. */
 .api-foot {
+  margin-inline: auto;
+  max-width: 58ch;
   color: var(--tertiary);
   font-size: 13.5px;
   line-height: 1.65;
-  max-width: 62ch;
+  text-align: center;
 }
 .api-foot a {
   display: inline-flex;
@@ -1536,29 +1582,6 @@ pre.code {
   text-decoration-color: var(--quaternary);
 }
 .api-foot a:hover {
-  color: var(--ink);
-}
-
-/* ---------------------------------------------------------------- footer */
-
-footer {
-  display: grid;
-  justify-items: center;
-  gap: 14px;
-  padding: 40px 0 8px;
-  font: 13px/1.6 var(--mono);
-  color: var(--quaternary);
-  text-align: center;
-}
-footer nav {
-  display: flex;
-  gap: 16px;
-}
-footer a {
-  color: var(--tertiary);
-  text-decoration: none;
-}
-footer a:hover {
   color: var(--ink);
 }
 
