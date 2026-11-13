@@ -93,7 +93,13 @@ export function Hero() {
             <GitHubIcon /> Source
           </a>
         </div>
-        <p className="meta">Deterministic SVG avatars · zero dependencies · 1.4 KB each</p>
+        <p className="meta">
+          <span>Deterministic SVG avatars</span>
+          <i aria-hidden="true">·</i>
+          <span>zero dependencies</span>
+          <i aria-hidden="true">·</i>
+          <span>1.4 KB each</span>
+        </p>
       </div>
 
       <span className="cue" aria-hidden="true" />

@@ -32,8 +32,8 @@ const RULES: ReadonlyArray<readonly [Token['cls'], RegExp]> = [
   ['l', /\b(?:true|false|null|undefined|this)\b/],
   // 5. numbers
   ['n', /\b\d[\d_]*(?:\.\d+)?\b/],
-  // 6. a capitalised word: a type, or a component in JSX
-  ['t', /\b[A-Z][A-Za-z0-9_$]*\b/],
+  // 6. a type: a capitalised word, or one of the primitives
+  ['t', /\b[A-Z][A-Za-z0-9_$]*\b|\b(?:string|number|boolean|object|unknown|never|symbol|bigint)\b/],
   // 7. a lowercase word about to be called
   ['f', /\b[a-z_$][\w$]*(?=\s*\()/],
   // 8. punctuation and operators

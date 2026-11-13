@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Avatar } from '@blobbies/react';
+import { Menu } from 'iconoir-react';
 import { Api, Footer } from './sections/Api';
 import { Draws } from './sections/Draws';
 import { Ending } from './sections/Ending';
@@ -8,9 +9,17 @@ import { Hero } from './sections/Hero';
 import { Playground, DEFAULTS, avatarPropsFrom, type Controls } from './sections/Playground';
 import { QuickStart } from './sections/QuickStart';
 import { buildNames } from './data';
-import { GitHubIcon, ThemeIcon } from './ui';
+import { GitHubIcon, ThemeIcon, REPO } from './ui';
 
 const STRESS = buildNames(200);
+
+/** The sections the bar links to. */
+const SECTIONS = [
+  ['#start', 'Quick start'],
+  ['#playground', 'Playground'],
+  ['#draws', 'Glyphs'],
+  ['#api', 'API'],
+] as const;
 
 /** The mark is built the same way an avatar is: disk, egg, two eyes. */
 function Mark({ size = 20 }: { size?: number }) {
@@ -35,17 +44,7 @@ export function App(): JSX.Element {
   );
   const [stress, setStress] = useState(() => params.get('stress') === '1');
   const [controls, setControls] = useState<Controls>(DEFAULTS);
-
-  // Hairline under the bar only after you have scrolled, so the top of the
-  // page stays completely open.
-  useEffect(() => {
-    const onScroll = (): void => {
-      document.documentElement.dataset.scrolled = window.scrollY > 8 ? '1' : '';
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const [menu, setMenu] = useState(false);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -67,39 +66,97 @@ export function App(): JSX.Element {
     return () => window.clearTimeout(t);
   }, [params]);
 
+  useEffect(() => {
+    const onScroll = (): void => {
+      document.documentElement.dataset.scrolled = window.scrollY > 8 ? '1' : '';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // The menu is a sheet over the page: it has to give way to anything that
+  // means the visitor has moved on.
+  useEffect(() => {
+    if (!menu) return undefined;
+    const close = (): void => setMenu(false);
+    const onKey = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') close();
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', close, { passive: true });
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('scroll', close);
+      window.removeEventListener('resize', close);
+    };
+  }, [menu]);
+
+  const flipTheme = (): void => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+  const themeLabel = `Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance`;
+
   return (
     <div id="top">
       <a className="skip" href="#main">
         Skip to content
       </a>
 
-      <div className="topbar">
+      <header className="bar" data-menu={menu ? '1' : '0'}>
         <a className="brand" href="#top">
           <Mark />
           <span className="brand-word">blobbies</span>
-          <span className="brand-version">v0.1.0</span>
+          <span className="brand-version">0.1.0</span>
         </a>
-        <nav className="topnav" aria-label="Sections">
-          <a href="#start">Quick start</a>
-          <a href="#playground">Playground</a>
-          <a href="#draws">Glyphs</a>
-          <a href="#api">API</a>
+
+        <nav className="barnav" aria-label="Sections">
+          {SECTIONS.map(([href, label]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
         </nav>
-        <div className="topbar-end">
-          <a className="topbar-link" href="https://github.com/SouravInsights/blobbies" target="_blank" rel="noreferrer">
-            <GitHubIcon />
+
+        <div className="bar-end">
+          <a className="bar-cta" href={REPO} target="_blank" rel="noreferrer">
+            <GitHubIcon size={15} />
             <span>GitHub</span>
           </a>
-          <button
-            type="button"
-            className="icon-btn"
-            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance`}
-          >
+          <button type="button" className="icon-btn bar-theme" onClick={flipTheme} aria-label={themeLabel}>
             <ThemeIcon theme={theme} />
           </button>
+          <button
+            type="button"
+            className="icon-btn bar-menu-btn"
+            onClick={() => setMenu((m) => !m)}
+            aria-expanded={menu}
+            aria-controls="bar-menu"
+            aria-label={menu ? 'Close menu' : 'Open menu'}
+          >
+            <Menu width={17} height={17} aria-hidden="true" />
+          </button>
         </div>
-      </div>
+
+        <div className="bar-menu" id="bar-menu" hidden={!menu}>
+          <nav aria-label="Sections">
+            {SECTIONS.map(([href, label]) => (
+              <a key={href} href={href} onClick={() => setMenu(false)}>
+                {label}
+              </a>
+            ))}
+          </nav>
+          <div className="bar-menu-foot">
+            <a href={REPO} target="_blank" rel="noreferrer">
+              <GitHubIcon size={15} />
+              <span>GitHub</span>
+            </a>
+            <button type="button" onClick={flipTheme}>
+              <ThemeIcon theme={theme} />
+              <span>{theme === 'dark' ? 'Light' : 'Dark'} appearance</span>
+            </button>
+          </div>
+        </div>
+      </header>
 
       <main id="main">
         {stress ? (

@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { RefreshDouble } from 'iconoir-react';
-import { CORE_SNIPPET } from '../data';
-import { Code, CopyButton, GitHubIcon, REPO } from '../ui';
 import { Burst } from './Burst';
+import { CopyButton, GitHubIcon, REPO } from '../ui';
 
 /**
  * The ending: the one line, the one command, and the burst.
@@ -44,9 +43,6 @@ export function Ending() {
 
       <div className="fin">
         <h2>Two lines is all it takes.</h2>
-        {/* The claim, then the evidence: the two lines, rather than asking the
-            reader to take "two lines" on faith. */}
-        <Code code={CORE_SNIPPET} className="fin-code" />
         <div className="cta">
           <CopyButton className="btn primary code" text="npm i blobbies" label="npm i blobbies" />
           <button type="button" className="btn" onClick={() => setRun((n) => n + 1)}>

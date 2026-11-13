@@ -57,3 +57,41 @@ const stop = attachAvatarMotion(svgEl, {
 })
 
 stop() // removes the listener`;
+
+/** The whole public surface, as it would read in an editor. */
+export const TYPES_SNIPPET = `// blobbies — zero dependencies
+renderAvatarSvg(name, options?): string
+renderAvatarBody(name, options?): ResolvedAvatar
+avatarDataUri(name, options?): string
+resolveAvatar(name, options?): ResolvedAvatar
+getInitials(name): string
+LETTER_PATHS: Record<string, string>
+
+// @blobbies/react — blobbies is its only dependency
+<Avatar name="Sourav Nanda" size={40} />  // every AvatarOption, and every svg prop
+useAvatarMotion(ref, options?): void
+
+// blobbies/motion — its own entry point
+attachAvatarMotion(el, options?): () => void`;
+
+/** Every option, with its default, in the shape you would paste. */
+export const OPTIONS_SNIPPET = `type AvatarOptions = {
+  size?: number | string                    // 48
+  animate?: boolean | 'blink' | 'follow' | 'all'  // false
+  blink?: boolean                           // true when animated
+  blinkInterval?: [number, number]          // [2500, 6000]
+  follow?: boolean                          // true when animated
+  followRange?: number                      // 6
+  followTarget?: 'window' | Element         // 'window'
+  smoothing?: number                        // 0.15
+  idleTimeout?: number                      // 2500
+  paused?: boolean                          // false
+  respectReducedMotion?: boolean            // true
+  wink?: boolean                            // false
+  glance?: boolean                          // false
+  surprise?: boolean                        // false
+  rounded?: boolean                         // false
+  title?: boolean                           // false
+  palette?: readonly string[]               // built-in
+  className?: string
+}`;
