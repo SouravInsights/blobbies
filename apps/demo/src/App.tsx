@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Avatar } from '@blobbies/react';
 import { Api, Footer } from './sections/Api';
-import { Behaviour } from './sections/Behaviour';
-import { Count } from './sections/Count';
 import { Draws } from './sections/Draws';
+import { Film } from './sections/Film';
 import { Hero } from './sections/Hero';
 import { Playground, DEFAULTS, avatarPropsFrom, type Controls } from './sections/Playground';
 import { QuickStart } from './sections/QuickStart';
 import { buildNames } from './data';
+import { GitHubIcon, ThemeIcon } from './ui';
 
 const STRESS = buildNames(200);
 
@@ -75,22 +75,29 @@ export function App(): JSX.Element {
       <div className="topbar">
         <a className="brand" href="#top">
           <Mark />
-          <span>blobbies</span>
+          <span className="brand-word">blobbies</span>
+          <span className="brand-version">v0.1.0</span>
         </a>
         <nav className="topnav" aria-label="Sections">
           <a href="#start">Quick start</a>
-          <a href="#behaviour">Behaviour</a>
           <a href="#playground">Playground</a>
+          <a href="#draws">Glyphs</a>
           <a href="#api">API</a>
         </nav>
-        <button
-          type="button"
-          className="icon-btn"
-          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance`}
-        >
-          {theme === 'dark' ? '☀' : '☾'}
-        </button>
+        <div className="topbar-end">
+          <a className="topbar-link" href="https://github.com/SouravInsights/blobbies" target="_blank" rel="noreferrer">
+            <GitHubIcon />
+            <span>GitHub</span>
+          </a>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance`}
+          >
+            <ThemeIcon theme={theme} />
+          </button>
+        </div>
       </div>
 
       <main id="main">
@@ -109,11 +116,10 @@ export function App(): JSX.Element {
         ) : (
           <>
             <Hero />
+            <Film />
             <QuickStart />
-            <Behaviour name={name} />
             <Playground value={controls} onChange={setControls} onAdopt={setName} />
-            <Count />
-            <Draws onPick={setName} />
+            <Draws name={name} onPick={setName} />
             <Api />
           </>
         )}

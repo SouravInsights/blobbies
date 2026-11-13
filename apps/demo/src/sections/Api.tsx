@@ -25,7 +25,7 @@ const REACT_PROPS: Array<[string, string, string]> = [
 export function Api() {
   return (
     <section className="section" id="api">
-      <Lead title="Two packages, one import." note="blobbies has no runtime dependencies at all. Import the motion only if you want it." />
+      <Lead title="Two packages, one import." note="No runtime dependencies. Import the motion only if you want it." />
       <div className="api">
         <div className="api-row">
           <CopyButton className="btn code" text={INSTALL} label={INSTALL} />

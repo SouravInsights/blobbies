@@ -11,6 +11,22 @@ export function GitHubIcon({ size = 15 }: { size?: number }) {
   );
 }
 
+/** Sun / moon as paths rather than text glyphs, so weight and size match. */
+export function ThemeIcon({ theme }: { theme: 'dark' | 'light' }) {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+      {theme === 'dark' ? (
+        <>
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" />
+        </>
+      ) : (
+        <path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a8.2 8.2 0 1 0 10.5 10.5Z" />
+      )}
+    </svg>
+  );
+}
+
 export function CopyButton(props: { text: string; label: string; className?: string; icon?: ReactNode }) {
   const { text, label, className, icon } = props;
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');

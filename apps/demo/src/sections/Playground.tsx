@@ -1,6 +1,7 @@
 import { Avatar } from '@blobbies/react';
 import type { AvatarAnimate } from '@blobbies/react';
 import { buildNames } from '../data';
+import { Check, Range, Select } from '../controls';
 import { Lead } from './Lead';
 
 export type Flag = 'auto' | 'on' | 'off';
@@ -88,42 +89,37 @@ export function Playground({
 
   return (
     <section className="section" id="playground">
-      <Lead title="Turn every dial." note="All of it runs on the same shared loop." />
+      <Lead title="Every option, one at a time." note="Change one and see what you get." />
       <div className="play">
         <div className="controls">
           <div className="control-group">
-            <label className="field">
-              <span>Animate</span>
-              <select
-                value={String(value.animate)}
-                onChange={(e) =>
-                  set('animate', (e.target.value === 'false' ? false : e.target.value) as AvatarAnimate)
-                }
-              >
-                {ANIMATE_OPTIONS.map((o) => (
-                  <option key={String(o.value)} value={String(o.value)}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Select
+              label="Animate"
+              value={String(value.animate)}
+              options={ANIMATE_OPTIONS.map((o) => ({ value: String(o.value), label: o.label }))}
+              onChange={(v) => set('animate', (v === 'false' ? false : v) as AvatarAnimate)}
+            />
             <div className="field-pair">
-              <label className="field">
-                <span>Blink</span>
-                <select value={value.blink} onChange={(e) => set('blink', e.target.value as Flag)}>
-                  <option value="auto">auto</option>
-                  <option value="on">on</option>
-                  <option value="off">off</option>
-                </select>
-              </label>
-              <label className="field">
-                <span>Follow</span>
-                <select value={value.follow} onChange={(e) => set('follow', e.target.value as Flag)}>
-                  <option value="auto">auto</option>
-                  <option value="on">on</option>
-                  <option value="off">off</option>
-                </select>
-              </label>
+              <Select
+                label="Blink"
+                value={value.blink}
+                options={[
+                  { value: 'auto', label: 'auto' },
+                  { value: 'on', label: 'on' },
+                  { value: 'off', label: 'off' },
+                ]}
+                onChange={(v) => set('blink', v as Flag)}
+              />
+              <Select
+                label="Follow"
+                value={value.follow}
+                options={[
+                  { value: 'auto', label: 'auto' },
+                  { value: 'on', label: 'on' },
+                  { value: 'off', label: 'off' },
+                ]}
+                onChange={(v) => set('follow', v as Flag)}
+              />
             </div>
           </div>
 
@@ -169,45 +165,5 @@ export function Playground({
         </div>
       </div>
     </section>
-  );
-}
-
-function Range(props: {
-  label: string;
-  suffix?: string;
-  min: number;
-  max: number;
-  step: number;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <label className="field">
-      <span className="range-head">
-        <span className="k">{props.label}</span>
-        <span className="v">
-          {props.value}
-          {props.suffix ?? ''}
-        </span>
-      </span>
-      <input
-        type="range"
-        min={props.min}
-        max={props.max}
-        step={props.step}
-        value={props.value}
-        onChange={(e) => props.onChange(Number(e.target.value))}
-      />
-    </label>
-  );
-}
-
-function Check(props: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <label className="check">
-      <input type="checkbox" checked={props.checked} onChange={(e) => props.onChange(e.target.checked)} />
-      <i aria-hidden="true" />
-      <span>{props.label}</span>
-    </label>
   );
 }
