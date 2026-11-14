@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Avatar } from '@blobbies/react';
 import type { AvatarAnimate } from '@blobbies/react';
 import { buildNames } from '../data';
@@ -91,6 +92,22 @@ export function Playground({
     <section className="section" id="playground">
       <Lead title="Every option, one at a time." note="Change one and see what you get." />
       <div className="play">
+        {/* The specimen comes first in the document, not beside the controls
+            in source order: on a phone it pins to the top of the screen and
+            the controls scroll under it, so a dial and its result are never
+            more than a glance apart. */}
+        <div className="play-hero">
+          <Avatar
+            name="Sourav Nanda"
+            size={value.size}
+            {...avatarPropsFrom(value)}
+            style={{ "--size": `${value.size}px` } as CSSProperties}
+          />
+          <code>
+            {value.animate === false ? 'static' : value.animate} · {value.size}px
+          </code>
+        </div>
+
         <div className="controls">
           <div className="control-group">
             <Select
@@ -142,26 +159,13 @@ export function Playground({
           </div>
         </div>
 
-        <div className="play-stage">
-          <div className="play-hero">
-            <Avatar
-              name="Sourav Nanda"
-              size={value.size}
-              {...avatarPropsFrom(value)}
-              style={{ width: `min(${value.size}px, 40vw)`, height: 'auto' }}
-            />
-            <code>
-              {value.animate === false ? 'static' : value.animate} · {value.size}px
-            </code>
-          </div>
-          <div className="gallery">
-            {GALLERY.map((n) => (
-              <button key={n} type="button" title={`Use ${n}`} onClick={() => onAdopt(n)}>
-                <Avatar name={n} size={52} {...avatarPropsFrom(value)} />
-                <span>{n}</span>
-              </button>
-            ))}
-          </div>
+        <div className="gallery">
+          {GALLERY.map((n) => (
+            <button key={n} type="button" title={`Use ${n}`} onClick={() => onAdopt(n)}>
+              <Avatar name={n} size={52} {...avatarPropsFrom(value)} />
+              <span>{n}</span>
+            </button>
+          ))}
         </div>
       </div>
     </section>

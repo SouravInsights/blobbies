@@ -1350,6 +1350,10 @@ pre.code {
   align-items: start;
 }
 .controls {
+  grid-column: 1;
+  /* Both rows, so the panel's area is the whole column and it has somewhere
+     to stick within. */
+  grid-row: 1 / span 2;
   display: grid;
   gap: 16px;
   padding: 16px;
@@ -1609,12 +1613,9 @@ pre.code {
     0 0 0 3.5px var(--tertiary);
 }
 
-.play-stage {
-  display: grid;
-  gap: 16px;
-  min-width: 0;
-}
 .play-hero {
+  grid-column: 2;
+  grid-row: 1;
   display: grid;
   place-items: center;
   gap: 14px;
@@ -1624,14 +1625,21 @@ pre.code {
   border-radius: var(--radius);
   background: var(--panel);
 }
+.play-hero svg {
+  width: min(var(--size, 128px), 40vw);
+  height: auto;
+}
 .play-hero code {
   font: 12px/1 var(--mono);
   color: var(--tertiary);
 }
 .gallery {
+  grid-column: 2;
+  grid-row: 2;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
   gap: 6px;
+  min-width: 0;
 }
 .gallery button {
   display: grid;
@@ -1659,13 +1667,64 @@ pre.code {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* On a phone the specimen pins to the top of the screen and the controls run
+   under it. Without that the panel is taller than the screen, so changing a
+   dial and seeing the result were two separate scrolls — which is the one
+   thing a playground cannot ask for. */
 @media (max-width: 900px) {
   .play {
-    grid-template-columns: minmax(0, 1fr);
+    display: block;
+  }
+  .play-hero {
+    position: sticky;
+    top: 64px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 0;
+    padding: 14px 16px;
+  }
+  .play-hero svg {
+    width: min(var(--size, 128px), 34vw);
   }
   .controls {
     position: static;
     max-height: none;
+    margin-top: 16px;
+  }
+  .gallery {
+    margin-top: 16px;
+  }
+  /* Thumbs, not cursors: every control a finger has to land on gets the size
+     a finger needs. */
+  .select-trigger {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 13.5px;
+  }
+  .slider {
+    height: 34px;
+  }
+  .slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+  .check {
+    min-height: 44px;
+    font-size: 14.5px;
+  }
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+  .checkbox-indicator svg {
+    width: 14px;
+    height: 14px;
+  }
+  .control-group {
+    gap: 14px;
   }
 }
 
