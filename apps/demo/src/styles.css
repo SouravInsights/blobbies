@@ -24,12 +24,21 @@
 
   /* One elevation model. The hairline cap + inner highlight is what makes a
      control read as physical without a heavy shadow. */
-  --control: 0 0 0 0.5px oklch(0.15 0.006 300 / 0.7), 0 1px 2px oklch(0.15 0.006 300 / 0.3),
-    inset 0 0.5px 0 oklch(0.92 0 0 / 0.1), inset 0 0 0 0.5px oklch(0.92 0 0 / 0.05);
-  --lift: 0 10px 15px -3px oklch(0.15 0.006 300 / 0.4), 0 4px 6px -4px oklch(0.15 0.006 300 / 0.4);
+  --control:
+    0 0 0 0.5px oklch(0.15 0.006 300 / 0.7),
+    0 1px 2px oklch(0.15 0.006 300 / 0.3),
+    inset 0 0.5px 0 oklch(0.92 0 0 / 0.1),
+    inset 0 0 0 0.5px oklch(0.92 0 0 / 0.05);
+  --lift:
+    0 10px 15px -3px oklch(0.15 0.006 300 / 0.4),
+    0 4px 6px -4px oklch(0.15 0.006 300 / 0.4);
 
-  --sans: 'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans:
+    "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui,
+    -apple-system, sans-serif;
+  --mono:
+    "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo,
+    monospace;
 
   /* One springy curve for anything that pops, one short curve for colour, and
      SwiftUI's easeOut for anything that has to leave the frame smoothly. */
@@ -44,7 +53,7 @@
   --swatch: #ece6da;
 }
 
-:root[data-theme='light'] {
+:root[data-theme="light"] {
   color-scheme: light;
   --bg: oklch(0.985 0.004 95);
   --panel: oklch(1 0 0);
@@ -56,9 +65,12 @@
   --secondary: oklch(0.47 0.012 300);
   --tertiary: oklch(0.56 0.011 300);
   --quaternary: oklch(0.64 0.01 300);
-  --control: 0 0 0 0.5px oklch(0.85 0.006 95), 0 1px 2px oklch(0.6 0.01 95 / 0.12),
+  --control:
+    0 0 0 0.5px oklch(0.85 0.006 95), 0 1px 2px oklch(0.6 0.01 95 / 0.12),
     inset 0 0.5px 0 oklch(1 0 0), inset 0 0 0 0.5px oklch(1 0 0 / 0.6);
-  --lift: 0 10px 15px -3px oklch(0.6 0.01 95 / 0.18), 0 4px 6px -4px oklch(0.6 0.01 95 / 0.14);
+  --lift:
+    0 10px 15px -3px oklch(0.6 0.01 95 / 0.18),
+    0 4px 6px -4px oklch(0.6 0.01 95 / 0.14);
 }
 
 * {
@@ -74,8 +86,8 @@ html {
   background: var(--bg);
   scroll-behavior: smooth;
 }
-:root[data-theme='light'] html,
-html:has(:root[data-theme='light']) {
+:root[data-theme="light"] html,
+html:has(:root[data-theme="light"]) {
   color-scheme: light;
 }
 
@@ -108,7 +120,9 @@ figure {
 }
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--tertiary);
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3.5px var(--tertiary);
   border-radius: 8px;
 }
 
@@ -177,7 +191,7 @@ main > * {
 .lead .w {
   transition-duration: 0.42s;
 }
-.lead[data-s='said'] .w {
+.lead[data-s="said"] .w {
   transition-delay: calc(var(--d, 0ms) + var(--i) * 42ms);
 }
 .lead p {
@@ -218,7 +232,7 @@ main > * {
 }
 
 .bar::before {
-  content: '';
+  content: "";
   position: absolute;
   /* Absolutely positioned, so it would otherwise paint over the bar's own
      links: the wash goes behind them. */
@@ -229,7 +243,7 @@ main > * {
   pointer-events: none;
   transition: background var(--fade);
 }
-:root[data-scrolled='1'] .bar::before {
+:root[data-scrolled="1"] .bar::before {
   background: linear-gradient(var(--bg) 48%, transparent);
 }
 
@@ -267,8 +281,10 @@ main > * {
   text-decoration: none;
   transition: color var(--fade);
 }
-.barnav a:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .barnav a:hover {
+    color: var(--ink);
+  }
 }
 
 .bar-end {
@@ -288,11 +304,15 @@ main > * {
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
-  transition: border-color var(--fade), background-color var(--fade);
+  transition:
+    border-color var(--fade),
+    background-color var(--fade);
 }
-.bar-cta:hover {
-  border-color: transparent;
-  background: var(--raised);
+@media (hover: hover) {
+  .bar-cta:hover {
+    border-color: transparent;
+    background: var(--raised);
+  }
 }
 
 .icon-btn {
@@ -304,11 +324,15 @@ main > * {
   border-radius: 50%;
   background: transparent;
   color: var(--tertiary);
-  transition: color var(--fade), background-color var(--fade);
+  transition:
+    color var(--fade),
+    background-color var(--fade);
 }
-.icon-btn:hover {
-  background: var(--raised);
-  color: var(--ink);
+@media (hover: hover) {
+  .icon-btn:hover {
+    background: var(--raised);
+    color: var(--ink);
+  }
 }
 
 /* The menu: phones only, so the bar never has to choose between a link running
@@ -368,9 +392,11 @@ main > * {
     text-decoration: none;
     transition: background-color var(--fade);
   }
-  .bar-menu a:hover,
-  .bar-menu button:hover {
-    background: var(--raised);
+  @media (hover: hover) {
+    .bar-menu a:hover,
+    .bar-menu button:hover {
+      background: var(--raised);
+    }
   }
   .bar-menu-foot {
     display: grid;
@@ -411,24 +437,30 @@ main > * {
   white-space: nowrap;
   transition: background-color var(--fade);
 }
-.btn:hover {
-  background: var(--raised-hover);
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--raised-hover);
+  }
 }
 .btn.primary {
   background: oklch(0.95 0 0);
   color: oklch(0.205 0 0);
   box-shadow: var(--lift);
 }
-.btn.primary:hover {
-  background: oklch(0.99 0 0);
+@media (hover: hover) {
+  .btn.primary:hover {
+    background: oklch(0.99 0 0);
+  }
 }
 /* On paper a near-white button disappears, so the primary inverts instead. */
-:root[data-theme='light'] .btn.primary {
+:root[data-theme="light"] .btn.primary {
   background: oklch(0.24 0.012 300);
   color: oklch(0.985 0.004 95);
 }
-:root[data-theme='light'] .btn.primary:hover {
-  background: oklch(0.32 0.012 300);
+@media (hover: hover) {
+  :root[data-theme="light"] .btn.primary:hover {
+    background: oklch(0.32 0.012 300);
+  }
 }
 .btn.code {
   font-family: var(--mono);
@@ -727,8 +759,10 @@ main > * {
   text-decoration-color: var(--quaternary);
   transition: color var(--fade);
 }
-.fin .meta a:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .fin .meta a:hover {
+    color: var(--ink);
+  }
 }
 
 /* --- the burst --------------------------------------------------------- */
@@ -743,8 +777,14 @@ main > * {
   pointer-events: none;
   /* They come up out of nothing and fall back into it, so the section's own
      bottom edge is never a line drawn across them. */
-  -webkit-mask: linear-gradient(#000 calc(100% - clamp(120px, 24vh, 260px)), #0000 calc(100% - 6px));
-  mask: linear-gradient(#000 calc(100% - clamp(120px, 24vh, 260px)), #0000 calc(100% - 6px));
+  -webkit-mask: linear-gradient(
+    #000 calc(100% - clamp(120px, 24vh, 260px)),
+    #0000 calc(100% - 6px)
+  );
+  mask: linear-gradient(
+    #000 calc(100% - clamp(120px, 24vh, 260px)),
+    #0000 calc(100% - 6px)
+  );
 }
 
 /* Hidden until the physics gives them a place and a reason. */
@@ -773,7 +813,9 @@ main > * {
   padding: 0 0.95em;
   border-radius: 99px;
   background: color-mix(in srgb, var(--bg) 82%, transparent);
-  box-shadow: 0 6px 24px oklch(0.04 0 0 / 0.22), inset 0 0 0 1px oklch(0.6 0 0 / 0.16);
+  box-shadow:
+    0 6px 24px oklch(0.04 0 0 / 0.22),
+    inset 0 0 0 1px oklch(0.6 0 0 / 0.16);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -902,12 +944,16 @@ main > * {
   padding: 9px 12px;
   border-radius: 8px;
   white-space: nowrap;
-  transition: color var(--fade), background-color var(--fade);
+  transition:
+    color var(--fade),
+    background-color var(--fade);
 }
-.tab-list button:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .tab-list button:hover {
+    color: var(--ink);
+  }
 }
-.tab-list button[aria-selected='true'] {
+.tab-list button[aria-selected="true"] {
   background: var(--raised);
   color: var(--ink);
   box-shadow: var(--control);
@@ -1139,8 +1185,10 @@ pre.code {
   border-radius: 8px;
   transition: transform 0.15s var(--spring);
 }
-.dq-grid button:hover {
-  transform: scale(1.12);
+@media (hover: hover) {
+  .dq-grid button:hover {
+    transform: scale(1.12);
+  }
 }
 .dq-grid button > * {
   animation: swap 0.4s var(--spring);
@@ -1208,8 +1256,10 @@ pre.code {
   background-color: var(--line);
   background-clip: padding-box;
 }
-.controls::-webkit-scrollbar-thumb:hover {
-  background-color: var(--tertiary);
+@media (hover: hover) {
+  .controls::-webkit-scrollbar-thumb:hover {
+    background-color: var(--tertiary);
+  }
 }
 /* Firefox has no ::-webkit-scrollbar, and Chrome ignores the two standard
    properties the moment they are set — so they go only where the pseudo-
@@ -1262,16 +1312,22 @@ pre.code {
   font-size: 12.5px;
   text-align: left;
   cursor: pointer;
-  transition: border-color var(--fade), background-color var(--fade);
+  transition:
+    border-color var(--fade),
+    background-color var(--fade);
 }
-.select-trigger:hover {
-  border-color: var(--tertiary);
+@media (hover: hover) {
+  .select-trigger:hover {
+    border-color: var(--tertiary);
+  }
 }
 .select-trigger:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--tertiary);
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3.5px var(--tertiary);
 }
-.select-trigger[data-state='open'] {
+.select-trigger[data-state="open"] {
   border-color: var(--tertiary);
 }
 .select-icon {
@@ -1280,7 +1336,7 @@ pre.code {
   color: var(--tertiary);
   transition: transform var(--fade);
 }
-.select-trigger[data-state='open'] .select-icon {
+.select-trigger[data-state="open"] .select-icon {
   transform: rotate(180deg);
 }
 .select-content {
@@ -1313,7 +1369,7 @@ pre.code {
   background: var(--raised);
   color: var(--ink);
 }
-.select-item[data-state='checked'] {
+.select-item[data-state="checked"] {
   color: var(--ink);
 }
 .select-indicator {
@@ -1364,17 +1420,23 @@ pre.code {
   box-shadow: 0 0 0 3px var(--bg);
   outline: none;
   cursor: grab;
-  transition: background-color var(--fade), transform var(--fade);
+  transition:
+    background-color var(--fade),
+    transform var(--fade);
 }
-.slider-thumb:hover {
-  background: var(--accent);
+@media (hover: hover) {
+  .slider-thumb:hover {
+    background: var(--accent);
+  }
 }
 .slider-thumb:active {
   cursor: grabbing;
   transform: scale(1.08);
 }
 .slider-thumb:focus-visible {
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--tertiary);
+  box-shadow:
+    0 0 0 3px var(--bg),
+    0 0 0 4.5px var(--tertiary);
 }
 
 .checks {
@@ -1398,12 +1460,16 @@ pre.code {
   border: 1px solid var(--line);
   border-radius: 4px;
   background: var(--bg);
-  transition: background-color var(--fade), border-color var(--fade);
+  transition:
+    background-color var(--fade),
+    border-color var(--fade);
 }
-.checkbox:hover {
-  border-color: var(--tertiary);
+@media (hover: hover) {
+  .checkbox:hover {
+    border-color: var(--tertiary);
+  }
 }
-.checkbox[data-state='checked'] {
+.checkbox[data-state="checked"] {
   background: var(--accent);
   border-color: var(--accent);
 }
@@ -1414,7 +1480,9 @@ pre.code {
 }
 .checkbox:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--tertiary);
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3.5px var(--tertiary);
 }
 
 .play-stage {
@@ -1449,11 +1517,15 @@ pre.code {
   border: 1px solid transparent;
   border-radius: 10px;
   background: none;
-  transition: background-color var(--fade), border-color var(--fade);
+  transition:
+    background-color var(--fade),
+    border-color var(--fade);
 }
-.gallery button:hover {
-  background: var(--panel);
-  border-color: var(--line);
+@media (hover: hover) {
+  .gallery button:hover {
+    background: var(--panel);
+    border-color: var(--line);
+  }
 }
 .gallery span {
   font: 11px/1 var(--mono);
@@ -1515,19 +1587,23 @@ pre.code {
   color: var(--tertiary);
   font: 13px/1 var(--mono);
   letter-spacing: 0.01em;
-  transition: color var(--fade), background-color var(--fade);
+  transition:
+    color var(--fade),
+    background-color var(--fade);
 }
-.api-tablist button:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .api-tablist button:hover {
+    color: var(--ink);
+  }
 }
-.api-tablist button[aria-selected='true'] {
+.api-tablist button[aria-selected="true"] {
   background: var(--raised);
   color: var(--ink);
 }
 /* A hairline before the reference, so the four examples and the two tables read
    as the two things they are. */
 .api-tablist button[data-divide]::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 1px;
   height: 13px;
@@ -1581,8 +1657,10 @@ pre.code {
   text-underline-offset: 3px;
   text-decoration-color: var(--quaternary);
 }
-.api-foot a:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .api-foot a:hover {
+    color: var(--ink);
+  }
 }
 
 /* ---------------------------------------------------------------- stress */
@@ -1712,13 +1790,13 @@ pre.code {
 .says p .w {
   --d: 130ms;
 }
-.says[data-s='said'] .w {
+.says[data-s="said"] .w {
   opacity: 1;
   filter: none;
   translate: 0 0;
   transition-delay: calc(var(--d, 0ms) + var(--i) * 55ms);
 }
-.says[data-s='gone'] .w {
+.says[data-s="gone"] .w {
   filter: blur(0.24em);
   translate: 0 -0.12em;
   transition-duration: 0.4s;
@@ -1732,7 +1810,7 @@ pre.code {
     opacity 0.6s var(--oe) 0.1s,
     translate 0.6s var(--oe) 0.1s;
 }
-.film-beat[data-s='said'] .film-number {
+.film-beat[data-s="said"] .film-number {
   opacity: 1;
   translate: 0 0;
 }
@@ -1809,7 +1887,8 @@ pre.code {
     translate: none;
     scale: 1;
     opacity: 1;
-  }  .film-copy {
+  }
+  .film-copy {
     position: static;
     translate: none;
     width: min(620px, 100% - 48px);
