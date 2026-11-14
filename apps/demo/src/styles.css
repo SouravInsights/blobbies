@@ -49,6 +49,13 @@
   --radius: 14px;
   --gap: clamp(96px, 11vw, 140px);
 
+  /* One scale. What carries the hierarchy is the distance between the small
+     type and the large, not weight or colour: a 14px body against a 46px
+     statement is a ratio of three and a bit, and anything closer than that
+     reads as a page with no opinions. */
+  --fs-say: clamp(28px, 3.3vw, 46px); /* a section's statement */
+  --fs-hero: clamp(30px, 4.4vw, 52px); /* the hero's, and the ending's */
+
   /* The page's gutter. Two properties so a full-bleed child can escape it
      exactly, safe-area and all, instead of guessing with 100vw (which includes
      the scrollbar). It lives here rather than on main because the bar needs the
@@ -102,7 +109,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 400 16px/1.5 var(--sans);
+  font: 400 14px/1.62 var(--sans);
 }
 
 ::selection {
@@ -179,15 +186,20 @@ main > * {
 .lead {
   display: grid;
   justify-items: center;
-  gap: 2px;
+  gap: 0.06em;
   text-align: center;
+  /* The measure is set in the statement's own characters, so it stays a
+     statement at every width rather than a column of two words. */
+  font-size: var(--fs-say);
+  width: min(21em, 100%);
 }
 .lead h2,
 .lead p {
-  font-size: clamp(20px, 2.1vw, 24px);
-  line-height: 1.34;
+  font-size: var(--fs-say);
+  line-height: 1.1;
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
 }
 /* A shorter queue than the film's: an intro is read once, not scrubbed. */
 .lead .w {
@@ -434,15 +446,15 @@ main > * {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 40px;
-  padding: 0 16px;
+  height: 42px;
+  padding: 0 17px;
   border: 0;
   border-radius: 8px;
   background: var(--raised);
   box-shadow: var(--control);
   color: var(--ink);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13.5px;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
   transition: background-color var(--fade);
@@ -595,7 +607,7 @@ main > * {
      it holds rather than of the body text it inherits. It also sets how far
      the block blurs and rises on its way out, so the exit scales with the type
      the way everything else here does. */
-  --fs: clamp(30px, 4.4vw, 52px);
+  --fs: var(--fs-hero);
   --out: 0;
   font-size: var(--fs);
   width: min(19em, 100% - 40px);
@@ -743,7 +755,7 @@ main > * {
   justify-items: center;
   /* The same size as the hero's line: the page opens and closes on the same
      note, and everything between them is smaller. */
-  --fs: clamp(30px, 4.4vw, 52px);
+  --fs: var(--fs-hero);
   font-size: var(--fs);
   width: min(16em, 100% - 40px);
   text-align: center;
@@ -1225,7 +1237,7 @@ pre.code {
   animation: swap 0.4s var(--spring);
 }
 .dq-caption {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--tertiary);
   text-align: center;
 }
@@ -1240,6 +1252,20 @@ pre.code {
   display: block;
   flex: none;
 }
+@media (max-width: 720px) {
+  :root {
+    --fs-say: clamp(27px, 7.2vw, 38px);
+  }
+  /* Six tabs wrap on a phone, and a divider that opens the second line reads
+     as a stray mark. A gap says the same thing without one. */
+  .api-tablist button[data-divide]::before {
+    display: none;
+  }
+  .api-tablist button[data-divide] {
+    margin-left: 10px;
+  }
+}
+
 @media (max-width: 760px) {
   .dq-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1478,7 +1504,7 @@ pre.code {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--secondary);
   cursor: pointer;
 }
@@ -1779,7 +1805,7 @@ pre.code {
   bottom: clamp(56px, 11vh, 104px);
   translate: -50% 0;
   display: grid;
-  width: min(620px, 100% - 48px);
+  width: min(760px, 100% - 48px);
   text-align: center;
   pointer-events: none;
 }
@@ -1859,7 +1885,7 @@ pre.code {
   translate: 0 0;
 }
 .film-beat h3 {
-  font-size: clamp(22px, 2.9vw, 38px);
+  font-size: clamp(24px, 3.2vw, 42px);
   font-weight: 600;
   letter-spacing: -0.028em;
   line-height: 1.1;

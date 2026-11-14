@@ -10,7 +10,7 @@ import { Words, useInView } from '../ui';
 export function Lead({ title, note }: { title: string; note: string }) {
   const [ref, seen] = useInView<HTMLDivElement>(0.55);
   return (
-    <div className="lead col says" ref={ref} data-s={seen ? 'said' : 'wait'}>
+    <div className="lead says" ref={ref} data-s={seen ? 'said' : 'wait'}>
       <h2>
         <Words text={title} />
       </h2>

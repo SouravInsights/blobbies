@@ -12,7 +12,7 @@ const SIZES = [96, 64, 40, 28, 20];
 export function Draws({ name, onPick }: { name: string; onPick: (name: string) => void }) {
   return (
     <section className="section" id="draws">
-      <Lead title="What it draws." note="Every name gets its own eyes. Click any to draw it." />
+      <Lead title="What it draws." note="Every name gets its own eyes." />
       <div className="dq-grid">
         {GLYPHS.map((ch) => (
           <button key={ch} type="button" onClick={() => onPick(ch)} title={`Draw “${ch}”`}>
