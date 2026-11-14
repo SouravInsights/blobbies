@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" width="116" height="116" role="img" aria-label="Blobbies">
+  <title>Blobbies</title>
+  <!-- Black tile: the mark sits on pure black (#000000), inset to leave an 8%
+       margin. The disk's own backdrop (#2f2f2f) is deliberately a different
+       colour from the tile, so the disk reads as a circle rather than
+       dissolving into the background. -->
+  <defs>
+    <clipPath id="bb-jpg-black-clip">
+      <circle cx="50" cy="50" r="50"/>
+    </clipPath>
+  </defs>
+  <rect x="-8" y="-8" width="116" height="116" fill="#000000"/>
+  <circle cx="50" cy="50" r="50" fill="#2f2f2f"/>
+  <g clip-path="url(#bb-jpg-black-clip)">
+    <g transform="translate(50 61.09)">
+      <path d="M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.2 -24 38 0 38C24 38 44 25.2 44 10.18Z" fill="#FFD43B"/>
+    </g>
+  </g>
+  <g fill="#1c1c1c">
+    <circle cx="38" cy="56.2" r="7.5"/>
+    <circle cx="61" cy="56.2" r="7.5"/>
+    <path transform="translate(50 78)" d="M-9 0 A9 7 0 0 0 9 0 Z"/>
+  </g>
+</svg>
