@@ -1364,7 +1364,6 @@ pre.code {
   top: 76px;
   max-height: calc(100dvh - 100px);
   overflow-y: auto;
-  overscroll-behavior: contain;
 }
 
 /* A scrollbar drawn to the panel's own measure: a 4px pill in a 14px lane,
@@ -1523,7 +1522,11 @@ pre.code {
   align-items: center;
   width: 100%;
   height: 20px;
-  touch-action: none;
+  /* A horizontal slider, so only the horizontal axis is ours. Left as `none`
+     — which is what a slider normally wants on a desktop — the whole track
+     swallows a vertical swipe, and with six of them stacked the panel is
+     mostly dead to the finger trying to scroll past it. */
+  touch-action: pan-y;
   user-select: none;
 }
 .slider-track {
@@ -1629,9 +1632,26 @@ pre.code {
   width: min(var(--size, 128px), 40vw);
   height: auto;
 }
+.play-hero-note {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
 .play-hero code {
   font: 12px/1 var(--mono);
   color: var(--tertiary);
+}
+/* Said only where there is no cursor to discover it with. */
+.play-hero-hint {
+  display: none;
+  color: var(--quaternary);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+@media (hover: none) {
+  .play-hero-hint {
+    display: block;
+  }
 }
 .gallery {
   grid-column: 2;
@@ -1685,12 +1705,19 @@ pre.code {
     min-height: 0;
     padding: 14px 16px;
   }
+  .play-hero-note {
+    justify-items: start;
+  }
   .play-hero svg {
-    width: min(var(--size, 128px), 34vw);
+    width: min(var(--size, 128px), 44vw);
   }
   .controls {
     position: static;
     max-height: none;
+    /* Not a scroll container at all here. Left as one, it is a box with
+       overflow: auto and nothing to scroll, which swallows a vertical pan
+       instead of passing it to the page. */
+    overflow: visible;
     margin-top: 16px;
   }
   .gallery {
@@ -1723,8 +1750,32 @@ pre.code {
     width: 14px;
     height: 14px;
   }
+  /* Compact, but not at the cost of the targets: the gaps come down, the
+     things a finger lands on do not. */
+  .controls {
+    padding: 14px;
+    gap: 10px;
+  }
   .control-group {
-    gap: 14px;
+    gap: 10px;
+  }
+  .control-group + .control-group {
+    padding-top: 12px;
+  }
+  .field {
+    gap: 3px;
+  }
+  .slider {
+    height: 32px;
+  }
+  /* Six toggles stacked is a screen and a half of scrolling on its own; two
+     columns is three rows of them. */
+  .checks {
+    grid-template-columns: 1fr 1fr;
+    gap: 0 12px;
+  }
+  .check {
+    min-height: 42px;
   }
 }
 

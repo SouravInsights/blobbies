@@ -103,9 +103,15 @@ export function Playground({
             {...avatarPropsFrom(value)}
             style={{ "--size": `${value.size}px` } as CSSProperties}
           />
-          <code>
-            {value.animate === false ? 'static' : value.animate} · {value.size}px
-          </code>
+          <div className="play-hero-note">
+            <code>
+              {value.animate === false ? 'static' : value.animate} · {value.size}px
+            </code>
+            {/* Half of these dials set behaviour rather than appearance, and
+                behaviour needs a finger to be seen. Nothing on the screen said
+                so, which is why moving one looked like it did nothing. */}
+            <span className="play-hero-hint">Drag the face — it follows your finger.</span>
+          </div>
         </div>
 
         <div className="controls">
