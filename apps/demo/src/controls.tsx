@@ -1,7 +1,7 @@
-import * as RadixCheckbox from '@radix-ui/react-checkbox';
-import { Check as CheckIcon } from 'iconoir-react';
-import * as RadixSelect from '@radix-ui/react-select';
-import * as RadixSlider from '@radix-ui/react-slider';
+import * as RadixCheckbox from "@radix-ui/react-checkbox";
+import { Check as CheckIcon } from "iconoir-react";
+import * as RadixSelect from "@radix-ui/react-select";
+import * as RadixSlider from "@radix-ui/react-slider";
 
 /* ------------------------------------------------------------------ *
  * Form primitives.
@@ -29,25 +29,55 @@ export function Select({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="field">
+    <div className="field field-range">
       <span className="field-label">{label}</span>
       <RadixSelect.Root value={value} onValueChange={onChange}>
         <RadixSelect.Trigger className="select-trigger" aria-label={label}>
           <RadixSelect.Value />
           <RadixSelect.Icon className="select-icon" aria-hidden="true">
-            <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              viewBox="0 0 12 12"
+              width="10"
+              height="10"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M2.5 4.5 6 8l3.5-3.5" />
             </svg>
           </RadixSelect.Icon>
         </RadixSelect.Trigger>
         <RadixSelect.Portal>
-          <RadixSelect.Content className="select-content" position="popper" sideOffset={5} align="start">
+          <RadixSelect.Content
+            className="select-content"
+            position="popper"
+            sideOffset={5}
+            align="start"
+          >
             <RadixSelect.Viewport className="select-viewport">
               {options.map((o) => (
-                <RadixSelect.Item key={o.value} value={o.value} className="select-item">
+                <RadixSelect.Item
+                  key={o.value}
+                  value={o.value}
+                  className="select-item"
+                >
                   <RadixSelect.ItemText>{o.label}</RadixSelect.ItemText>
-                  <RadixSelect.ItemIndicator className="select-indicator" aria-hidden="true">
-                    <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <RadixSelect.ItemIndicator
+                    className="select-indicator"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 12 12"
+                      width="11"
+                      height="11"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <path d="M2.5 6.4 5 8.9l4.5-5.3" />
                     </svg>
                   </RadixSelect.ItemIndicator>
@@ -84,7 +114,7 @@ export function Range({
         <span className="k">{label}</span>
         <span className="v">
           {value}
-          {suffix ?? ''}
+          {suffix ?? ""}
         </span>
       </span>
       <RadixSlider.Root

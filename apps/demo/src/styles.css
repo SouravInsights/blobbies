@@ -1904,6 +1904,12 @@ pre.code {
   .control-group[data-on="0"] {
     display: none;
   }
+  /* The groups are separated by a rule; with only one of them on screen that
+     rule is a line drawn under nothing, at the top of the panel. */
+  .control-group + .control-group {
+    padding-top: 0;
+    border-top: 0;
+  }
   .group-label {
     display: none;
   }
@@ -1916,18 +1922,24 @@ pre.code {
        tabs does not show through it. */
     background: var(--bg);
   }
+  /* A header row, not a card. The border and the fill were what made it read
+     as a panel a fifth of the screen tall; without them it is a chip and its
+     label, and the rule under the tabs does the separating. */
   .play-hero {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     min-height: 0;
-    padding: 10px 14px;
+    padding: 6px 0 10px;
+    border: 0;
+    border-radius: 0;
+    background: none;
   }
   .play-hero-note {
     justify-items: start;
   }
   .play-hero svg {
-    width: min(var(--size, 128px), 22vw);
+    width: min(var(--size, 128px), 18vw);
   }
   .controls {
     position: static;
@@ -1971,17 +1983,44 @@ pre.code {
   /* Compact, but not at the cost of the targets: the gaps come down, the
      things a finger lands on do not. */
   .controls {
-    padding: 14px;
-    gap: 10px;
+    padding: 12px;
+    gap: 9px;
   }
   .control-group {
-    gap: 10px;
+    gap: 9px;
   }
   .control-group + .control-group {
     padding-top: 12px;
   }
+  /* One row per range, not two. Label above track above nothing used a whole
+     line for eleven pixels of type, and six of them is a screen of empty. */
+  .field-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .field-range .range-head {
+    display: contents;
+  }
+  .field-range .range-head .k {
+    flex: none;
+    /* Wide enough for IDLE TIMEOUT on one line: a wrapped label makes one row
+       taller than its neighbours for no reason at all. */
+    width: 6.2rem;
+  }
+  .field-range .range-head .v {
+    order: 2;
+    flex: none;
+    width: 2.8rem;
+    text-align: right;
+  }
+  .field-range .slider {
+    order: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
   .slider {
-    height: 32px;
+    height: 30px;
   }
   /* Six toggles stacked is a screen and a half of scrolling on its own; two
      columns is three rows of them. */
