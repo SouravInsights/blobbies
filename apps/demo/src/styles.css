@@ -1861,6 +1861,38 @@ pre.code {
   .play-adjust {
     display: block;
   }
+
+  /* The specimen and the tabs pin as one block: pinned separately they would
+     drift apart the moment the page moved. */
+  .play-sticky {
+    display: block;
+    position: sticky;
+    top: 64px;
+    z-index: 3;
+    /* Opaque, so the panel passing under the gap between the specimen and the
+       tabs does not show through it. */
+    background: var(--bg);
+  }
+  /* A header row, not a card. The border and the fill were what made it read
+     as a panel a fifth of the screen tall; without them it is a chip and its
+     label, and the rule under the tabs does the separating. */
+  .play-hero {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 0;
+    padding: 6px 0 10px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  .play-hero svg {
+    width: min(var(--size, 128px), 18vw);
+  }
+  .play-hero-note {
+    justify-items: start;
+  }
+
   /* One group at a time, so the panel is a screenful rather than three. A
      rule under the row and a mark under the chosen word: a pill inside a pill
      says nothing the words do not, and takes twice the height to say it. */
@@ -1898,78 +1930,60 @@ pre.code {
   .play-tabs button[aria-selected="true"]::after {
     scale: 1 1;
   }
+
+  /* No card. A border, a fill and twelve pixels of inset on every side is
+     forty-eight pixels holding nothing; the sticky header already separates
+     the panel from what is above it, and the page's gutter is the margin.
+     Not a scroll container either — left as one it is a box with overflow
+     auto and nothing to scroll, which swallows a vertical pan. */
   .controls {
-    margin-top: 12px;
-  }
-  .control-group[data-on="0"] {
-    display: none;
-  }
-  /* The groups are separated by a rule; with only one of them on screen that
-     rule is a line drawn under nothing, at the top of the panel. */
-  .control-group + .control-group {
-    padding-top: 0;
-    border-top: 0;
-  }
-  .group-label {
-    display: none;
-  }
-  .play-sticky {
-    display: block;
-    position: sticky;
-    top: 64px;
-    z-index: 3;
-    /* Opaque, so the panel passing under the gap between the specimen and the
-       tabs does not show through it. */
-    background: var(--bg);
-  }
-  /* A header row, not a card. The border and the fill were what made it read
-     as a panel a fifth of the screen tall; without them it is a chip and its
-     label, and the rule under the tabs does the separating. */
-  .play-hero {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-height: 0;
-    padding: 6px 0 10px;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    margin-top: 14px;
+    padding: 0;
+    gap: 0;
     border: 0;
     border-radius: 0;
     background: none;
   }
-  .play-hero-note {
-    justify-items: start;
+  .control-group {
+    gap: 7px;
   }
-  .play-hero svg {
-    width: min(var(--size, 128px), 18vw);
-  }
-  .controls {
-    position: static;
-    max-height: none;
-    /* Not a scroll container at all here. Left as one, it is a box with
-       overflow: auto and nothing to scroll, which swallows a vertical pan
-       instead of passing it to the page. */
-    overflow: visible;
+  /* The groups are separated by a rule on a wide screen; with only one of
+     them on screen that rule is a line drawn under nothing. */
+  .control-group + .control-group {
+    padding-top: 0;
+    border-top: 0;
     margin-top: 16px;
   }
-  .gallery {
-    margin-top: 16px;
+  .control-group[data-on="0"] {
+    display: none;
   }
-  /* Thumbs, not cursors: every control a finger has to land on gets the size
-     a finger needs. */
+  .group-label {
+    display: none;
+  }
+
+  .field {
+    gap: 4px;
+  }
+  .field-pair {
+    gap: 8px;
+  }
+
+  /* Thumbs, not cursors — but no wider than a thumb needs. A 44px box for one
+     line of 13px type is four fifths air. */
   .select-trigger {
-    height: 44px;
-    padding: 0 14px;
+    height: 40px;
+    padding: 0 13px;
     font-size: 13.5px;
   }
   .slider {
-    height: 34px;
+    height: 26px;
   }
   .slider-thumb {
     width: 20px;
     height: 20px;
-  }
-  .check {
-    min-height: 44px;
-    font-size: 14.5px;
   }
   .checkbox {
     width: 20px;
@@ -1980,33 +1994,45 @@ pre.code {
     width: 14px;
     height: 14px;
   }
-  /* Compact, but not at the cost of the targets: the gaps come down, the
-     things a finger lands on do not. */
-  .controls {
-    padding: 12px;
-    gap: 9px;
+  /* Six toggles stacked is a screen and a half on its own; two columns is
+     three rows of them. */
+  .checks {
+    grid-template-columns: 1fr 1fr;
+    gap: 0 12px;
   }
-  .control-group {
-    gap: 9px;
+  .check {
+    min-height: 38px;
+    font-size: 14px;
   }
-  .control-group + .control-group {
-    padding-top: 12px;
-  }
-  /* One row per range, not two. Label above track above nothing used a whole
-     line for eleven pixels of type, and six of them is a screen of empty. */
+
+  /* One row per control, not two. A label above a track above nothing used a
+     whole line for eleven pixels of type, and eight of them is most of a
+     screen of empty space holding eight numbers. The label becomes the row's
+     first column, and the control takes what is left. */
+  .field-inline,
   .field-range {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
   }
-  .field-range .range-head {
-    display: contents;
-  }
+  .field-inline > .field-label,
   .field-range .range-head .k {
     flex: none;
     /* Wide enough for IDLE TIMEOUT on one line: a wrapped label makes one row
        taller than its neighbours for no reason at all. */
-    width: 6.2rem;
+    width: 5.6rem;
+    letter-spacing: 0.03em;
+  }
+  .field-inline > .select-trigger {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  /* In the pair the words are short, so the column is too. */
+  .field-pair .field-inline > .field-label {
+    width: 3.1rem;
+  }
+  .field-range .range-head {
+    display: contents;
   }
   .field-range .range-head .v {
     order: 2;
@@ -2018,18 +2044,6 @@ pre.code {
     order: 1;
     flex: 1 1 auto;
     min-width: 0;
-  }
-  .slider {
-    height: 30px;
-  }
-  /* Six toggles stacked is a screen and a half of scrolling on its own; two
-     columns is three rows of them. */
-  .checks {
-    grid-template-columns: 1fr 1fr;
-    gap: 0 12px;
-  }
-  .check {
-    min-height: 42px;
   }
 }
 

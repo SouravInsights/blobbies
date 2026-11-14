@@ -29,7 +29,7 @@ export function Select({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="field field-range">
+    <div className="field field-inline">
       <span className="field-label">{label}</span>
       <RadixSelect.Root value={value} onValueChange={onChange}>
         <RadixSelect.Trigger className="select-trigger" aria-label={label}>
@@ -109,7 +109,7 @@ export function Range({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="field">
+    <div className="field field-range">
       <span className="range-head">
         <span className="k">{label}</span>
         <span className="v">
