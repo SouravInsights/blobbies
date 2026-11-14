@@ -1364,6 +1364,23 @@ pre.code {
 
 /* ---------------------------------------------------------------- playground */
 
+/* The specimen and the panel share a box so the pin has somewhere to end: it
+   should stop when the last dial does, not when the gallery has gone by. */
+.play-adjust {
+  display: contents;
+}
+.play-sticky {
+  display: contents;
+}
+.play-tabs {
+  display: none;
+}
+.group-label {
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--quaternary);
+}
 .play {
   display: grid;
   grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
@@ -1714,13 +1731,55 @@ pre.code {
    dial and seeing the result were two separate scrolls — which is the one
    thing a playground cannot ask for. */
 @media (max-width: 900px) {
-  .play {
+  .play,
+  .play-adjust {
     display: block;
   }
-  .play-hero {
+  /* One group at a time, so the panel is a screenful rather than three. */
+  .play-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    padding: 3px;
+    border-radius: 99px;
+    background: var(--panel);
+  }
+  .play-tabs button {
+    padding: 10px 8px;
+    border: 0;
+    border-radius: 99px;
+    background: none;
+    color: var(--tertiary);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition:
+      color var(--fade),
+      background-color var(--fade);
+  }
+  .play-tabs button[aria-selected="true"] {
+    background: var(--raised);
+    color: var(--ink);
+  }
+  .controls {
+    margin-top: 10px;
+  }
+  .control-group[data-on="0"] {
+    display: none;
+  }
+  .group-label {
+    display: none;
+  }
+  .play-sticky {
+    display: block;
     position: sticky;
     top: 64px;
     z-index: 3;
+    /* Opaque, so the panel passing under the gap between the specimen and the
+       segment does not show through it. */
+    background: var(--bg);
+    padding-bottom: 12px;
+  }
+  .play-hero {
     display: flex;
     align-items: center;
     gap: 18px;
