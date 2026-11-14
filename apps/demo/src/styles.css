@@ -49,6 +49,13 @@
   --radius: 14px;
   --gap: clamp(96px, 11vw, 140px);
 
+  /* The page's gutter. Two properties so a full-bleed child can escape it
+     exactly, safe-area and all, instead of guessing with 100vw (which includes
+     the scrollbar). It lives here rather than on main because the bar needs the
+     same number to stand on the same line as everything else. */
+  --pad-l: max(clamp(24px, 5.5vw, 88px), env(safe-area-inset-left));
+  --pad-r: max(clamp(24px, 5.5vw, 88px), env(safe-area-inset-right));
+
   /* Glyphs are near-black, so their chips stay light in both schemes. */
   --swatch: #ece6da;
 }
@@ -143,11 +150,6 @@ figure {
 /* ---------------------------------------------------------------- shell */
 
 main {
-  /* The page's gutter. Kept as two properties so a full-bleed child can escape
-     it exactly, safe-area and all, instead of guessing with 100vw (which
-     includes the scrollbar). */
-  --pad-l: max(clamp(20px, 5vw, 64px), env(safe-area-inset-left));
-  --pad-r: max(clamp(20px, 5vw, 64px), env(safe-area-inset-right));
   display: grid;
   /* One explicit column, not an implicit auto one. An implicit auto column
      sizes to the max-content of its items, so a child that is wider than the
@@ -212,16 +214,21 @@ main > * {
    the full height of the screen and dissolves behind the links rather than
    being cut off by a bar. */
 .bar {
-  --bar-pad: max(clamp(16px, 4vw, 28px), env(safe-area-inset-left));
+  /* The page's own gutter, so the wordmark stands on the same line as the
+     content under it. */
+  --bar-pad: var(--pad-l);
   position: fixed;
   z-index: 30;
-  top: 0;
+  /* Off the top edge rather than on it: the crowd runs the full height of the
+     screen and passes above the wordmark, which is what makes the bar read as
+     something laid over the page instead of a lid on it. */
+  top: 11px;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
   gap: 18px;
-  height: 62px;
+  height: 44px;
   padding-inline: var(--bar-pad);
   /* Nothing here is a surface: only what is in it takes a click, so the hero
      underneath stays reachable through the gaps. */
@@ -237,7 +244,8 @@ main > * {
   /* Absolutely positioned, so it would otherwise paint over the bar's own
      links: the wash goes behind them. */
   z-index: -1;
-  inset: 0 0 auto;
+  /* From the top of the viewport, not from the bar, which now floats. */
+  inset: -11px 0 auto;
   height: 116px;
   background: linear-gradient(var(--bg) 30%, transparent);
   pointer-events: none;
@@ -316,8 +324,8 @@ main > * {
 }
 
 .icon-btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   border: 0;
@@ -350,6 +358,8 @@ main > * {
   }
   .bar-menu-btn {
     display: grid;
+    width: 42px;
+    height: 42px;
   }
   /* So the menu button is the last thing in the row. */
   .bar-end {

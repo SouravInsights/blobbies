@@ -60,7 +60,7 @@ const clamp = (v: number, a: number, b: number): number => Math.min(b, Math.max(
 
 /** Base diameter: a share of the short edge, kept inside a sane range. */
 export function baseSize(width: number, height: number): number {
-  return clamp(Math.min(width, height) * 0.066, 44, 78);
+  return clamp(Math.min(width, height) * 0.072, 46, 84);
 }
 
 /**
