@@ -377,16 +377,18 @@ main > * {
   .bar-end {
     margin-left: auto;
   }
+  /* Two columns. Four short words stacked is a panel a third of the screen
+     tall for something you look at for a second. */
   .bar-menu {
     position: absolute;
-    top: 66px;
+    top: 64px;
     left: var(--bar-pad);
     right: var(--bar-pad);
     display: grid;
     gap: 6px;
-    padding: 8px;
+    padding: 6px;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 14px;
     background: color-mix(in oklab, var(--bg) 92%, transparent);
     backdrop-filter: blur(20px) saturate(1.2);
     box-shadow: var(--lift);
@@ -395,20 +397,23 @@ main > * {
   .bar-menu[hidden] {
     display: none;
   }
-  .bar-menu nav {
+  .bar-menu nav,
+  .bar-menu-foot {
     display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
   }
   .bar-menu a,
   .bar-menu button {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
+    gap: 9px;
+    padding: 10px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 9px;
     background: none;
     color: var(--ink);
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 500;
     text-align: left;
     text-decoration: none;
@@ -421,14 +426,14 @@ main > * {
     }
   }
   .bar-menu-foot {
-    display: grid;
-    padding-top: 6px;
+    margin-top: 5px;
+    padding-top: 5px;
     border-top: 1px solid var(--line-soft);
   }
   .bar-menu-foot a,
   .bar-menu-foot button {
     color: var(--secondary);
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 400;
   }
 }
