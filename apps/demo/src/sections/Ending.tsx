@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { RefreshDouble } from 'iconoir-react';
 import { Burst } from './Burst';
 import { NPM } from '../data';
-import { CopyButton, GitHubIcon, REPO } from '../ui';
+import { AUTHOR, CopyButton, REPO } from '../ui';
 
 /**
  * The ending: the one line, the one command, and the burst.
@@ -50,23 +50,30 @@ export function Ending() {
             <RefreshDouble width={15} height={15} aria-hidden="true" /> Throw them again
           </button>
         </div>
-        {/* The last line of the page carries the footer's job too. It used to
-            be repeated below in a footer of its own, which cost a hundred
-            pixels under a full-height section — enough that the ending could
-            never sit centred in the viewport. */}
-        <p className="meta">
-          <span>MIT</span>
-          <i aria-hidden="true">·</i>
-          <a href={NPM} target="_blank" rel="noreferrer">
-            npm
-          </a>
-          <i aria-hidden="true">·</i>
-          <a href={REPO} target="_blank" rel="noreferrer">
-            <GitHubIcon size={13} /> SouravInsights/blobbies
-          </a>
-          <i aria-hidden="true">·</i>
-          <a href="#top">Back to top</a>
-        </p>
+        {/* Two lines rather than one, because one line of five things is a
+            list nobody reads and the separators trail onto a second row on a
+            phone. What you can go to, then who made it. */}
+        <div className="fin-foot">
+          <nav className="fin-links" aria-label="Elsewhere">
+            <a href={NPM} target="_blank" rel="noreferrer">
+              npm
+            </a>
+            <a href={REPO} target="_blank" rel="noreferrer">
+              Source
+            </a>
+            <a href="#top">Back to top</a>
+          </nav>
+          <p className="fin-credit">
+            <span>MIT</span>
+            <i aria-hidden="true">·</i>
+            <span>
+              Made by{' '}
+              <a href={AUTHOR} target="_blank" rel="noreferrer">
+                @souravinsights
+              </a>
+            </span>
+          </p>
+        </div>
       </div>
     </section>
   );

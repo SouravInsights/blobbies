@@ -703,6 +703,9 @@ main > * {
   .hello .meta i {
     display: none;
   }
+  .fin-links {
+    gap: 4px 18px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -775,27 +778,46 @@ main > * {
   margin-top: clamp(28px, 4.4vh, 44px);
   font-size: 13.5px;
 }
-.fin .meta {
+.fin-foot {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  margin-top: clamp(26px, 3.6vh, 38px);
+}
+
+/* Where you can go, at a weight you can find. Gaps rather than dots: a row of
+   links reads as a row of links. */
+.fin-links {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
-  gap: 6px 14px;
-  margin-top: 20px;
-  font: 12.5px/1.6 var(--mono);
-  color: var(--tertiary);
+  gap: 6px 22px;
+  font: 12.5px/1.5 var(--mono);
 }
-/* A real node rather than a ::before, so the same separator works before a
-   link without the dot landing inside the link's own underline. */
-.fin .meta i {
-  font-style: normal;
+.fin-links a {
+  color: var(--secondary);
+  text-decoration: none;
+  transition: color var(--fade);
+}
+@media (hover: hover) {
+  .fin-links a:hover {
+    color: var(--ink);
+  }
+}
+
+/* Who made it, a step quieter, and the only place a dot is needed. */
+.fin-credit {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font: 12.5px/1.5 var(--mono);
   color: var(--quaternary);
 }
-.fin .meta a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--secondary);
+.fin-credit i {
+  font-style: normal;
+}
+.fin-credit a {
+  color: var(--tertiary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -803,7 +825,7 @@ main > * {
   transition: color var(--fade);
 }
 @media (hover: hover) {
-  .fin .meta a:hover {
+  .fin-credit a:hover {
     color: var(--ink);
   }
 }

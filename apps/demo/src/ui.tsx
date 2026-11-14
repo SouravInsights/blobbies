@@ -13,6 +13,7 @@ import { BACKDROP_COLOR, INK_COLOR, LETTER_PATHS, STROKE_WIDTH, LETTER_BOX } fro
 import { highlight, highlightShell } from './highlight';
 
 export const REPO = 'https://github.com/SouravInsights/blobbies';
+export const AUTHOR = 'https://www.souravinsights.com';
 
 /** Every icon in the page, at the one size the type is set in. */
 const ICON = 15;
