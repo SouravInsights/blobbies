@@ -8,6 +8,7 @@ import { Film } from './sections/Film';
 import { Hero } from './sections/Hero';
 import { Playground, DEFAULTS, avatarPropsFrom, type Controls } from './sections/Playground';
 import { QuickStart } from './sections/QuickStart';
+import { Steps } from './sections/Steps';
 import { buildNames } from './data';
 import { GitHubIcon, Mark, ThemeIcon, REPO } from './ui';
 
@@ -163,6 +164,7 @@ export function App(): JSX.Element {
           <>
             <Hero />
             <Film />
+            <Steps />
             <QuickStart />
             <Playground value={controls} onChange={setControls} onAdopt={setName} />
             <Draws name={name} onPick={setName} />
