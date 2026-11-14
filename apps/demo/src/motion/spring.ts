@@ -85,6 +85,8 @@ export const SPRINGS = {
   snap: spring(0.3, 0.85),
   /** A ring or halo growing out from under something. */
   ring: spring(0.42, 0.66),
+  /** A mark turning on its own axis, once, and settling with a little life. */
+  turn: spring(0.45, 0.75),
 } as const;
 
 export type SpringName = keyof typeof SPRINGS;

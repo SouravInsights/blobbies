@@ -680,6 +680,20 @@ main > * {
   }
 }
 
+/* A mark that turns all the way round and settles. A spring rather than a
+   linear spin, so it arrives with a little life instead of stopping dead. */
+.turn {
+  animation: turn var(--t-turn) var(--e-turn);
+}
+@keyframes turn {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
 /* A chevron under everything, until the page moves. */
 .cue {
   position: absolute;
@@ -734,6 +748,9 @@ main > * {
   .hello .cta,
   .hello .meta {
     visibility: visible;
+  }
+  .turn {
+    animation: none;
   }
 }
 

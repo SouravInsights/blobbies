@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { RefreshDouble } from 'iconoir-react';
-import { Burst } from './Burst';
-import { NPM } from '../data';
-import { AUTHOR, CopyButton, REPO } from '../ui';
+import { useEffect, useRef, useState } from "react";
+import { RefreshDouble } from "iconoir-react";
+import { Burst } from "./Burst";
+import { NPM } from "../data";
+import { AUTHOR, CopyButton, REPO } from "../ui";
 
 /**
  * The ending: the one line, the one command, and the burst.
@@ -18,11 +18,13 @@ import { AUTHOR, CopyButton, REPO } from '../ui';
 export function Ending() {
   const ref = useRef<HTMLElement>(null);
   const [run, setRun] = useState(0);
+  /** Bumped on every press, so the mark turns again rather than once. */
+  const [turns, setTurns] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return undefined;
-    if (typeof IntersectionObserver === 'undefined') {
+    if (typeof IntersectionObserver === "undefined") {
       setRun((n) => n + 1);
       return undefined;
     }
@@ -45,9 +47,30 @@ export function Ending() {
       <div className="fin">
         <h2>Two lines is all it takes.</h2>
         <div className="cta">
-          <CopyButton className="btn primary code" text="npm i blobbies" label="npm i blobbies" />
-          <button type="button" className="btn" onClick={() => setRun((n) => n + 1)}>
-            <RefreshDouble width={15} height={15} aria-hidden="true" /> Throw them again
+          <CopyButton
+            className="btn primary code"
+            text="npm i blobbies"
+            label="npm i blobbies"
+          />
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              setRun((n) => n + 1);
+              setTurns((n) => n + 1);
+            }}
+          >
+            {/* Re-keyed on every press: a CSS animation only plays when it is
+                put on something, so the same element would turn once and then
+                never again. */}
+            <RefreshDouble
+              key={turns}
+              className={turns ? "turn" : undefined}
+              width={15}
+              height={15}
+              aria-hidden="true"
+            />{" "}
+            Throw them again
           </button>
         </div>
         {/* Two lines rather than one, because one line of five things is a
@@ -67,7 +90,7 @@ export function Ending() {
             <span>MIT</span>
             <i aria-hidden="true">·</i>
             <span>
-              Made by{' '}
+              Made by{" "}
               <a href={AUTHOR} target="_blank" rel="noreferrer">
                 @souravinsights
               </a>
