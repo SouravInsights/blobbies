@@ -1940,7 +1940,7 @@ pre.code {
     position: static;
     max-height: none;
     overflow: visible;
-    margin-top: 14px;
+    margin-top: 18px;
     padding: 0;
     gap: 0;
     border: 0;
@@ -1948,7 +1948,13 @@ pre.code {
     background: none;
   }
   .control-group {
-    gap: 7px;
+    gap: 11px;
+  }
+  /* The numbers, set off from the switches above and the toggles below. */
+  .control-sub {
+    display: grid;
+    gap: 11px;
+    margin: 4px 0;
   }
   /* The groups are separated by a rule on a wide screen; with only one of
      them on screen that rule is a line drawn under nothing. */
@@ -1979,7 +1985,7 @@ pre.code {
     font-size: 13.5px;
   }
   .slider {
-    height: 26px;
+    height: 34px;
   }
   .slider-thumb {
     width: 20px;
@@ -2037,13 +2043,20 @@ pre.code {
   .field-range .range-head .v {
     order: 2;
     flex: none;
-    width: 2.8rem;
+    width: 3.1rem;
     text-align: right;
+    color: var(--secondary);
   }
   .field-range .slider {
     order: 1;
     flex: 1 1 auto;
     min-width: 0;
+  }
+
+  /* Room under the panel. The grid of faces is a different thing from the
+     controls and should not read as the next row of them. */
+  .gallery {
+    margin-top: 44px;
   }
 }
 

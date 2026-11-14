@@ -234,56 +234,62 @@ export function Playground({
               {/* Only what applies. A blink interval under a static avatar is a
                 dial that does nothing, and a panel full of those is why moving
                 one looked like it changed nothing. */}
-              {blinking && (
-                <>
-                  <Range
-                    label="Blink min"
-                    suffix="ms"
-                    min={500}
-                    max={8000}
-                    step={100}
-                    value={value.blinkMin}
-                    onChange={(v) => set("blinkMin", v)}
-                  />
-                  <Range
-                    label="Blink max"
-                    suffix="ms"
-                    min={500}
-                    max={12000}
-                    step={100}
-                    value={value.blinkMax}
-                    onChange={(v) => set("blinkMax", v)}
-                  />
-                </>
-              )}
-              {following && (
-                <>
-                  <Range
-                    label="Follow range"
-                    min={0}
-                    max={14}
-                    step={0.5}
-                    value={value.followRange}
-                    onChange={(v) => set("followRange", v)}
-                  />
-                  <Range
-                    label="Smoothing"
-                    min={0.02}
-                    max={1}
-                    step={0.01}
-                    value={value.smoothing}
-                    onChange={(v) => set("smoothing", v)}
-                  />
-                  <Range
-                    label="Idle timeout"
-                    suffix="ms"
-                    min={0}
-                    max={8000}
-                    step={100}
-                    value={value.idleTimeout}
-                    onChange={(v) => set("idleTimeout", v)}
-                  />
-                </>
+              {/* The numbers are a block of their own. Run together with the
+                switches above them, eight rows of one weight is a wall. */}
+              {(blinking || following) && (
+                <div className="control-sub">
+                  {blinking && (
+                    <>
+                      <Range
+                        label="Blink min"
+                        suffix="ms"
+                        min={500}
+                        max={8000}
+                        step={100}
+                        value={value.blinkMin}
+                        onChange={(v) => set("blinkMin", v)}
+                      />
+                      <Range
+                        label="Blink max"
+                        suffix="ms"
+                        min={500}
+                        max={12000}
+                        step={100}
+                        value={value.blinkMax}
+                        onChange={(v) => set("blinkMax", v)}
+                      />
+                    </>
+                  )}
+                  {following && (
+                    <>
+                      <Range
+                        label="Follow range"
+                        min={0}
+                        max={14}
+                        step={0.5}
+                        value={value.followRange}
+                        onChange={(v) => set("followRange", v)}
+                      />
+                      <Range
+                        label="Smoothing"
+                        min={0.02}
+                        max={1}
+                        step={0.01}
+                        value={value.smoothing}
+                        onChange={(v) => set("smoothing", v)}
+                      />
+                      <Range
+                        label="Idle timeout"
+                        suffix="ms"
+                        min={0}
+                        max={8000}
+                        step={100}
+                        value={value.idleTimeout}
+                        onChange={(v) => set("idleTimeout", v)}
+                      />
+                    </>
+                  )}
+                </div>
               )}
 
               <div className="checks">
