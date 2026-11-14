@@ -1,54 +1,64 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Avatar } from '@blobbies/react';
-import { Menu } from 'iconoir-react';
-import { Api } from './sections/Api';
-import { Draws } from './sections/Draws';
-import { Ending } from './sections/Ending';
-import { Film } from './sections/Film';
-import { Hero } from './sections/Hero';
-import { Playground, DEFAULTS, avatarPropsFrom, type Controls } from './sections/Playground';
-import { QuickStart } from './sections/QuickStart';
-import { Steps } from './sections/Steps';
-import { buildNames } from './data';
-import { GitHubIcon, Mark, ThemeIcon, REPO } from './ui';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Avatar } from "@blobbies/react";
+import { Api } from "./sections/Api";
+import { Draws } from "./sections/Draws";
+import { Ending } from "./sections/Ending";
+import { Film } from "./sections/Film";
+import { Hero } from "./sections/Hero";
+import {
+  Playground,
+  DEFAULTS,
+  avatarPropsFrom,
+  type Controls,
+} from "./sections/Playground";
+import { QuickStart } from "./sections/QuickStart";
+import { Steps } from "./sections/Steps";
+import { buildNames } from "./data";
+import { GitHubIcon, Mark, ThemeIcon, REPO } from "./ui";
 
 const STRESS = buildNames(200);
 
 /** The sections the bar links to. */
 const SECTIONS = [
-  ['#start', 'Quick start'],
-  ['#playground', 'Playground'],
-  ['#draws', 'Glyphs'],
-  ['#api', 'API'],
+  ["#start", "Quick start"],
+  ["#playground", "Playground"],
+  ["#draws", "Glyphs"],
+  ["#api", "API"],
 ] as const;
 
 export function App(): JSX.Element {
   const params = useMemo(
-    () => new URLSearchParams(typeof window !== 'undefined' ? window.location.search : ''),
+    () =>
+      new URLSearchParams(
+        typeof window !== "undefined" ? window.location.search : "",
+      ),
     [],
   );
-  const [name, setName] = useState(() => params.get('name') ?? 'Sourav Nanda');
-  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
-    params.get('theme') === 'light' ? 'light' : 'dark',
+  const [name, setName] = useState(() => params.get("name") ?? "Sourav Nanda");
+  const [theme, setTheme] = useState<"dark" | "light">(() =>
+    params.get("theme") === "light" ? "light" : "dark",
   );
-  const [stress, setStress] = useState(() => params.get('stress') === '1');
+  const [stress, setStress] = useState(() => params.get("stress") === "1");
   const [controls, setControls] = useState<Controls>(DEFAULTS);
   const [menu, setMenu] = useState(false);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#15151a' : '#fbfaf7');
+    if (meta)
+      meta.setAttribute("content", theme === "dark" ? "#15151a" : "#fbfaf7");
   }, [theme]);
 
   // Screenshot hooks. ?pointer=x,y fires a synthetic pointer so the follow tier
   // can be captured headlessly; ?stress=1 renders the 200-avatar stress grid.
   useEffect(() => {
-    const pointer = params.get('pointer');
+    const pointer = params.get("pointer");
     if (!pointer) return undefined;
-    const [x, y] = pointer.split(',').map(Number);
+    const [x, y] = pointer.split(",").map(Number);
     const fire = (): void => {
-      window.dispatchEvent(new MouseEvent('pointermove', { clientX: x ?? 0, clientY: y ?? 0 }));
+      window.dispatchEvent(
+        new MouseEvent("pointermove", { clientX: x ?? 0, clientY: y ?? 0 }),
+      );
     };
     fire();
     const t = window.setTimeout(fire, 600);
@@ -57,11 +67,11 @@ export function App(): JSX.Element {
 
   useEffect(() => {
     const onScroll = (): void => {
-      document.documentElement.dataset.scrolled = window.scrollY > 8 ? '1' : '';
+      document.documentElement.dataset.scrolled = window.scrollY > 8 ? "1" : "";
     };
     onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // The menu is a sheet over the page: it has to give way to anything that
@@ -70,20 +80,24 @@ export function App(): JSX.Element {
     if (!menu) return undefined;
     const close = (): void => setMenu(false);
     const onKey = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') close();
+      if (event.key === "Escape") close();
     };
-    window.addEventListener('keydown', onKey);
-    window.addEventListener('scroll', close, { passive: true });
-    window.addEventListener('resize', close);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("resize", close);
     return () => {
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('scroll', close);
-      window.removeEventListener('resize', close);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("resize", close);
     };
   }, [menu]);
 
-  const flipTheme = (): void => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
-  const themeLabel = `Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance`;
+  const [themeTurns, setThemeTurns] = useState(0);
+  const flipTheme = (): void => {
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
+    setThemeTurns((n) => n + 1);
+  };
+  const themeLabel = `Switch to ${theme === "dark" ? "light" : "dark"} theme`;
 
   return (
     <div id="top">
@@ -91,7 +105,7 @@ export function App(): JSX.Element {
         Skip to content
       </a>
 
-      <header className="bar" data-menu={menu ? '1' : '0'}>
+      <header className="bar" data-menu={menu ? "1" : "0"}>
         <a className="brand" href="#top">
           <Mark />
           <span className="brand-word">blobbies</span>
@@ -111,8 +125,19 @@ export function App(): JSX.Element {
             <GitHubIcon size={15} />
             <span>GitHub</span>
           </a>
-          <button type="button" className="icon-btn bar-theme" onClick={flipTheme} aria-label={themeLabel}>
-            <ThemeIcon theme={theme} />
+          <button
+            type="button"
+            className="icon-btn bar-theme"
+            onClick={flipTheme}
+            aria-label={themeLabel}
+          >
+            <span
+              className="theme-mark"
+              key={themeTurns}
+              data-turn={themeTurns ? "1" : undefined}
+            >
+              <ThemeIcon theme={theme} />
+            </span>
           </button>
           <button
             type="button"
@@ -120,9 +145,12 @@ export function App(): JSX.Element {
             onClick={() => setMenu((m) => !m)}
             aria-expanded={menu}
             aria-controls="bar-menu"
-            aria-label={menu ? 'Close menu' : 'Open menu'}
+            aria-label={menu ? "Close menu" : "Open menu"}
           >
-            <Menu width={17} height={17} aria-hidden="true" />
+            <span className="burger" aria-hidden="true">
+              <i />
+              <i />
+            </span>
           </button>
         </div>
 
@@ -141,7 +169,7 @@ export function App(): JSX.Element {
             </a>
             <button type="button" onClick={flipTheme}>
               <ThemeIcon theme={theme} />
-              <span>{theme === 'dark' ? 'Light' : 'Dark'} appearance</span>
+              <span>{theme === "dark" ? "Light" : "Dark"} theme</span>
             </button>
           </div>
         </div>
@@ -152,11 +180,19 @@ export function App(): JSX.Element {
           <section className="stress" style={{ marginTop: 40 }}>
             <div className="lead">
               <h2>200 avatars, all animated.</h2>
-              <p>One pointer listener, one animation frame loop, no React renders.</p>
+              <p>
+                One pointer listener, one animation frame loop, no React
+                renders.
+              </p>
             </div>
             <div className="stress-grid">
               {STRESS.map((n, i) => (
-                <Avatar key={`${n}-${i}`} name={n} size={52} {...avatarPropsFrom(controls)} />
+                <Avatar
+                  key={`${n}-${i}`}
+                  name={n}
+                  size={52}
+                  {...avatarPropsFrom(controls)}
+                />
               ))}
             </div>
           </section>
@@ -166,14 +202,17 @@ export function App(): JSX.Element {
             <Film />
             <Steps />
             <QuickStart />
-            <Playground value={controls} onChange={setControls} onAdopt={setName} />
+            <Playground
+              value={controls}
+              onChange={setControls}
+              onAdopt={setName}
+            />
             <Draws name={name} onPick={setName} />
             <Api />
             <Ending />
           </>
         )}
       </main>
-
     </div>
   );
 }

@@ -86,7 +86,7 @@ export const SPRINGS = {
   /** A ring or halo growing out from under something. */
   ring: spring(0.42, 0.66),
   /** A mark turning on its own axis, once, and settling with a little life. */
-  turn: spring(0.45, 0.75),
+  turn: spring(0.5, 0.6),
 } as const;
 
 export type SpringName = keyof typeof SPRINGS;

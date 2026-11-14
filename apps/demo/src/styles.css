@@ -348,6 +348,53 @@ main > * {
     color var(--fade),
     background-color var(--fade);
 }
+
+/* A menu button should say what it is about to do. Two rules that cross into
+   an X, on the same spring as everything else, rather than one icon simply
+   swapped for a different one. */
+.burger {
+  position: relative;
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+.burger i {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1.5px;
+  margin-top: -0.75px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    translate var(--t-part) var(--e-part),
+    rotate var(--t-part) var(--e-part);
+}
+.burger i:first-child {
+  translate: 0 -3.5px;
+}
+.burger i:last-child {
+  translate: 0 3.5px;
+}
+.bar-menu-btn[aria-expanded="true"] .burger i:first-child {
+  translate: 0 0;
+  rotate: 45deg;
+}
+.bar-menu-btn[aria-expanded="true"] .burger i:last-child {
+  translate: 0 0;
+  rotate: -45deg;
+}
+
+/* The sun and the moon turn in as they change, so the switch reads as one
+   thing becoming another rather than as two icons taking turns. */
+.theme-mark {
+  display: grid;
+  place-items: center;
+}
+.theme-mark[data-turn] {
+  animation: mark-in 0.4s var(--e-turn) backwards;
+}
 @media (hover: hover) {
   .icon-btn:hover {
     background: var(--raised);
@@ -502,6 +549,38 @@ main > * {
   width: 15px;
   height: 15px;
   flex: none;
+}
+
+/* Every state of the label is laid out, so the button never changes width
+   when it is pressed. A button that shrinks on click drags its neighbours
+   with it, and a control that moves under the finger stops feeling like one. */
+.btn-label {
+  display: grid;
+  text-align: left;
+}
+.btn-label > span {
+  grid-area: 1 / 1;
+}
+.btn-label > span:not([data-on]) {
+  visibility: hidden;
+}
+.mark {
+  display: grid;
+  place-items: center;
+}
+.mark[data-pop] {
+  animation: mark-in 0.34s var(--e-turn) backwards;
+}
+
+/* A mark that replaces another arrives rather than appearing: it turns in
+   from the direction it is going, and only a little. A change of state, not
+   a performance. */
+@keyframes mark-in {
+  from {
+    opacity: 0;
+    scale: 0.72;
+    rotate: -30deg;
+  }
 }
 
 /* ---------------------------------------------------------------- hero */
@@ -680,17 +759,37 @@ main > * {
   }
 }
 
-/* A mark that turns all the way round and settles. A spring rather than a
-   linear spin, so it arrives with a little life instead of stopping dead. */
+/* A knob, not a wheel. It turns to an angle and settles back the way a dial
+   moves when it is flicked: quickly out, then home on a spring, going a
+   little past centre before it stops. A full circle is a spin, and a spin
+   does not describe anything a button does.
+ *
+ * Two animations rather than one with a timing function on its middle
+ * keyframe: a custom property in `animation-timing-function` inside
+ * `@keyframes` does not resolve, and falls back to `ease` without saying so —
+ * which is a flick with no spring in it. On the shorthand, it resolves. */
 .turn {
-  animation: turn var(--t-turn) var(--e-turn);
+  /* `forwards`, not `both`: filled backwards, the second animation would hold
+     its starting angle through its own delay and the turn out would never be
+     seen — the mark would simply appear at the far end and come back. */
+  animation:
+    flick-out 0.19s var(--oe) forwards,
+    flick-back 0.53s var(--e-turn) 0.19s forwards;
 }
-@keyframes turn {
+@keyframes flick-out {
   from {
     rotate: 0deg;
   }
   to {
-    rotate: 360deg;
+    rotate: 34deg;
+  }
+}
+@keyframes flick-back {
+  from {
+    rotate: 34deg;
+  }
+  to {
+    rotate: 0deg;
   }
 }
 
@@ -749,8 +848,13 @@ main > * {
   .hello .meta {
     visibility: visible;
   }
-  .turn {
+  .turn,
+  .mark[data-pop],
+  .theme-mark[data-turn] {
     animation: none;
+  }
+  .burger i {
+    transition: none;
   }
 }
 
@@ -1757,33 +1861,45 @@ pre.code {
   .play-adjust {
     display: block;
   }
-  /* One group at a time, so the panel is a screenful rather than three. */
+  /* One group at a time, so the panel is a screenful rather than three. A
+     rule under the row and a mark under the chosen word: a pill inside a pill
+     says nothing the words do not, and takes twice the height to say it. */
   .play-tabs {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2px;
-    padding: 3px;
-    border-radius: 99px;
-    background: var(--panel);
+    display: flex;
+    gap: 26px;
+    border-bottom: 1px solid var(--line-soft);
   }
   .play-tabs button {
-    padding: 10px 8px;
+    position: relative;
+    padding: 9px 0 10px;
     border: 0;
-    border-radius: 99px;
+    border-radius: 0;
     background: none;
     color: var(--tertiary);
     font-size: 13.5px;
     font-weight: 500;
-    transition:
-      color var(--fade),
-      background-color var(--fade);
+    transition: color var(--fade);
   }
   .play-tabs button[aria-selected="true"] {
-    background: var(--raised);
     color: var(--ink);
   }
+  .play-tabs button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: var(--ink);
+    scale: 0 1;
+    transition: scale var(--t-part) var(--e-part);
+  }
+  .play-tabs button[aria-selected="true"]::after {
+    scale: 1 1;
+  }
   .controls {
-    margin-top: 10px;
+    margin-top: 12px;
   }
   .control-group[data-on="0"] {
     display: none;
@@ -1797,22 +1913,21 @@ pre.code {
     top: 64px;
     z-index: 3;
     /* Opaque, so the panel passing under the gap between the specimen and the
-       segment does not show through it. */
+       tabs does not show through it. */
     background: var(--bg);
-    padding-bottom: 12px;
   }
   .play-hero {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     min-height: 0;
-    padding: 14px 16px;
+    padding: 10px 14px;
   }
   .play-hero-note {
     justify-items: start;
   }
   .play-hero svg {
-    width: min(var(--size, 128px), 44vw);
+    width: min(var(--size, 128px), 22vw);
   }
   .controls {
     position: static;
@@ -1864,9 +1979,6 @@ pre.code {
   }
   .control-group + .control-group {
     padding-top: 12px;
-  }
-  .field {
-    gap: 3px;
   }
   .slider {
     height: 32px;

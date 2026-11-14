@@ -7,13 +7,19 @@ import {
   useState,
   type CSSProperties,
   type ReactNode,
-} from 'react';
-import { Check, Copy, Github, MoonSat, SunLight } from 'iconoir-react';
-import { BACKDROP_COLOR, INK_COLOR, LETTER_PATHS, STROKE_WIDTH, LETTER_BOX } from 'blobbies';
-import { highlight, highlightShell } from './highlight';
+} from "react";
+import { Check, Copy, Github, MoonSat, SunLight } from "iconoir-react";
+import {
+  BACKDROP_COLOR,
+  INK_COLOR,
+  LETTER_PATHS,
+  STROKE_WIDTH,
+  LETTER_BOX,
+} from "blobbies";
+import { highlight, highlightShell } from "./highlight";
 
-export const REPO = 'https://github.com/SouravInsights/blobbies';
-export const AUTHOR = 'https://www.souravinsights.com';
+export const REPO = "https://github.com/SouravInsights/blobbies";
+export const AUTHOR = "https://www.souravinsights.com";
 
 /** Every icon in the page, at the one size the type is set in. */
 const ICON = 15;
@@ -23,18 +29,23 @@ export function GitHubIcon({ size = ICON }: { size?: number }) {
 }
 
 /** Sun and moon, rather than a generic switch, so the state is readable at a glance. */
-export function ThemeIcon({ theme }: { theme: 'dark' | 'light' }) {
-  const Icon = theme === 'dark' ? SunLight : MoonSat;
+export function ThemeIcon({ theme }: { theme: "dark" | "light" }) {
+  const Icon = theme === "dark" ? SunLight : MoonSat;
   return <Icon width={ICON} height={ICON} aria-hidden="true" />;
 }
 
-export function CopyButton(props: { text: string; label: string; className?: string; icon?: ReactNode }) {
+export function CopyButton(props: {
+  text: string;
+  label: string;
+  className?: string;
+  icon?: ReactNode;
+}) {
   const { text, label, className, icon } = props;
-  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
 
   useEffect(() => {
-    if (state === 'idle') return undefined;
-    const timer = window.setTimeout(() => setState('idle'), 1400);
+    if (state === "idle") return undefined;
+    const timer = window.setTimeout(() => setState("idle"), 1400);
     return () => window.clearTimeout(timer);
   }, [state]);
 
@@ -44,18 +55,33 @@ export function CopyButton(props: { text: string; label: string; className?: str
       className={className}
       onClick={() =>
         navigator.clipboard.writeText(text).then(
-          () => setState('copied'),
-          () => setState('failed'),
+          () => setState("copied"),
+          () => setState("failed"),
         )
       }
     >
       {icon}
-      {state === 'copied' ? (
-        <Check width={14} height={14} aria-hidden="true" />
-      ) : (
-        <Copy width={14} height={14} aria-hidden="true" />
-      )}
-      {state === 'idle' ? label : state === 'copied' ? 'Copied' : 'Copy failed'}
+      {/* Re-keyed so the mark arrives with a little turn rather than simply
+          being a different shape than it was. */}
+      <span
+        className="mark"
+        key={state}
+        data-pop={state === "idle" ? undefined : "1"}
+      >
+        {state === "copied" ? (
+          <Check width={14} height={14} aria-hidden="true" />
+        ) : (
+          <Copy width={14} height={14} aria-hidden="true" />
+        )}
+      </span>
+      {/* All three labels are laid out at once and only one is shown. The
+          button is therefore always as wide as its widest state, so pressing
+          it cannot move itself or anything standing beside it. */}
+      <span className="btn-label">
+        <span data-on={state === "idle" ? "1" : undefined}>{label}</span>
+        <span data-on={state === "copied" ? "1" : undefined}>Copied</span>
+        <span data-on={state === "failed" ? "1" : undefined}>Failed</span>
+      </span>
     </button>
   );
 }
@@ -93,8 +119,8 @@ export function Words({ text }: { text: string }) {
     <>
       {words.map(({ word, i }, k) => (
         <Fragment key={`${word}-${i}`}>
-          {k > 0 ? ' ' : null}
-          <span className="w" style={{ '--i': i } as CSSProperties}>
+          {k > 0 ? " " : null}
+          <span className="w" style={{ "--i": i } as CSSProperties}>
             {word}
           </span>
         </Fragment>
@@ -104,10 +130,21 @@ export function Words({ text }: { text: string }) {
 }
 
 /** A highlighted code block. Plain text where there is nothing to say. */
-export function Code({ code, lang = 'ts', className }: { code: string; lang?: 'ts' | 'sh'; className?: string }) {
-  const tokens = useMemo(() => (lang === 'sh' ? highlightShell(code) : highlight(code)), [code, lang]);
+export function Code({
+  code,
+  lang = "ts",
+  className,
+}: {
+  code: string;
+  lang?: "ts" | "sh";
+  className?: string;
+}) {
+  const tokens = useMemo(
+    () => (lang === "sh" ? highlightShell(code) : highlight(code)),
+    [code, lang],
+  );
   return (
-    <pre className={className ? `code ${className}` : 'code'}>
+    <pre className={className ? `code ${className}` : "code"}>
       <code>
         {tokens.map((token, i) =>
           token.cls ? (
@@ -136,7 +173,7 @@ export function Code({ code, lang = 'ts', className }: { code: string; lang?: 't
  * shape; a disk, an egg, two dots and a smile is a face.
  */
 const MARK_BLOB =
-  'M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.2 -24 38 0 38C24 38 44 25.2 44 10.18Z';
+  "M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.2 -24 38 0 38C24 38 44 25.2 44 10.18Z";
 
 /** The face, in the library's own ink at the library's own coordinates. */
 const MARK_FACE =
@@ -146,9 +183,15 @@ const MARK_FACE =
 export function Mark({ size = 22 }: { size?: number }) {
   // Sanitised because React's ids carry colons, which are legal in an id but
   // not in the functional notation this is used in.
-  const clip = `mk-${useId().replace(/:/g, '')}`;
+  const clip = `mk-${useId().replace(/:/g, "")}`;
   return (
-    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true" focusable="false">
+    <svg
+      viewBox="0 0 100 100"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs>
         <clipPath id={clip}>
           <circle cx="50" cy="50" r="50" />
@@ -202,8 +245,15 @@ export function Glyph({ char, pad = 0.05 }: { char: string; pad?: number }) {
   if (!d) return null;
   const s = (24 * (1 - pad * 2)) / Math.max(INK.w, INK.h);
   return (
-    <svg viewBox="0 0 24 24" className="glyph" aria-hidden="true" focusable="false">
-      <g transform={`translate(12 12) scale(${s.toFixed(4)}) translate(${-INK_CX} ${-INK_CY})`}>
+    <svg
+      viewBox="0 0 24 24"
+      className="glyph"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <g
+        transform={`translate(12 12) scale(${s.toFixed(4)}) translate(${-INK_CX} ${-INK_CY})`}
+      >
         <path
           d={d}
           fill="none"
@@ -224,7 +274,7 @@ export function useInView<T extends HTMLElement>(threshold = 0.4) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return undefined;
-    if (typeof IntersectionObserver === 'undefined') {
+    if (typeof IntersectionObserver === "undefined") {
       setSeen(true);
       return undefined;
     }
@@ -246,7 +296,7 @@ export function useInView<T extends HTMLElement>(threshold = 0.4) {
 export function useCountUp(to: number, run: boolean): number {
   const [value, setValue] = useState(to);
   useEffect(() => {
-    if (!run || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!run || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setValue(to);
       return undefined;
     }
