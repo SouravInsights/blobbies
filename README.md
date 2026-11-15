@@ -252,6 +252,11 @@ version of the same person — the eyes come from `name` and never change.
 Hovering brings a face forward; cells shrink and fade with distance from it, so
 the edges dissolve without ever clipping the chosen face.
 
+The map sizes its own grid to whatever box it is given — a full settings page, a
+380px popover, or a phone dialog — so it never clips its edge faces. Drop the
+same component into a dialog, an inline settings row, a popover or a sign-up
+step.
+
 ```tsx
 import { Avatar, AvatarPicker } from '@blobbies/react';
 
@@ -310,13 +315,15 @@ ancestor) and the picker follows your product.
 
 The preset is only a composition of parts. Import the parts, keep the state, and
 lay them out however your product needs. Every part carries a `data-part`
-attribute (`root`, `header`, `title`, `description`, `surface`, `mood`, `blush`,
-`spotlight`, `reset`, `cancel`, `save`, `footer`) for your own CSS hooks.
+attribute (`root`, `header`, `title`, `description`, `surface`, `preview`,
+`mood`, `blush`, `spotlight`, `reset`, `cancel`, `save`, `footer`) for your own
+CSS hooks.
 
 ```tsx
 import {
   AvatarPickerRoot,
   AvatarPickerSurface,
+  AvatarPickerPreview,
   AvatarPickerMood,
   AvatarPickerBlush,
   AvatarPickerSpotlight,
@@ -327,6 +334,7 @@ import {
 } from '@blobbies/react';
 
 <AvatarPickerRoot name={user.name} defaultValue={user.look} onSave={save} unstyled>
+  <AvatarPickerPreview size={72} />
   <AvatarPickerSurface />
   <AvatarPickerMood />
   <AvatarPickerBlush />
@@ -414,6 +422,7 @@ type AvatarOptions = {
 | `<Avatar name …options />` | Inline, SSR-safe SVG (`role="img"`, `aria-label`). |
 | `<AvatarPicker name … />` | The preset look map. |
 | `AvatarPickerRoot` + parts | Build your own layout (see above). |
+| `AvatarPickerPreview` | The chosen face, for layouts that show it outside the map. |
 | `useAvatarPicker()` | The picker state, for custom controls. |
 | `useAvatarMotion(ref, options?)` | Attach motion to your own SVG. |
 | `AvatarPickerProps`, `AvatarPickerState`, `AvatarProps`, … | The public types. |

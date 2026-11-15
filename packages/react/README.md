@@ -79,6 +79,9 @@ in both directions, so it never ends. Every face is a version of the same person
 Hovering brings a face forward; cells shrink and fade with distance from it, so
 the edges dissolve without ever clipping the chosen face.
 
+The map sizes its own grid to whatever box it is given — a full settings page, a
+380px popover, or a phone dialog — so it never clips its edge faces.
+
 ```tsx
 import { useState } from 'react';
 import { Avatar, AvatarPicker } from '@blobbies/react';
@@ -156,14 +159,15 @@ ancestor) and the picker follows your product.
 
 The preset is only a composition of parts. Import the parts, keep the state, and
 lay them out however your product needs. Every part carries a `data-part`
-attribute (`root`, `header`, `title`, `description`, `surface`, `mood`, `blush`,
-`spotlight`, `reset`, `cancel`, `save`, `footer`) for your own CSS hooks, and
-`unstyled` skips the bundled styles entirely.
+attribute (`root`, `header`, `title`, `description`, `surface`, `preview`,
+`mood`, `blush`, `spotlight`, `reset`, `cancel`, `save`, `footer`) for your own
+CSS hooks, and `unstyled` skips the bundled styles entirely.
 
 ```tsx
 import {
   AvatarPickerRoot,
   AvatarPickerSurface,
+  AvatarPickerPreview,
   AvatarPickerMood,
   AvatarPickerBlush,
   AvatarPickerSpotlight,
@@ -174,6 +178,7 @@ import {
 } from '@blobbies/react';
 
 <AvatarPickerRoot name={user.name} defaultValue={user.look} onSave={save} unstyled>
+  <AvatarPickerPreview size={72} />
   <AvatarPickerSurface />
   <AvatarPickerMood />
   <AvatarPickerBlush />
@@ -218,7 +223,7 @@ enabled state changes — pointer movement never triggers a re-render.
 | --- | --- |
 | `<Avatar>`, `AvatarProps` | Inline, SSR-safe SVG. |
 | `<AvatarPicker>`, `AvatarPickerProps` | The preset look map. |
-| `AvatarPickerRoot`, `AvatarPickerSurface`, `AvatarPickerMood`, `AvatarPickerBlush`, `AvatarPickerSpotlight`, `AvatarPickerReset`, `AvatarPickerSave`, `AvatarPickerCancel` | The composable parts. |
+| `AvatarPickerRoot`, `AvatarPickerSurface`, `AvatarPickerPreview`, `AvatarPickerMood`, `AvatarPickerBlush`, `AvatarPickerSpotlight`, `AvatarPickerReset`, `AvatarPickerSave`, `AvatarPickerCancel` | The composable parts. |
 | `useAvatarPicker`, `AvatarPickerState` | Picker state for custom controls. |
 | `useAvatarMotion`, `UseAvatarMotionOptions` | The motion hook. |
 | `COLORS`, `PALETTE`, `EXPRESSIONS`, `SHAPES`, `EXPRESSION_NAMES`, `EXPRESSION_COUNT`, `SHAPE_COUNT` | Re-exported for building custom UIs. |
