@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Popover from '@radix-ui/react-popover';
 import { toast } from 'sonner';
@@ -6,6 +6,7 @@ import {
   Avatar,
   AvatarPicker,
   AvatarPickerBlush,
+  AvatarPickerCancel,
   AvatarPickerMood,
   AvatarPickerPreview,
   AvatarPickerReset,
@@ -196,23 +197,24 @@ const PLACES: readonly Place[] = [
   {
     id: 'popover',
     label: 'In a popover',
-    note: 'A smaller surface, anchored to the avatar it changes.',
+    note: 'A quick change from the composer, without leaving the thread.',
     file: 'AvatarPopover.tsx',
-    code: `<Popover
-  open={open}
-  onOpenChange={setOpen}
-  trigger={<Avatar name={user.name} {...live} />}
->
-  <AvatarPicker
-    name={user.name}
-    title=""
-    description=""
-    onChange={setLive}
-    onSave={(look) => {
-      setPhoto(look)
-      setOpen(false)
-    }}
-  />
+    code: `<Popover>
+  <Popover.Trigger asChild>
+    <button className="composer-avatar">
+      <Avatar name={user.name} {...live} />
+    </button>
+  </Popover.Trigger>
+  <Popover.Content side="top" align="start" sideOffset={10}>
+    <AvatarPickerRoot name={user.name} onSave={save}>
+      <div className="head">Your avatar</div>
+      <AvatarPickerSurface />
+      <div className="foot">
+        <AvatarPickerReset />
+        <AvatarPickerSave>Save</AvatarPickerSave>
+      </div>
+    </AvatarPickerRoot>
+  </Popover.Content>
 </Popover>`,
   },
   {
@@ -288,20 +290,16 @@ function AppFrame({
   look,
   crumb,
   tall = false,
-  me,
-  frameRef,
   children,
 }: {
   name: string;
   look: AvatarOptions;
   crumb: string;
   tall?: boolean;
-  me?: ReactNode;
-  frameRef?: Ref<HTMLDivElement>;
   children: ReactNode;
 }) {
   return (
-    <div className={tall ? 'app tall' : 'app'} ref={frameRef}>
+    <div className={tall ? 'app tall' : 'app'}>
       <header className="app-bar">
         <span className="app-brand">
           <Mark size={16} />
@@ -309,7 +307,7 @@ function AppFrame({
         </span>
         <span className="app-crumb">{crumb}</span>
         <span className="app-me">
-          {me ?? <Avatar name={name} {...look} size={28} animate="all" />}
+          <Avatar name={name} {...look} size={28} animate="all" />
           <i aria-hidden="true" />
         </span>
       </header>
@@ -429,14 +427,7 @@ function InDialog({ name }: { name: string }) {
 /* ------------------------------------------------------------ 2. on the page */
 
 function OnPage({ name }: { name: string }) {
-  const [saved, setSaved] = useState<AvatarOptions | null>(null);
   const [live, setLive] = useState<AvatarOptions>(START);
-  const [open, setOpen] = useState(true);
-
-  const close = (): void => {
-    setLive(saved ?? START);
-    setOpen(false);
-  };
 
   return (
     <AppFrame name={name} look={live} crumb="Settings / Profile">
@@ -447,38 +438,23 @@ function OnPage({ name }: { name: string }) {
         </div>
         <div className="page-current">
           <Photo name={name} look={live} size={44} />
-          {!open && (
-            <button type="button" className="btn small" onClick={() => setOpen(true)}>
-              Change
-            </button>
-          )}
         </div>
       </div>
 
-      {open ? (
-        <div className="pd-inline">
-          <AvatarPicker
-            name={name}
-            className="blobbies-picker flat"
-            title=""
-            description=""
-            defaultValue={saved ?? START}
-            onChange={setLive}
-            onSave={(look) => {
-              setSaved(look);
-              setLive(look);
-              setOpen(false);
-              toast.success('Avatar updated');
-            }}
-            onCancel={close}
-          />
-        </div>
-      ) : (
-        <p className="page-saved">
-          <CheckCircle width={15} height={15} aria-hidden="true" />
-          Your avatar is saved. It updates everywhere it appears.
-        </p>
-      )}
+      <div className="pd-inline">
+        <AvatarPicker
+          name={name}
+          className="blobbies-picker flat"
+          title=""
+          description=""
+          defaultValue={START}
+          onChange={setLive}
+          onSave={(look) => {
+            setLive(look);
+            toast.success('Avatar updated');
+          }}
+        />
+      </div>
 
       <div className="page-preview">
         <span className="group-label">Preview</span>
@@ -512,8 +488,7 @@ function InPopover({ name }: { name: string }) {
   const [saved, setSaved] = useState<AvatarOptions | null>(null);
   const [live, setLive] = useState<AvatarOptions>(START);
   const [open, setOpen] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 560px)');
-  const frame = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery('(max-width: 820px)');
 
   const close = (): void => {
     setLive(saved ?? START);
@@ -525,109 +500,115 @@ function InPopover({ name }: { name: string }) {
     else close();
   };
 
-  const picker = (title: string) => (
+  const save = (look: AvatarOptions): void => {
+    setSaved(look);
+    setLive(look);
+    setOpen(false);
+    toast.success('Avatar updated');
+  };
+
+  const sheetPicker = (
     <AvatarPicker
       name={name}
       className="blobbies-picker"
-      title={title}
+      title=""
       description=""
       defaultValue={saved ?? START}
       onChange={setLive}
-      onSave={(look) => {
-        setSaved(look);
-        setLive(look);
-        setOpen(false);
-        toast.success('Avatar updated');
-      }}
+      onSave={save}
       onCancel={close}
     />
   );
 
-  const me = (Trigger: typeof Popover.Trigger) => (
-    <>
-      <Trigger asChild>
-        <button type="button" className="app-me-btn" aria-label="Choose your avatar">
-          <Avatar name={name} {...live} size={28} animate="all" />
-        </button>
-      </Trigger>
-      {!open && <span className="win-ping" aria-hidden="true" />}
-    </>
+  /* A popover wants a compact surface: the map and a single action row, not
+     the full preset with its header, mood row and toggles. */
+  const popoverPicker = (
+    <AvatarPickerRoot
+      name={name}
+      className="blobbies-picker compact-picker"
+      defaultValue={saved ?? START}
+      onChange={setLive}
+      onCancel={close}
+      onSave={save}
+    >
+      <div className="compact-head">Your avatar</div>
+      <AvatarPickerSurface />
+      <div className="compact-foot">
+        <AvatarPickerReset />
+        <span className="bb-picker-grow" />
+        <AvatarPickerCancel />
+        <AvatarPickerSave>Save</AvatarPickerSave>
+      </div>
+    </AvatarPickerRoot>
   );
 
-  const thread = (
-    <div className="thread">
-      <div className="thread-list">
-        {THREAD.map((comment) => (
-          <div className="cmt" key={comment.name}>
-            <Avatar name={comment.name} size={30} animate="all" />
-            <div className="cmt-main">
-              <b>
-                {comment.name} <span>· {comment.when}</span>
-              </b>
-              <p>{comment.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="composer">
-        <Avatar name={name} {...live} size={34} animate="all" />
-        <div className="composer-box">Write a comment…</div>
-        <button type="button" className="composer-post">
-          Post
-        </button>
-      </div>
-    </div>
+  const trigger = (
+    <button type="button" className="composer-avatar" aria-label="Choose your avatar">
+      <Avatar name={name} {...live} size={34} animate="all" />
+    </button>
   );
-
-  if (isMobile) {
-    return (
-      <Dialog.Root open={open} onOpenChange={onOpenChange}>
-        <AppFrame name={name} look={live} crumb="Thread" tall me={me(Dialog.Trigger)}>
-          {thread}
-        </AppFrame>
-        <Dialog.Portal>
-          <Dialog.Overlay className="sheet-scrim" />
-          <Dialog.Content
-            className="sheet"
-            aria-describedby={undefined}
-            onOpenAutoFocus={(event) => event.preventDefault()}
-          >
-            <Dialog.Title className="sr-only">Choose your avatar</Dialog.Title>
-            <span className="sheet-handle" aria-hidden="true" />
-            {picker('')}
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    );
-  }
 
   return (
-    <Popover.Root open={open} onOpenChange={onOpenChange}>
-      <AppFrame
-        name={name}
-        look={live}
-        crumb="Thread"
-        tall
-        frameRef={frame}
-        me={me(Popover.Trigger)}
-      >
-        {thread}
-      </AppFrame>
-      <Popover.Portal>
-        <Popover.Content
-          className="pd-pop"
-          side="bottom"
-          align="end"
-          sideOffset={10}
-          collisionPadding={12}
-          collisionBoundary={frame.current ?? undefined}
-          onOpenAutoFocus={(event) => event.preventDefault()}
-        >
-          {picker('Your avatar')}
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+    <AppFrame name={name} look={live} crumb="Thread" tall>
+      <div className="thread">
+        <div className="thread-list">
+          {THREAD.map((comment) => (
+            <div className="cmt" key={comment.name}>
+              <Avatar name={comment.name} size={30} animate="all" />
+              <div className="cmt-main">
+                <b>
+                  {comment.name} <span>· {comment.when}</span>
+                </b>
+                <p>{comment.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="composer">
+          <div className="pd-anchor">
+            {isMobile ? (
+              <Dialog.Root open={open} onOpenChange={onOpenChange}>
+                <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+                <Dialog.Portal>
+                  <Dialog.Overlay className="sheet-scrim" />
+                  <Dialog.Content
+                    className="sheet"
+                    aria-describedby={undefined}
+                    onOpenAutoFocus={(event) => event.preventDefault()}
+                  >
+                    <Dialog.Title className="sr-only">Choose your avatar</Dialog.Title>
+                    <span className="sheet-handle" aria-hidden="true" />
+                    {sheetPicker}
+                  </Dialog.Content>
+                </Dialog.Portal>
+              </Dialog.Root>
+            ) : (
+              <Popover.Root open={open} onOpenChange={onOpenChange}>
+                <Popover.Trigger asChild>{trigger}</Popover.Trigger>
+                <Popover.Portal>
+                  <Popover.Content
+                    className="pd-pop"
+                    side="top"
+                    align="start"
+                    sideOffset={10}
+                    collisionPadding={16}
+                    onOpenAutoFocus={(event) => event.preventDefault()}
+                  >
+                    {popoverPicker}
+                  </Popover.Content>
+                </Popover.Portal>
+              </Popover.Root>
+            )}
+            {!open && <span className="win-ping" aria-hidden="true" />}
+          </div>
+          <div className="composer-box">Write a comment…</div>
+          <button type="button" className="composer-post">
+            Post
+          </button>
+        </div>
+      </div>
+    </AppFrame>
   );
 }
 
@@ -635,51 +616,35 @@ function InPopover({ name }: { name: string }) {
 
 function SignUp({ name }: { name: string }) {
   const [live, setLive] = useState<AvatarOptions>(START);
-  const [done, setDone] = useState<AvatarOptions | null>(null);
-
-  if (done) {
-    return (
-      <div className="su">
-        <div className="su-done">
-          <Avatar name={name} {...done} size={84} animate="all" />
-          <h4>Welcome, Maya</h4>
-          <p>You are all set.</p>
-          <button type="button" className="btn small" onClick={() => setDone(null)}>
-            Start over
-          </button>
-        </div>
-        <div className="cmt cmt-preview">
-          <Avatar name={name} {...done} size={30} animate="all" />
-          <div className="cmt-main">
-            <b>
-              You <span>· just now</span>
-            </b>
-            <p>First comment in the new workspace.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const [done, setDone] = useState(false);
 
   return (
     <div className="su">
       <div className="su-steps" aria-hidden="true">
         <i className="on" />
         <i className="on" />
-        <i />
+        <i className={done ? 'on' : undefined} />
       </div>
       <div className="su-ask">
-        <h4>Pick your look</h4>
-        <p>Step 2 of 3. You can change it later.</p>
+        <h4>{done ? 'You are all set' : 'Pick your look'}</h4>
+        <p>
+          {done
+            ? 'Welcome to NoteMap. You can change it later.'
+            : 'Step 2 of 3. You can change it later.'}
+        </p>
       </div>
 
       <div className="cmt cmt-preview">
         <Photo name={name} look={live} size={30} />
         <div className="cmt-main">
           <b>
-            You <span>· preview</span>
+            You <span>· {done ? 'ready' : 'preview'}</span>
           </b>
-          <p>This is how you will show up in comments.</p>
+          <p>
+            {done
+              ? 'First comment in the new workspace.'
+              : 'This is how you will show up in comments.'}
+          </p>
         </div>
       </div>
 
@@ -688,10 +653,14 @@ function SignUp({ name }: { name: string }) {
         className="blobbies-picker flat"
         title=""
         description=""
-        saveLabel="Continue"
+        saveLabel={done ? 'Saved' : 'Continue'}
         defaultValue={START}
         onChange={setLive}
-        onSave={setDone}
+        onSave={(look) => {
+          setLive(look);
+          setDone(true);
+          toast.success('Welcome, Maya');
+        }}
       />
     </div>
   );
