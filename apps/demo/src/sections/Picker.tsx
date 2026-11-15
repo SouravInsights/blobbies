@@ -1,165 +1,326 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Avatar,
   AvatarPicker,
   AvatarPickerBlush,
   AvatarPickerMood,
+  AvatarPickerPreview,
+  AvatarPickerReset,
   AvatarPickerRoot,
   AvatarPickerSave,
   AvatarPickerSurface,
   useAvatarPicker,
 } from '@blobbies/react';
 import type { AvatarOptions } from '@blobbies/react';
-import { Bell, Camera, CheckCircle, CreditCard, User } from 'iconoir-react';
+import {
+  Bell,
+  CheckCircle,
+  CreditCard,
+  EditPencil,
+  User,
+} from 'iconoir-react';
 import { Code, Mark } from '../ui';
 import { Lead } from './Lead';
 
 /**
  * The picker, in the places products actually put one.
  *
- * The component is the same everywhere — what changes is the shell around it.
- * A settings page opens it over a dialog and writes the result back to the
- * profile row; a sign-up embeds it as a step; and a custom layout keeps the
- * parts and throws the panel away. Each scenario is the real shipped
- * component, not a mock of it, which is the point: you are looking at what
- * you get.
+ * `blobbies` ships no dialog, popover or sign-up — deliberately. What it ships
+ * is a panel that fits whatever box you hand it, so the same component drops
+ * into a modal, an inline settings row, a popover, or a layout you build from
+ * its parts. These six stages are that claim, shown rather than told: every
+ * one is the real component, not a mock of it.
  */
 export function Picker({ name }: { name: string }) {
-  const [scenario, setScenario] = useState<Scenario>('settings');
+  const [id, setId] = useState(PLACES[0]?.id ?? 'dialog');
+  const place = PLACES.find((p) => p.id === id) ?? PLACES[0];
 
-  /** Left and right move between scenarios; Home and End go to the ends. */
+  /** Up and down move between places, Home and End go to the ends. */
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key))
+      return;
     event.preventDefault();
-    const at = SCENARIOS.findIndex((s) => s.id === scenario);
+    const at = PLACES.findIndex((p) => p.id === id);
     const next =
       event.key === 'Home'
         ? 0
         : event.key === 'End'
-          ? SCENARIOS.length - 1
-          : (at + (event.key === 'ArrowRight' ? 1 : -1) + SCENARIOS.length) %
-            SCENARIOS.length;
-    const id = SCENARIOS[next]?.id ?? 'settings';
-    setScenario(id);
-    document.getElementById(`show-tab-${id}`)?.focus();
+          ? PLACES.length - 1
+          : (at +
+              (event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1) +
+              PLACES.length) %
+            PLACES.length;
+    const nextId = PLACES[next]?.id ?? 'dialog';
+    setId(nextId);
+    document.getElementById(`pl-tab-${nextId}`)?.focus();
   };
 
   return (
     <section className="section" id="picker">
       <Lead
-        title="See it in your UI."
-        note="The real component, in the places real apps need one."
+        title="One picker, every surface."
+        note="A dialog, a page, a popover, a sign-up, your colours — the same component."
       />
 
-      <div className="show">
+      <div className="pl">
         <div
-          className="show-tabs"
+          className="pl-nav"
           role="tablist"
-          aria-label="Picker scenarios"
+          aria-label="Ways to use the picker"
           onKeyDown={onKeyDown}
         >
-          {SCENARIOS.map((s) => (
+          {PLACES.map((p) => (
             <button
-              key={s.id}
-              id={`show-tab-${s.id}`}
+              key={p.id}
+              id={`pl-tab-${p.id}`}
               type="button"
               role="tab"
-              aria-selected={scenario === s.id}
-              aria-controls="show-stage"
-              tabIndex={scenario === s.id ? 0 : -1}
-              onClick={() => setScenario(s.id)}
+              aria-selected={id === p.id}
+              aria-controls="pl-stage"
+              tabIndex={id === p.id ? 0 : -1}
+              onClick={() => setId(p.id)}
             >
-              {s.label}
+              {p.label}
             </button>
           ))}
         </div>
 
-        <div
-          className="show-stage"
-          id="show-stage"
-          role="tabpanel"
-          aria-labelledby={`show-tab-${scenario}`}
-        >
-          {scenario === 'settings' && <Settings name={name} />}
-          {scenario === 'signup' && <Signup name={name} />}
-          {scenario === 'own' && <OwnLayout name={name} />}
+        <div className="pl-body">
+          <p className="pl-note">{place?.note}</p>
+          <div
+            className="pl-stage"
+            id="pl-stage"
+            role="tabpanel"
+            aria-labelledby={`pl-tab-${id}`}
+          >
+            <Place id={id} name={name} />
+          </div>
+          <figure className="pl-code">
+            <figcaption>
+              <span className="qs-file">{place?.file}</span>
+            </figcaption>
+            <Code code={place?.code ?? ''} />
+          </figure>
         </div>
-
-        <figure className="show-code">
-          <figcaption>
-            <span className="qs-file">{CODE[scenario].file}</span>
-          </figcaption>
-          <Code code={CODE[scenario].code} />
-        </figure>
       </div>
     </section>
   );
 }
 
-type Scenario = 'settings' | 'signup' | 'own';
+interface Place {
+  id: PlaceId;
+  label: string;
+  note: string;
+  file: string;
+  code: string;
+}
 
-const SCENARIOS: ReadonlyArray<{ id: Scenario; label: string }> = [
-  { id: 'settings', label: 'Profile settings' },
-  { id: 'signup', label: 'Sign-up' },
-  { id: 'own', label: 'Your own layout' },
-];
+type PlaceId = 'dialog' | 'page' | 'popover' | 'signup' | 'themed' | 'custom';
 
-const CODE: Record<Scenario, { file: string; code: string }> = {
-  settings: {
-    file: 'ProfileSettings.tsx',
-    code: `const [saved, setSaved] = useState<AvatarOptions>()
-const [open, setOpen] = useState(false)
+const DIALOG_CODE = `const [open, setOpen] = useState(false)
 
 <button onClick={() => setOpen(true)}>
-  <Avatar name={user.name} {...saved} size={40} />
+  <Avatar name={user.name} {...photo} size={40} />
 </button>
 
 {open && (
-  <Dialog onClose={() => setOpen(false)}>
+  <Dialog open onClose={() => setOpen(false)}>
     <AvatarPicker
       name={user.name}
-      defaultValue={saved}
+      defaultValue={photo}
       onSave={(look) => {
-        setSaved(look)
+        setPhoto(look)
         setOpen(false)
       }}
       onCancel={() => setOpen(false)}
     />
   </Dialog>
-)}`,
+)}`;
+
+const THEMED_CODE = `<AvatarPicker
+  name={user.name}
+  palette={brand}
+  className="brand-picker"
+  onSave={save}
+/>
+
+.brand-picker {
+  --bb-picker-panel: #ffffff;
+  --bb-picker-ink: #14142b;
+  --bb-picker-accent: #6d28d9;
+  --bb-picker-accent-ink: #ffffff;
+}`;
+
+const CUSTOM_CODE = `<AvatarPickerRoot name={user.name} unstyled onSave={save}>
+  <div className="side">
+    <AvatarPickerPreview size={76} />
+    <AvatarPickerBlush />
+    <AvatarPickerReset />
+    <AvatarPickerSave>Use this look</AvatarPickerSave>
+  </div>
+  <div className="hive">
+    <AvatarPickerSurface />
+    <AvatarPickerMood />
+  </div>
+</AvatarPickerRoot>`;
+
+const PLACES: readonly Place[] = [
+  {
+    id: 'dialog',
+    label: 'In a dialog',
+    note: 'Open it from the profile photo, inside your own dialog.',
+    file: 'ProfileSettings.tsx',
+    code: DIALOG_CODE,
   },
-  signup: {
-    file: 'Onboarding.tsx',
-    code: `// The picker is just a step. Strip its header
-// and give Save the app's own words.
-<AvatarPicker
+  {
+    id: 'page',
+    label: 'On the page',
+    note: 'No popup: the picker sits in the settings body itself.',
+    file: 'Settings.tsx',
+    code: `<AvatarPicker
   name={user.name}
   title=""
   description=""
-  saveLabel="Start writing"
+  defaultValue={photo}
+  onSave={(look) => setPhoto(look)}
+/>`,
+  },
+  {
+    id: 'popover',
+    label: 'In a popover',
+    note: 'A smaller surface, anchored to the photo it changes.',
+    file: 'AvatarPopover.tsx',
+    code: `<Popover
+  open={open}
+  onOpenChange={setOpen}
+  trigger={<Avatar name={user.name} {...photo} />}
+>
+  <AvatarPicker
+    name={user.name}
+    title=""
+    description=""
+    onSave={(look) => {
+      setPhoto(look)
+      setOpen(false)
+    }}
+  />
+</Popover>`,
+  },
+  {
+    id: 'signup',
+    label: 'When signing up',
+    note: 'Let people pick a face as a step in onboarding.',
+    file: 'Onboarding.tsx',
+    code: `<AvatarPicker
+  name={user.name}
+  title=""
+  description=""
+  saveLabel="Continue"
   onSave={(look) => updateUser({ look })}
 />`,
   },
-  own: {
-    file: 'OwnLayout.tsx',
-    code: `// Keep the state, throw away the panel.
-<AvatarPickerRoot name={user.name} onSave={save} unstyled>
-  <YourPreview />
-  <AvatarPickerSurface />
-  <AvatarPickerMood />
-  <AvatarPickerBlush />
-  <AvatarPickerSave>Use this look</AvatarPickerSave>
-</AvatarPickerRoot>
-
-// inside <YourPreview />:
-const { value, expressionName } = useAvatarPicker()`,
+  {
+    id: 'themed',
+    label: 'In your colours',
+    note: 'A handful of CSS variables and a palette make it yours.',
+    file: 'BrandPicker.tsx',
+    code: THEMED_CODE,
   },
-};
+  {
+    id: 'custom',
+    label: 'Your own layout',
+    note: 'Keep the parts, keep the state, throw the panel away.',
+    file: 'OwnLayout.tsx',
+    code: CUSTOM_CODE,
+  },
+];
 
-/* ---------------------------------------------------------- settings demo */
+function Place({ id, name }: { id: PlaceId; name: string }): JSX.Element {
+  switch (id) {
+    case 'page':
+      return <OnPage name={name} />;
+    case 'popover':
+      return <InPopover name={name} />;
+    case 'signup':
+      return <SignUp name={name} />;
+    case 'themed':
+      return <Themed name={name} />;
+    case 'custom':
+      return <Custom name={name} />;
+    default:
+      return <InDialog name={name} />;
+  }
+}
 
-function Settings({ name }: { name: string }) {
-  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+/* ------------------------------------------------------------------ shell */
+
+/** The settings window three of the six places share. */
+function Window({
+  crumb,
+  tall = false,
+  children,
+}: {
+  crumb: string;
+  tall?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div className={tall ? 'win tall' : 'win'}>
+      <div className="win-bar">
+        <span>Settings</span>
+        <i aria-hidden="true">/</i>
+        <b>{crumb}</b>
+      </div>
+      <div className="win-body">{children}</div>
+    </div>
+  );
+}
+
+function Row({
+  label,
+  hint,
+  last = false,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  last?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div className="win-row" data-last={last ? '1' : undefined}>
+      <div className="win-label">
+        <b>{label}</b>
+        {hint && <p>{hint}</p>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+/** The photo before a look is chosen: the letter the avatar will replace. */
+function Photo({
+  name,
+  look,
+  size = 44,
+}: {
+  name: string;
+  look: AvatarOptions | null;
+  size?: number;
+}) {
+  if (look) return <Avatar name={name} {...look} size={size} animate="blink" />;
+  return (
+    <span className="win-letter" style={{ width: size, height: size }}>
+      M
+    </span>
+  );
+}
+
+/* ----------------------------------------------------------- 1. in a dialog */
+
+function InDialog({ name }: { name: string }) {
+  const [photo, setPhoto] = useState<AvatarOptions | null>(null);
   const [open, setOpen] = useState(false);
   const [flash, setFlash] = useState(false);
 
@@ -184,173 +345,256 @@ function Settings({ name }: { name: string }) {
   }, [flash]);
 
   return (
-    <div className="show-frame">
-      <div className="app">
-        <aside className="app-side">
-          <span className="app-brand">
-            <Mark size={18} />
-            <b>NoteMap</b>
+    <Window crumb="Profile">
+      <Row label="Profile photo" hint="Upload a photo or pick an avatar.">
+        <button
+          type="button"
+          className="win-photo"
+          onClick={() => setOpen(true)}
+          aria-label="Change profile photo"
+        >
+          <Photo name={name} look={photo} />
+          <span className="win-edit">
+            <EditPencil width={18} height={18} aria-hidden="true" />
           </span>
-          <nav>
-            <span className="app-link" data-on="1">
-              <User /> Profile
-            </span>
-            <span className="app-link">
-              <Bell /> Notifications
-            </span>
-            <span className="app-link">
-              <CreditCard /> Billing
-            </span>
-          </nav>
-        </aside>
+        </button>
+      </Row>
+      <Row label="Full name">
+        <span className="win-field">Maya Chen</span>
+      </Row>
+      <Row label="Email" last>
+        <span className="win-field">maya@notemap.com</span>
+      </Row>
 
-        <div className="app-main">
-          <p className="app-eyebrow">Settings</p>
-          <h3 className="app-title">Profile</h3>
-
-          <div className="app-row">
-            <div className="app-copy">
-              <b>Profile photo</b>
-              <span>Upload a photo or pick an avatar.</span>
-            </div>
-            <button
-              type="button"
-              className="app-photo"
-              onClick={() => setOpen(true)}
-              aria-label="Change profile photo"
+      {open &&
+        createPortal(
+          <div className="win-scrim" onClick={() => setOpen(false)}>
+            <div
+              className="win-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Choose an avatar"
+              onClick={(event) => event.stopPropagation()}
             >
-              <Avatar name={name} {...saved} size={40} animate="blink" />
-              <span className="app-photo-tag">
-                <Camera width={13} height={13} aria-hidden="true" />
-                Change
-              </span>
-            </button>
-          </div>
-
-          <label className="app-row">
-            <div className="app-copy">
-              <b>Full name</b>
+              <AvatarPicker
+                name={name}
+                className="blobbies-picker"
+                defaultValue={photo ?? undefined}
+                onSave={(look) => {
+                  setPhoto(look);
+                  setOpen(false);
+                  setFlash(true);
+                }}
+                onCancel={() => setOpen(false)}
+              />
             </div>
-            <input className="app-input" defaultValue="Maya Chen" spellCheck={false} readOnly />
-          </label>
+          </div>,
+          document.body,
+        )}
 
-          <label className="app-row">
-            <div className="app-copy">
-              <b>Email</b>
-            </div>
-            <input
-              className="app-input"
-              defaultValue="maya@notemap.com"
-              spellCheck={false}
-              readOnly
-            />
-          </label>
-        </div>
-      </div>
-
-      {open && (
-        <div className="app-scrim" onClick={() => setOpen(false)}>
-          <div
-            className="app-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Choose an avatar"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <AvatarPicker
-              name={name}
-              className="blobbies-picker"
-              defaultValue={saved ?? undefined}
-              onSave={(look) => {
-                setSaved(look);
-                setOpen(false);
-                setFlash(true);
-              }}
-              onCancel={() => setOpen(false)}
-            />
-          </div>
-        </div>
-      )}
-
-      <p className="app-toast" data-on={flash ? '1' : undefined} aria-live="polite">
+      <p className="win-toast" data-on={flash ? '1' : undefined} aria-live="polite">
         <CheckCircle width={15} height={15} aria-hidden="true" />
         Profile photo updated
       </p>
-    </div>
+    </Window>
   );
 }
 
-/* ------------------------------------------------------------ signup demo */
+/* ------------------------------------------------------------ 2. on the page */
 
-function Signup({ name }: { name: string }) {
-  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+function OnPage({ name }: { name: string }) {
+  const [photo, setPhoto] = useState<AvatarOptions | null>(null);
+  const [open, setOpen] = useState(true);
+
   return (
-    <div className="show-frame">
-      <div className="signup">
-        <div className="signup-head">
-          <span className="app-brand">
-            <Mark size={18} />
-            <b>NoteMap</b>
-          </span>
-          <p className="signup-step">Step 2 of 2</p>
-          <h3 className="app-title">Pick your look</h3>
-          <p className="app-sub">This is how you will show up across the workspace.</p>
+    <Window crumb="Profile">
+      <Row label="Profile photo" hint="Pick an avatar. You can change it any time.">
+        <div className="pd-current">
+          <Photo name={name} look={photo} />
+          {!open && (
+            <button type="button" className="btn small" onClick={() => setOpen(true)}>
+              Change
+            </button>
+          )}
         </div>
+      </Row>
 
-        <AvatarPicker
-          name={name}
-          className="blobbies-picker"
-          title=""
-          description=""
-          saveLabel="Start writing"
-          onSave={(look) => setSaved(look)}
-        />
+      {open && (
+        <div className="pd-inline">
+          <AvatarPicker
+            name={name}
+            className="blobbies-picker flat"
+            title=""
+            description=""
+            defaultValue={photo ?? undefined}
+            onSave={(look) => {
+              setPhoto(look);
+              setOpen(false);
+            }}
+            onCancel={() => setOpen(false)}
+          />
+        </div>
+      )}
 
-        <p className="signup-done" data-on={saved ? '1' : undefined} aria-live="polite">
-          {saved && <Avatar name={name} {...saved} size={24} />}
-          <CheckCircle width={15} height={15} aria-hidden="true" />
-          You are all set.
-        </p>
-      </div>
-    </div>
+      <Row label="Full name">
+        <span className="win-field">Maya Chen</span>
+      </Row>
+      <Row label="Email" last>
+        <span className="win-field">maya@notemap.com</span>
+      </Row>
+    </Window>
   );
 }
 
-/* --------------------------------------------------------- custom layout */
+/* ----------------------------------------------------------- 3. in a popover */
 
-function OwnLayout({ name }: { name: string }) {
-  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+function InPopover({ name }: { name: string }) {
+  const [photo, setPhoto] = useState<AvatarOptions | null>(null);
+  const [open, setOpen] = useState(true);
+  const anchor = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDown = (event: PointerEvent): void => {
+      if (!anchor.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener('pointerdown', onDown);
+    return () => document.removeEventListener('pointerdown', onDown);
+  }, [open]);
+
   return (
-    <div className="show-frame">
-      <AvatarPickerRoot
+    <Window crumb="Profile" tall>
+      <Row label="Profile photo" hint="Click it to pick another.">
+        <div className="pd-anchor" ref={anchor}>
+          <button
+            type="button"
+            className="win-photo"
+            aria-expanded={open}
+            aria-label="Change profile photo"
+            onClick={() => setOpen((value) => !value)}
+          >
+            <Photo name={name} look={photo} size={52} />
+            <span className="win-edit">
+              <EditPencil width={18} height={18} aria-hidden="true" />
+            </span>
+          </button>
+
+          {open && (
+            <div className="pd-pop">
+              <AvatarPicker
+                name={name}
+                className="blobbies-picker"
+                title=""
+                description=""
+                defaultValue={photo ?? undefined}
+                onSave={(look) => {
+                  setPhoto(look);
+                  setOpen(false);
+                }}
+                onCancel={() => setOpen(false)}
+              />
+            </div>
+          )}
+        </div>
+      </Row>
+      <Row label="Full name">
+        <span className="win-field">Maya Chen</span>
+      </Row>
+      <Row label="Email" last>
+        <span className="win-field">maya@notemap.com</span>
+      </Row>
+    </Window>
+  );
+}
+
+/* ------------------------------------------------------------- 4. sign-up */
+
+function SignUp({ name }: { name: string }) {
+  const [done, setDone] = useState<AvatarOptions | null>(null);
+
+  if (done) {
+    return (
+      <div className="su">
+        <div className="su-done">
+          <Avatar name={name} {...done} size={88} animate="all" />
+          <h4>Welcome, Maya</h4>
+          <p>You are all set.</p>
+          <button type="button" className="btn small" onClick={() => setDone(null)}>
+            Start over
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="su">
+      <div className="su-steps" aria-hidden="true">
+        <i className="on" />
+        <i className="on" />
+        <i />
+      </div>
+      <div className="su-ask">
+        <h4>Pick your look</h4>
+        <p>Step 2 of 3. You can change it later.</p>
+      </div>
+      <AvatarPicker
         name={name}
-        unstyled
-        className="own"
-        onSave={(look) => setSaved(look)}
-      >
-        <OwnPreview saved={saved} />
-        <AvatarPickerSurface className="own-surface" />
-        <div className="own-bar">
-          <AvatarPickerMood />
-          <span className="bb-picker-grow" />
-          <AvatarPickerBlush />
-          <AvatarPickerSave>Use this look</AvatarPickerSave>
-        </div>
-      </AvatarPickerRoot>
+        className="blobbies-picker flat"
+        title=""
+        description=""
+        saveLabel="Continue"
+        onSave={setDone}
+      />
     </div>
   );
 }
 
-/** The one piece the parts leave to you: a live preview of the current look. */
-function OwnPreview({ saved }: { saved: AvatarOptions | null }) {
-  const { name, value, expressionName } = useAvatarPicker();
+/* ------------------------------------------------------------ 5. your colours */
+
+const BRAND = ['#6d28d9', '#0ea5e9', '#f59e0b', '#10b981', '#ef4444'];
+
+function Themed({ name }: { name: string }) {
+  const [saved, setSaved] = useState(false);
   return (
-    <div className="own-head">
-      <Avatar name={name} {...(saved ?? value)} size={52} animate="all" />
-      <div className="own-copy">
-        <b>Your avatar</b>
-        <span>{saved ? 'Saved' : expressionName.toLowerCase()}</span>
+    <div className="th-wrap">
+      <AvatarPicker
+        name={name}
+        className="blobbies-picker th-picker"
+        palette={BRAND}
+        saveLabel={saved ? 'Saved' : 'Save'}
+        onChange={() => setSaved(false)}
+        onSave={() => setSaved(true)}
+      />
+    </div>
+  );
+}
+
+/* -------------------------------------------------------- 6. your own layout */
+
+function Custom({ name }: { name: string }) {
+  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+  return (
+    <AvatarPickerRoot name={name} unstyled className="cu" onSave={setSaved}>
+      <CustomSide saved={saved} />
+      <div className="cu-hive">
+        <AvatarPickerSurface />
+        <AvatarPickerMood />
       </div>
+    </AvatarPickerRoot>
+  );
+}
+
+function CustomSide({ saved }: { saved: AvatarOptions | null }) {
+  const { expressionName } = useAvatarPicker();
+  return (
+    <div className="cu-side">
+      <AvatarPickerPreview size={76} animate="all" />
+      <b>Your avatar</b>
+      <span className="cu-meta">{saved ? 'Saved' : expressionName.toLowerCase()}</span>
+      <AvatarPickerBlush />
+      <AvatarPickerReset />
+      <AvatarPickerSave>Use this look</AvatarPickerSave>
     </div>
   );
 }

@@ -112,7 +112,7 @@ export function App(): JSX.Element {
         <a className="brand" href="#top">
           <Mark />
           <span className="brand-word">blobbies</span>
-          <span className="brand-version">0.2.0</span>
+          <span className="brand-version">0.2.1</span>
         </a>
 
         <nav className="barnav" aria-label="Sections">
