@@ -62,7 +62,7 @@ export function Api() {
 
   return (
     <section className="section" id="api">
-      <Lead title="Three imports, and you are done." note="Nothing at runtime except each other." />
+      <Lead title="The whole surface." note="Copy what you need; every option has a sensible default." />
 
       <div className="api">
         <div className="api-install">
@@ -105,8 +105,8 @@ export function Api() {
         </div>
 
         <p className="api-foot">
-          Every option has a deterministic default. Try them in the{' '}
-          <a href="#playground">playground</a>, or read the full tables on{' '}
+          Try them in the <a href="#playground">playground</a>, or read the full
+          tables on{' '}
           <a href={NPM} target="_blank" rel="noreferrer">
             npm
           </a>
