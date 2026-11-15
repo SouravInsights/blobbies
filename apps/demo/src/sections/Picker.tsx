@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import * as Popover from '@radix-ui/react-popover';
+import { toast } from 'sonner';
 import {
   Avatar,
   AvatarPicker,
@@ -11,16 +13,11 @@ import {
   AvatarPickerSave,
   AvatarPickerSurface,
   useAvatarPicker,
+  PALETTE,
 } from '@blobbies/react';
 import type { AvatarOptions } from '@blobbies/react';
-import {
-  Bell,
-  CheckCircle,
-  CreditCard,
-  EditPencil,
-  User,
-} from 'iconoir-react';
-import { Code, Mark } from '../ui';
+import { CheckCircle, EditPencil } from 'iconoir-react';
+import { Code, CopyButton, Mark } from '../ui';
 import { Lead } from './Lead';
 
 /**
@@ -29,8 +26,12 @@ import { Lead } from './Lead';
  * `blobbies` ships no dialog, popover or sign-up — deliberately. What it ships
  * is a panel that fits whatever box you hand it, so the same component drops
  * into a modal, an inline settings row, a popover, or a layout you build from
- * its parts. These six stages are that claim, shown rather than told: every
- * one is the real component, not a mock of it.
+ * its parts.
+ *
+ * Every stage is the real component inside a real product surface, and the
+ * product's own avatar always shows the live look. Pan the map and the face in
+ * the app bar changes with it, so the section is a demonstration rather than a
+ * screenshot.
  */
 export function Picker({ name }: { name: string }) {
   const [id, setId] = useState(PLACES[0]?.id ?? 'dialog');
@@ -99,6 +100,11 @@ export function Picker({ name }: { name: string }) {
           <figure className="pl-code">
             <figcaption>
               <span className="qs-file">{place?.file}</span>
+              <CopyButton
+                className="btn small"
+                text={place?.code ?? ''}
+                label="Copy"
+              />
             </figcaption>
             <Code code={place?.code ?? ''} />
           </figure>
@@ -154,7 +160,7 @@ const THEMED_CODE = `<AvatarPicker
 
 const CUSTOM_CODE = `<AvatarPickerRoot name={user.name} unstyled onSave={save}>
   <div className="side">
-    <AvatarPickerPreview size={76} />
+    <AvatarPickerPreview size={64} />
     <AvatarPickerBlush />
     <AvatarPickerReset />
     <AvatarPickerSave>Use this look</AvatarPickerSave>
@@ -183,23 +189,25 @@ const PLACES: readonly Place[] = [
   title=""
   description=""
   defaultValue={photo}
+  onChange={setLive}
   onSave={(look) => setPhoto(look)}
 />`,
   },
   {
     id: 'popover',
     label: 'In a popover',
-    note: 'A smaller surface, anchored to the photo it changes.',
+    note: 'A smaller surface, anchored to the avatar it changes.',
     file: 'AvatarPopover.tsx',
     code: `<Popover
   open={open}
   onOpenChange={setOpen}
-  trigger={<Avatar name={user.name} {...photo} />}
+  trigger={<Avatar name={user.name} {...live} />}
 >
   <AvatarPicker
     name={user.name}
     title=""
     description=""
+    onChange={setLive}
     onSave={(look) => {
       setPhoto(look)
       setOpen(false)
@@ -209,14 +217,15 @@ const PLACES: readonly Place[] = [
   },
   {
     id: 'signup',
-    label: 'When signing up',
-    note: 'Let people pick a face as a step in onboarding.',
+    label: 'Onboarding',
+    note: 'Let people pick a face as part of onboarding.',
     file: 'Onboarding.tsx',
     code: `<AvatarPicker
   name={user.name}
   title=""
   description=""
   saveLabel="Continue"
+  onChange={setLive}
   onSave={(look) => updateUser({ look })}
 />`,
   },
@@ -255,24 +264,56 @@ function Place({ id, name }: { id: PlaceId; name: string }): JSX.Element {
 
 /* ------------------------------------------------------------------ shell */
 
-/** The settings window three of the six places share. */
-function Window({
+/** The look the map opens on: its centre cell. */
+const START: AvatarOptions = { color: PALETTE[2], expression: 'smirk', blush: true };
+
+/** True below a breakpoint, so a popover can become a sheet on a phone. */
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const mql = window.matchMedia(query);
+    const onChange = (): void => setMatches(mql.matches);
+    onChange();
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, [query]);
+  return matches;
+}
+
+/** A small product surface, so the picker is seen inside an actual app. */
+function AppFrame({
+  name,
+  look,
   crumb,
   tall = false,
+  me,
+  frameRef,
   children,
 }: {
+  name: string;
+  look: AvatarOptions;
   crumb: string;
   tall?: boolean;
+  me?: ReactNode;
+  frameRef?: Ref<HTMLDivElement>;
   children: ReactNode;
 }) {
   return (
-    <div className={tall ? 'win tall' : 'win'}>
-      <div className="win-bar">
-        <span>Settings</span>
-        <i aria-hidden="true">/</i>
-        <b>{crumb}</b>
-      </div>
-      <div className="win-body">{children}</div>
+    <div className={tall ? 'app tall' : 'app'} ref={frameRef}>
+      <header className="app-bar">
+        <span className="app-brand">
+          <Mark size={16} />
+          <b>NoteMap</b>
+        </span>
+        <span className="app-crumb">{crumb}</span>
+        <span className="app-me">
+          {me ?? <Avatar name={name} {...look} size={28} animate="all" />}
+          <i aria-hidden="true" />
+        </span>
+      </header>
+      <div className="app-body">{children}</div>
     </div>
   );
 }
@@ -299,229 +340,322 @@ function Row({
   );
 }
 
-/** The photo before a look is chosen: the letter the avatar will replace. */
+/** The app's avatar, always live: blink plus cursor follow. */
 function Photo({
   name,
   look,
   size = 44,
 }: {
   name: string;
-  look: AvatarOptions | null;
+  look: AvatarOptions;
   size?: number;
 }) {
-  if (look) return <Avatar name={name} {...look} size={size} animate="blink" />;
-  return (
-    <span className="win-letter" style={{ width: size, height: size }}>
-      M
-    </span>
-  );
+  return <Avatar name={name} {...look} size={size} animate="all" />;
 }
 
 /* ----------------------------------------------------------- 1. in a dialog */
 
 function InDialog({ name }: { name: string }) {
-  const [photo, setPhoto] = useState<AvatarOptions | null>(null);
-  const [open, setOpen] = useState(false);
-  const [flash, setFlash] = useState(false);
+  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+  const [live, setLive] = useState<AvatarOptions>(START);
+  const [open, setOpen] = useState(true);
+  const [holder, setHolder] = useState<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') setOpen(false);
-    };
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', onKey);
-    return () => {
-      document.body.style.overflow = previous;
-      window.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
-
-  useEffect(() => {
-    if (!flash) return undefined;
-    const timer = window.setTimeout(() => setFlash(false), 2200);
-    return () => window.clearTimeout(timer);
-  }, [flash]);
+  const close = (): void => {
+    setLive(saved ?? START);
+    setOpen(false);
+  };
 
   return (
-    <Window crumb="Profile">
-      <Row label="Profile photo" hint="Upload a photo or pick an avatar.">
-        <button
-          type="button"
-          className="win-photo"
-          onClick={() => setOpen(true)}
-          aria-label="Change profile photo"
-        >
-          <Photo name={name} look={photo} />
-          <span className="win-edit">
-            <EditPencil width={18} height={18} aria-hidden="true" />
-          </span>
-        </button>
-      </Row>
-      <Row label="Full name">
-        <span className="win-field">Maya Chen</span>
-      </Row>
-      <Row label="Email" last>
-        <span className="win-field">maya@notemap.com</span>
-      </Row>
-
-      {open &&
-        createPortal(
-          <div className="win-scrim" onClick={() => setOpen(false)}>
-            <div
-              className="win-dialog"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Choose an avatar"
-              onClick={(event) => event.stopPropagation()}
+    <div className="win-scene" data-open={open ? '1' : undefined} ref={setHolder}>
+      <AppFrame name={name} look={live} crumb="Settings / Profile">
+        <Row label="Profile photo" hint="Upload a photo or pick an avatar.">
+          <div className="win-anchor">
+            <button
+              type="button"
+              className="win-photo"
+              onClick={() => setOpen(true)}
+              aria-label="Change profile photo"
             >
-              <AvatarPicker
-                name={name}
-                className="blobbies-picker"
-                defaultValue={photo ?? undefined}
-                onSave={(look) => {
-                  setPhoto(look);
-                  setOpen(false);
-                  setFlash(true);
-                }}
-                onCancel={() => setOpen(false)}
-              />
-            </div>
-          </div>,
-          document.body,
-        )}
+              <Photo name={name} look={live} />
+              <span className="win-edit">
+                <EditPencil width={18} height={18} aria-hidden="true" />
+              </span>
+            </button>
+            {!open && <span className="win-ping" aria-hidden="true" />}
+          </div>
+        </Row>
+        <Row label="Full name">
+          <span className="win-field">Maya Chen</span>
+        </Row>
+        <Row label="Email" last>
+          <span className="win-field">maya@notemap.com</span>
+        </Row>
+      </AppFrame>
 
-      <p className="win-toast" data-on={flash ? '1' : undefined} aria-live="polite">
-        <CheckCircle width={15} height={15} aria-hidden="true" />
-        Profile photo updated
-      </p>
-    </Window>
+      <Dialog.Root
+        open={open}
+        onOpenChange={(next) => (next ? setOpen(true) : close())}
+        modal={false}
+      >
+        <Dialog.Portal container={holder}>
+          <Dialog.Overlay className="dlg-overlay" />
+          <Dialog.Content
+            className="dlg-content"
+            aria-describedby={undefined}
+            onOpenAutoFocus={(event) => event.preventDefault()}
+          >
+            <Dialog.Title className="sr-only">Choose an avatar</Dialog.Title>
+            <AvatarPicker
+              name={name}
+              className="blobbies-picker"
+              defaultValue={saved ?? START}
+              onChange={setLive}
+              onSave={(look) => {
+                setSaved(look);
+                setLive(look);
+                setOpen(false);
+                toast.success('Profile photo updated');
+              }}
+              onCancel={close}
+            />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    </div>
   );
 }
 
 /* ------------------------------------------------------------ 2. on the page */
 
 function OnPage({ name }: { name: string }) {
-  const [photo, setPhoto] = useState<AvatarOptions | null>(null);
+  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+  const [live, setLive] = useState<AvatarOptions>(START);
   const [open, setOpen] = useState(true);
 
+  const close = (): void => {
+    setLive(saved ?? START);
+    setOpen(false);
+  };
+
   return (
-    <Window crumb="Profile">
-      <Row label="Profile photo" hint="Pick an avatar. You can change it any time.">
-        <div className="pd-current">
-          <Photo name={name} look={photo} />
+    <AppFrame name={name} look={live} crumb="Settings / Profile">
+      <div className="page-head">
+        <div className="page-copy">
+          <b>Avatar</b>
+          <p>Pick the face you use across NoteMap. It updates in comments, mentions and your profile.</p>
+        </div>
+        <div className="page-current">
+          <Photo name={name} look={live} size={44} />
           {!open && (
             <button type="button" className="btn small" onClick={() => setOpen(true)}>
               Change
             </button>
           )}
         </div>
-      </Row>
+      </div>
 
-      {open && (
+      {open ? (
         <div className="pd-inline">
           <AvatarPicker
             name={name}
             className="blobbies-picker flat"
             title=""
             description=""
-            defaultValue={photo ?? undefined}
+            defaultValue={saved ?? START}
+            onChange={setLive}
             onSave={(look) => {
-              setPhoto(look);
+              setSaved(look);
+              setLive(look);
               setOpen(false);
+              toast.success('Avatar updated');
             }}
-            onCancel={() => setOpen(false)}
+            onCancel={close}
           />
         </div>
+      ) : (
+        <p className="page-saved">
+          <CheckCircle width={15} height={15} aria-hidden="true" />
+          Your avatar is saved. It updates everywhere it appears.
+        </p>
       )}
 
-      <Row label="Full name">
-        <span className="win-field">Maya Chen</span>
-      </Row>
-      <Row label="Email" last>
-        <span className="win-field">maya@notemap.com</span>
-      </Row>
-    </Window>
+      <div className="page-preview">
+        <span className="group-label">Preview</span>
+        <div className="preview-row">
+          <span className="preview-item">
+            <Avatar name={name} {...live} size={22} animate="all" />
+            <span>Comment</span>
+          </span>
+          <span className="preview-item">
+            <Avatar name={name} {...live} size={32} animate="all" />
+            <span>Mention</span>
+          </span>
+          <span className="preview-item">
+            <Avatar name={name} {...live} size={44} animate="all" />
+            <span>Profile</span>
+          </span>
+        </div>
+      </div>
+    </AppFrame>
   );
 }
 
 /* ----------------------------------------------------------- 3. in a popover */
 
-function InPopover({ name }: { name: string }) {
-  const [photo, setPhoto] = useState<AvatarOptions | null>(null);
-  const [open, setOpen] = useState(true);
-  const anchor = useRef<HTMLDivElement>(null);
+const THREAD = [
+  { name: 'Priya Nair', text: 'The new look map is so much faster.', when: '2h' },
+  { name: 'Omar Haddad', text: 'Seconded — the faces finally look like us.', when: '1h' },
+] as const;
 
-  useEffect(() => {
-    if (!open) return undefined;
-    const onDown = (event: PointerEvent): void => {
-      if (!anchor.current?.contains(event.target as Node)) setOpen(false);
-    };
-    document.addEventListener('pointerdown', onDown);
-    return () => document.removeEventListener('pointerdown', onDown);
-  }, [open]);
+function InPopover({ name }: { name: string }) {
+  const [saved, setSaved] = useState<AvatarOptions | null>(null);
+  const [live, setLive] = useState<AvatarOptions>(START);
+  const [open, setOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 560px)');
+  const frame = useRef<HTMLDivElement>(null);
+
+  const close = (): void => {
+    setLive(saved ?? START);
+    setOpen(false);
+  };
+
+  const onOpenChange = (next: boolean): void => {
+    if (next) setOpen(true);
+    else close();
+  };
+
+  const picker = (title: string) => (
+    <AvatarPicker
+      name={name}
+      className="blobbies-picker"
+      title={title}
+      description=""
+      defaultValue={saved ?? START}
+      onChange={setLive}
+      onSave={(look) => {
+        setSaved(look);
+        setLive(look);
+        setOpen(false);
+        toast.success('Avatar updated');
+      }}
+      onCancel={close}
+    />
+  );
+
+  const me = (Trigger: typeof Popover.Trigger) => (
+    <>
+      <Trigger asChild>
+        <button type="button" className="app-me-btn" aria-label="Choose your avatar">
+          <Avatar name={name} {...live} size={28} animate="all" />
+        </button>
+      </Trigger>
+      {!open && <span className="win-ping" aria-hidden="true" />}
+    </>
+  );
+
+  const thread = (
+    <div className="thread">
+      <div className="thread-list">
+        {THREAD.map((comment) => (
+          <div className="cmt" key={comment.name}>
+            <Avatar name={comment.name} size={30} animate="all" />
+            <div className="cmt-main">
+              <b>
+                {comment.name} <span>· {comment.when}</span>
+              </b>
+              <p>{comment.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="composer">
+        <Avatar name={name} {...live} size={34} animate="all" />
+        <div className="composer-box">Write a comment…</div>
+        <button type="button" className="composer-post">
+          Post
+        </button>
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Dialog.Root open={open} onOpenChange={onOpenChange}>
+        <AppFrame name={name} look={live} crumb="Thread" tall me={me(Dialog.Trigger)}>
+          {thread}
+        </AppFrame>
+        <Dialog.Portal>
+          <Dialog.Overlay className="sheet-scrim" />
+          <Dialog.Content
+            className="sheet"
+            aria-describedby={undefined}
+            onOpenAutoFocus={(event) => event.preventDefault()}
+          >
+            <Dialog.Title className="sr-only">Choose your avatar</Dialog.Title>
+            <span className="sheet-handle" aria-hidden="true" />
+            {picker('')}
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    );
+  }
 
   return (
-    <Window crumb="Profile" tall>
-      <Row label="Profile photo" hint="Click it to pick another.">
-        <div className="pd-anchor" ref={anchor}>
-          <button
-            type="button"
-            className="win-photo"
-            aria-expanded={open}
-            aria-label="Change profile photo"
-            onClick={() => setOpen((value) => !value)}
-          >
-            <Photo name={name} look={photo} size={52} />
-            <span className="win-edit">
-              <EditPencil width={18} height={18} aria-hidden="true" />
-            </span>
-          </button>
-
-          {open && (
-            <div className="pd-pop">
-              <AvatarPicker
-                name={name}
-                className="blobbies-picker"
-                title=""
-                description=""
-                defaultValue={photo ?? undefined}
-                onSave={(look) => {
-                  setPhoto(look);
-                  setOpen(false);
-                }}
-                onCancel={() => setOpen(false)}
-              />
-            </div>
-          )}
-        </div>
-      </Row>
-      <Row label="Full name">
-        <span className="win-field">Maya Chen</span>
-      </Row>
-      <Row label="Email" last>
-        <span className="win-field">maya@notemap.com</span>
-      </Row>
-    </Window>
+    <Popover.Root open={open} onOpenChange={onOpenChange}>
+      <AppFrame
+        name={name}
+        look={live}
+        crumb="Thread"
+        tall
+        frameRef={frame}
+        me={me(Popover.Trigger)}
+      >
+        {thread}
+      </AppFrame>
+      <Popover.Portal>
+        <Popover.Content
+          className="pd-pop"
+          side="bottom"
+          align="end"
+          sideOffset={10}
+          collisionPadding={12}
+          collisionBoundary={frame.current ?? undefined}
+          onOpenAutoFocus={(event) => event.preventDefault()}
+        >
+          {picker('Your avatar')}
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
 
 /* ------------------------------------------------------------- 4. sign-up */
 
 function SignUp({ name }: { name: string }) {
+  const [live, setLive] = useState<AvatarOptions>(START);
   const [done, setDone] = useState<AvatarOptions | null>(null);
 
   if (done) {
     return (
       <div className="su">
         <div className="su-done">
-          <Avatar name={name} {...done} size={88} animate="all" />
+          <Avatar name={name} {...done} size={84} animate="all" />
           <h4>Welcome, Maya</h4>
           <p>You are all set.</p>
           <button type="button" className="btn small" onClick={() => setDone(null)}>
             Start over
           </button>
+        </div>
+        <div className="cmt cmt-preview">
+          <Avatar name={name} {...done} size={30} animate="all" />
+          <div className="cmt-main">
+            <b>
+              You <span>· just now</span>
+            </b>
+            <p>First comment in the new workspace.</p>
+          </div>
         </div>
       </div>
     );
@@ -538,12 +672,25 @@ function SignUp({ name }: { name: string }) {
         <h4>Pick your look</h4>
         <p>Step 2 of 3. You can change it later.</p>
       </div>
+
+      <div className="cmt cmt-preview">
+        <Photo name={name} look={live} size={30} />
+        <div className="cmt-main">
+          <b>
+            You <span>· preview</span>
+          </b>
+          <p>This is how you will show up in comments.</p>
+        </div>
+      </div>
+
       <AvatarPicker
         name={name}
         className="blobbies-picker flat"
         title=""
         description=""
         saveLabel="Continue"
+        defaultValue={START}
+        onChange={setLive}
         onSave={setDone}
       />
     </div>
@@ -553,19 +700,43 @@ function SignUp({ name }: { name: string }) {
 /* ------------------------------------------------------------ 5. your colours */
 
 const BRAND = ['#6d28d9', '#0ea5e9', '#f59e0b', '#10b981', '#ef4444'];
+const BRAND_START: AvatarOptions = { color: BRAND[2], expression: 'smirk', blush: true };
 
 function Themed({ name }: { name: string }) {
   const [saved, setSaved] = useState(false);
+  const [live, setLive] = useState<AvatarOptions>(BRAND_START);
   return (
-    <div className="th-wrap">
-      <AvatarPicker
-        name={name}
-        className="blobbies-picker th-picker"
-        palette={BRAND}
-        saveLabel={saved ? 'Saved' : 'Save'}
-        onChange={() => setSaved(false)}
-        onSave={() => setSaved(true)}
-      />
+    <div className="th-app">
+      <header className="th-bar">
+        <span className="th-brand">
+          <i aria-hidden="true" />
+          Acme
+        </span>
+        <Avatar name={name} {...live} size={28} animate="all" />
+      </header>
+      <div className="th-body">
+        <AvatarPicker
+          name={name}
+          className="blobbies-picker th-picker"
+          palette={BRAND}
+          defaultValue={BRAND_START}
+          saveLabel={saved ? 'Saved' : 'Save'}
+          onChange={(look) => {
+            setLive(look);
+            setSaved(false);
+          }}
+          onSave={() => {
+            setSaved(true);
+            toast.success('Brand avatar saved');
+          }}
+        />
+        <div className="th-comment">
+          <Avatar name={name} {...live} size={26} animate="all" />
+          <span>
+            <b>You</b> in an Acme comment
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -575,7 +746,15 @@ function Themed({ name }: { name: string }) {
 function Custom({ name }: { name: string }) {
   const [saved, setSaved] = useState<AvatarOptions | null>(null);
   return (
-    <AvatarPickerRoot name={name} unstyled className="cu" onSave={setSaved}>
+    <AvatarPickerRoot
+      name={name}
+      unstyled
+      className="cu"
+      onSave={(look) => {
+        setSaved(look);
+        toast.success('Look saved');
+      }}
+    >
       <CustomSide saved={saved} />
       <div className="cu-hive">
         <AvatarPickerSurface />
@@ -586,12 +765,16 @@ function Custom({ name }: { name: string }) {
 }
 
 function CustomSide({ saved }: { saved: AvatarOptions | null }) {
-  const { expressionName } = useAvatarPicker();
+  const { name, value, expressionName } = useAvatarPicker();
   return (
     <div className="cu-side">
-      <AvatarPickerPreview size={76} animate="all" />
+      <AvatarPickerPreview size={64} animate="all" />
       <b>Your avatar</b>
       <span className="cu-meta">{saved ? 'Saved' : expressionName.toLowerCase()}</span>
+      <div className="cu-comment">
+        <Avatar name={name} {...value} size={22} animate="all" />
+        <span>Looks good in comments.</span>
+      </div>
       <AvatarPickerBlush />
       <AvatarPickerReset />
       <AvatarPickerSave>Use this look</AvatarPickerSave>

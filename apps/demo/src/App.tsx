@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Toaster } from 'sonner';
 import { Avatar } from "@blobbies/react";
 import { Api } from "./sections/Api";
 import { Draws } from "./sections/Draws";
@@ -221,6 +222,20 @@ export function App(): JSX.Element {
           </>
         )}
       </main>
+
+      <Toaster
+        theme={theme}
+        position="bottom-right"
+        offset={16}
+        toastOptions={{
+          style: {
+            background: 'var(--panel)',
+            color: 'var(--ink)',
+            border: '1px solid var(--line)',
+            boxShadow: 'var(--lift)',
+          },
+        }}
+      />
     </div>
   );
 }

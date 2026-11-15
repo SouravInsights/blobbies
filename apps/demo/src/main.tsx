@@ -4,6 +4,7 @@ import { markDataUri } from './ui';
 
 import '@fontsource-variable/instrument-sans';
 import '@fontsource-variable/geist-mono';
+import 'sonner/dist/styles.css';
 import './styles.css';
 
 import { App } from './App';
