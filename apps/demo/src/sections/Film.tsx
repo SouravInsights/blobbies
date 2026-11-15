@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { Avatar } from '@blobbies/react';
-import { BUILDS, EYE_PAIRS, TOTAL, buildNames } from '../data';
+import { TOTAL, buildNames } from '../data';
 import { layoutField, type Blob } from '../motion/field';
 import { Words } from '../ui';
 
@@ -94,7 +94,7 @@ export function Film() {
               <Words text="Every one of these is a name." />
             </h3>
             <p>
-              <Words text="A hash of it decides the rest." />
+              <Words text="Each one gets a face of its own." />
             </p>
           </div>
           <div className="film-beat says" style={{ '--in': 0.3, '--out': 0.68 } as CSSProperties}>
@@ -107,15 +107,13 @@ export function Film() {
           </div>
           <div className="film-beat says" style={{ '--in': 0.68, '--out': 1.4 } as CSSProperties}>
             <h3 className="film-ask">
-              <Words text="How many are there?" />
+              <Words text="How many faces are there?" />
             </h3>
             <p className="film-number" data-count-to={TOTAL}>
               0
             </p>
-            <p>
-              <Words
-                text={`${BUILDS.toLocaleString('en-US')} builds × ${EYE_PAIRS.toLocaleString('en-US')} eye pairs, before the rotation and the offset.`}
-              />
+            <p className="film-formula">
+              <Words text="36 × 36 eye letters × 9 colours × 5 shapes × 22 moods × 2 blushes × 4 nudges" />
             </p>
             <p className="film-quiet">
               <Words text="Far more than you will ever need." />

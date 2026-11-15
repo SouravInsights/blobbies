@@ -46,7 +46,7 @@ export function Ending() {
       <Burst trigger={run} />
 
       <div className="fin">
-        <h2>Two lines is all it takes.</h2>
+        <h2>Not avatars. Characters.</h2>
         <div className="cta">
           <CopyButton
             className="btn primary code"

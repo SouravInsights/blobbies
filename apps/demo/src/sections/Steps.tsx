@@ -4,11 +4,11 @@ import { Words } from '../ui';
 /** How a face is decided, said one sentence at a time. */
 const LINES = [
   'Give it a name.',
-  'The name is hashed into one number.',
-  'That number picks the colour, the egg, the mouth, the tilt.',
+  'That name decides the whole look.',
+  'The colour, the shape, the mood, the tilt.',
   'The first two letters become the eyes.',
-  'Nothing is random, and nothing is fetched.',
-  'So the same name always draws the same face.',
+  'The face blinks and follows your cursor.',
+  'And the same name always draws the same face.',
 ];
 
 /** A short opening with nothing said, before the first sentence. */

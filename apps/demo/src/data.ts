@@ -29,7 +29,7 @@ export function buildNames(count: number): string[] {
 export const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
 
 export const PALETTE_SIZE = 9;
-export const BUILDS = 9 * 5 * 5 * 2 * 4; // palettes × eggs × mouths × blush × tilts
+export const BUILDS = 9 * 5 * 22 * 2 * 4; // colours × shapes × moods × blush × nudges
 export const EYE_PAIRS = GLYPHS.length * GLYPHS.length;
 export const TOTAL = BUILDS * EYE_PAIRS;
 

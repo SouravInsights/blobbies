@@ -29,7 +29,7 @@ export function Draws({ name, onPick }: { name: string; onPick: (name: string) =
           <Avatar key={s} name={name} size={s} animate={s === 96 ? 'all' : 'blink'} />
         ))}
       </div>
-      <p className="dq-caption">One avatar, five sizes. It stays crisp — it is vectors all the way down.</p>
+      <p className="dq-caption">One character, five sizes. It stays crisp — it is vectors all the way down.</p>
     </section>
   );
 }

@@ -68,8 +68,8 @@ export function Picker({ name }: { name: string }) {
   return (
     <section className="section" id="picker">
       <Lead
-        title="One picker, every surface."
-        note="A dialog, a page, a popover, a sign-up, your colours — the same component."
+        title="The picker you don't have to build."
+        note="It drops into a dialog, a page, a popover or a sign-up — and looks like yours."
       />
 
       <div className="pl">
@@ -228,7 +228,7 @@ const PLACES: readonly Place[] = [
   {
     id: 'signup',
     label: 'Onboarding',
-    note: 'Let people pick a face as part of onboarding.',
+    note: 'Let them choose a face on the way in.',
     file: 'Onboarding.tsx',
     code: `<AvatarPicker
   name={user.name}

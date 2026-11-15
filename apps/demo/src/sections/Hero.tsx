@@ -97,7 +97,7 @@ export function Hero() {
           <Words text="Any name becomes a face." />
         </h1>
         <p className="lede says" data-s="wait">
-          <Words text="Same name, same face. Every time." />
+          <Words text="They blink. They follow your cursor." />
         </p>
         <div className="cta">
           <CopyButton
@@ -119,7 +119,7 @@ export function Hero() {
           </a>
         </div>
         <p className="meta">
-          <span>Deterministic SVG avatars</span>
+          <span>Deterministic SVG characters</span>
           <i aria-hidden="true">·</i>
           <span>zero dependencies</span>
           <i aria-hidden="true">·</i>

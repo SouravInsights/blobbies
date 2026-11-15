@@ -2358,21 +2358,29 @@ pre.code {
   color: var(--tertiary);
   font-size: clamp(14px, 1.15vw, 16px);
 }
-/* The reassurance under the number, a step quieter than the explanation. */
-.film-beat .film-quiet {
-  margin-top: 2px;
-  color: var(--quaternary);
+/* The recipe behind the number: prose is the wrong voice for arithmetic, so
+   it is set as a calculation, with the figures on a shared grid. It is the
+   number's caption, so it sits tight under it. */
+.film-beat .film-formula {
+  max-width: none;
+  margin-top: -2px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }
 
-/* The question and its answer must not be the same voice. The answer is the
-   payload, so the question steps back: lighter, quieter, and a size below. */
-/* One step under the ink, so the ladder is secondary → ink → tertiary →
-   quaternary with nothing sitting on the same rung. */
-.film-beat .film-ask {
-  font-size: clamp(17px, 1.5vw, 21px);
-  font-weight: 500;
-  letter-spacing: 0.01em;
+/* The takeaway, set apart from the arithmetic above with the room and the ink
+   of a conclusion rather than the grey of a footnote. */
+.film-beat .film-quiet {
+  margin-top: 8px;
   color: var(--secondary);
+}
+
+/* The question and its answer must not be the same voice. The number is the
+   payload, so the question steps back a rung — full size, lighter ink — into a
+   three-step ladder: ink (number) → secondary (question) → tertiary (recipe). */
+.film-beat h3.film-ask {
+  color: var(--secondary);
+  font-weight: 500;
 }
 
 /* Specificity matters here: `.film-beat p` below would otherwise win and set
