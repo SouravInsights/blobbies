@@ -11,6 +11,7 @@ import {
   avatarPropsFrom,
   type Controls,
 } from "./sections/Playground";
+import { Picker } from "./sections/Picker";
 import { QuickStart } from "./sections/QuickStart";
 import { Steps } from "./sections/Steps";
 import { buildNames } from "./data";
@@ -22,6 +23,7 @@ const STRESS = buildNames(200);
 const SECTIONS = [
   ["#start", "Quick start"],
   ["#playground", "Playground"],
+  ["#picker", "Picker"],
   ["#draws", "Glyphs"],
   ["#api", "API"],
 ] as const;
@@ -35,6 +37,7 @@ export function App(): JSX.Element {
     [],
   );
   const [name, setName] = useState(() => params.get("name") ?? "Sourav Nanda");
+  const only = params.get("only");
   const [theme, setTheme] = useState<"dark" | "light">(() =>
     params.get("theme") === "light" ? "light" : "dark",
   );
@@ -176,7 +179,11 @@ export function App(): JSX.Element {
       </header>
 
       <main id="main">
-        {stress ? (
+        {only === "picker" ? (
+          <section className="section" style={{ marginTop: 72 }}>
+            <Picker name={name} />
+          </section>
+        ) : stress ? (
           <section className="stress" style={{ marginTop: 40 }}>
             <div className="lead">
               <h2>200 avatars, all animated.</h2>
@@ -207,6 +214,7 @@ export function App(): JSX.Element {
               onChange={setControls}
               onAdopt={setName}
             />
+            <Picker name={name} />
             <Draws name={name} onPick={setName} />
             <Api />
             <Ending />

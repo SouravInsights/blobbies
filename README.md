@@ -135,7 +135,40 @@ The same options are accepted by the core renderer and the React component.
 | `rounded`               | `boolean` (circular clip)                                   | `false`              |
 | `className`             | `string`                                                    | –                    |
 | `title`                 | `boolean` (render an SVG `<title>`)                         | `false`              |
-| `palette`               | `readonly string[]`                                         | built-in palette     |
+| `palette`               | `readonly string[]` — the colours the seed draws from        | `PALETTE`            |
+| `variant`               | `number` (which look for this name)                         | `0`                  |
+| `color`                 | `string` (any CSS colour; `COLORS.sky` for the built-in set)  | seeded               |
+| `shape`                 | `'tall' \| 'wide' \| 'squat' \| 'round' \| 'mid'`             | seeded               |
+| `expression`            | `'smile' \| 'smirk' \| …` (see `EXPRESSIONS`)                 | seeded               |
+| `blush`                 | `boolean`                                                    | seeded               |
+| `tilt`                  | `number` (degrees)                                           | seeded               |
+| `backdrop`              | `number` (0..3)                                              | seeded               |
+
+`variant` reseeds only the body. The eyes still come from the name, so the
+same person can have many looks without ever becoming someone else.
+
+The individual trait props set the parts explicitly, which is what a picker
+uses to let someone build the look they want while keeping their own eyes.
+They read as the things they are — a colour, a mood, an egg — not as indices:
+
+```tsx
+import { Avatar, COLORS } from '@blobbies/react';
+
+<Avatar name="Sourav Nanda" color={COLORS.sky} expression="smirk" shape="round" blush />;
+```
+
+`color` takes any CSS colour, so a custom palette is just your own hex values:
+
+```tsx
+<Avatar name="Sourav Nanda" color="#0FA3B1" />
+<Avatar name="Sourav Nanda" palette={['#0FA3B1', '#FFD166', '#EF476F']} />
+```
+
+```ts
+renderAvatarSvg('Sourav Nanda', { color: COLORS.sky, expression: 'smirk', shape: 'round' });
+// COLORS, EXPRESSIONS, SHAPES, EXPRESSION_NAMES, EXPRESSION_COUNT and
+// SHAPE_COUNT are exported for pickers and custom UIs.
+```
 
 ### Core API (`blobbies`)
 
@@ -147,18 +180,94 @@ The same options are accepted by the core renderer and the React component.
 | `avatarDataUri(name, options?)`               | `data:image/svg+xml,…` (static / blink-only).      |
 | `attachAvatarMotion(svg, options?)`           | From `blobbies/motion`. Returns a cleanup fn.      |
 | `resolveAvatar(name, options?)`               | Every seeded decision, without rendering.          |
-| `PALETTE`                                     | The built-in flat palette.                         |
+| `COLORS`                                      | The built-in palette by name (`COLORS.sky`, …).    |
+| `PALETTE`                                     | The same colours, in canonical order.              |
+| `EXPRESSIONS` / `SHAPES`                      | Every expression and egg shape, by name.           |
+| `EXPRESSION_NAMES`                            | Names of every expression, for labels.             |
+| `EXPRESSION_COUNT` / `SHAPE_COUNT`            | How many expressions and egg shapes there are.     |
 
 ### React (`@blobbies/react`)
 
 | Export                                | Description                                             |
 | ------------------------------------- | ------------------------------------------------------- |
 | `<Avatar name …options />`            | Inline, SSR-safe SVG (`role="img"`, `aria-label`).      |
+| `<AvatarPicker name … />`             | The picker: a draggable map of looks (colour × mood).   |
 | `useAvatarMotion(ref, options?)`      | Attach motion to your own SVG.                          |
 
 `useAvatarMotion` keeps one stable options object and only re-attaches when the
 follow target or enabled state changes — pointer movement never triggers a
 re-render.
+
+### AvatarPicker
+
+```tsx
+import { Avatar, AvatarPicker } from '@blobbies/react';
+
+<AvatarPicker
+  name="Sourav Nanda"
+  defaultValue={user.look}
+  onSave={(look) => updateUser({ look })}
+  onCancel={() => setOpen(false)}
+/>;
+
+// The saved look is the same props you pass to <Avatar>.
+<Avatar name="Sourav Nanda" {...saved} size={40} />;
+```
+
+Every face is a version of the same person — the eyes come from `name` and never
+change. The map wraps in both directions, so it never ends: **drag or swipe** to
+pan, **trackpad** to glide, **arrow keys** to move. Hovering brings a face
+forward; cells shrink and fade with distance from it, so the edges dissolve
+without ever clipping the chosen face.
+
+| Prop | Default | What it does |
+| --- | --- | --- |
+| `name` | required | The person's name — the eyes every look shares. |
+| `defaultValue` | seeded | The look to open on (`AvatarOptions`). Read once. |
+| `palette` | `PALETTE` | The colours the map offers — pass your own. |
+| `onChange` | – | Called with the current look as it changes. |
+| `onSave` | – | Called with the look when Save is pressed. |
+| `onCancel` | – | Shows Cancel and calls this. |
+| `title` / `description` | `'Choose an avatar'` / … | Header copy. Pass `''` to hide. |
+| `saveLabel` | `'Save'` | Save button label. |
+| `spotlight` | `true` | Start with the depth-of-field spotlight on. The picker also ships a Spotlight toggle. |
+| `className` | – | Added to the root. |
+| `unstyled` | `false` | Skip the panel styles; style the parts yourself. |
+
+Theme it with variables: `--bb-picker-panel`, `--bb-picker-ink`,
+`--bb-picker-muted`, `--bb-picker-line`, `--bb-picker-accent`,
+`--bb-picker-accent-ink`, `--bb-picker-radius`, `--bb-picker-shadow`,
+`--bb-picker-spring`, `--bb-picker-fade`.
+
+Every part has a `data-part` attribute (`root`, `header`, `title`,
+`description`, `surface`, `mood`, `blush`, `spotlight`, `reset`, `cancel`, `save`, `footer`).
+
+**Build your own layout** from the parts:
+
+```tsx
+import {
+  AvatarPickerRoot,
+  AvatarPickerSurface,
+  AvatarPickerMood,
+  AvatarPickerBlush,
+  AvatarPickerSpotlight,
+  AvatarPickerReset,
+  AvatarPickerSave,
+  useAvatarPicker,
+} from '@blobbies/react';
+
+<AvatarPickerRoot name={user.name} defaultValue={user.look} onSave={save}>
+  <AvatarPickerSurface />
+  <AvatarPickerMood />
+  <AvatarPickerBlush />
+  <AvatarPickerSpotlight />
+  <AvatarPickerReset />
+  <AvatarPickerSave />
+</AvatarPickerRoot>;
+```
+
+`useAvatarPicker()` returns `{ value, changed, blush, expressionName,
+nextExpression, previousExpression, toggleBlush, reset, save, cancel }`.
 
 ---
 

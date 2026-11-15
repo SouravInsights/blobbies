@@ -2448,3 +2448,55 @@ pre.code {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ---------------------------------------------------------------- picker
+   The picker is the shipped component; these just hand it the page's tokens. */
+
+.blobbies-picker {
+  --bb-picker-panel: var(--panel);
+  --bb-picker-ink: var(--ink);
+  --bb-picker-muted: var(--tertiary);
+  --bb-picker-line: var(--line);
+  --bb-picker-accent: var(--ink);
+  --bb-picker-accent-ink: var(--panel);
+  --bb-picker-radius: calc(var(--radius) + 2px);
+  --bb-picker-shadow: var(--lift);
+  --bb-picker-spring: var(--spring);
+  --bb-picker-fade: var(--fade);
+}
+
+.wk-demo {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  width: 100%;
+}
+.wk-saved {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 4px 14px 4px 4px;
+  border: 1px solid transparent;
+  border-radius: 99px;
+  color: var(--tertiary);
+  font-size: 13.5px;
+}
+.wk-saved[data-on] {
+  border-color: var(--line);
+  background: var(--panel);
+  animation: wk-saved-in 0.4s var(--spring);
+}
+.wk-saved b {
+  color: var(--ink);
+  font-weight: 500;
+}
+.wk-saved > svg {
+  color: var(--accent);
+}
+@keyframes wk-saved-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}

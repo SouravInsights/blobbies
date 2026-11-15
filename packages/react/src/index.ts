@@ -9,6 +9,26 @@ export type {
   MotionOptions,
 } from 'blobbies';
 export {
+  AvatarPicker,
+  AvatarPickerRoot,
+  AvatarPickerSurface,
+  AvatarPickerMood,
+  AvatarPickerBlush,
+  AvatarPickerSpotlight,
+  AvatarPickerReset,
+  AvatarPickerSave,
+  AvatarPickerCancel,
+  useAvatarPicker,
+} from './AvatarPicker.js';
+export type {
+  AvatarPickerProps,
+  AvatarPickerRootProps,
+  AvatarPickerSurfaceProps,
+  AvatarPickerMoodProps,
+  AvatarPickerButtonProps,
+  AvatarPickerState,
+} from './AvatarPicker.js';
+export {
   COLORS,
   PALETTE,
   EXPRESSIONS,
