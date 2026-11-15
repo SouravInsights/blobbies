@@ -19,6 +19,12 @@ import { Avatar } from './Avatar.js';
 import type { AvatarProps } from './Avatar.js';
 import { usePickerStyles } from './picker-styles.js';
 
+// `useLayoutEffect` warns when it runs during server rendering. The picker is
+// SSR-safe, so fall back to `useEffect` where there is no DOM; the effect only
+// measures the client anyway.
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 /**
  * The Blobbies avatar picker — the Look Map.
  *
@@ -422,7 +428,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     stepRaf.current = requestAnimationFrame(tick);
   };
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const card = cardRef.current;
     if (!card) return undefined;
     // Size to the box the surface actually lives in, not the root. In the
@@ -458,7 +464,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     return () => observer.disconnect();
   }, []);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     pos.current = { x: 0, y: 0 };
     positioned.current = false;
     mode.current = 'idle';
@@ -471,7 +477,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   }, [cell, gap]);
 
   // Re-apply the lens after every render (hover, size, origin).
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     renderLens();
   });
 
