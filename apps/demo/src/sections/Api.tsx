@@ -9,6 +9,7 @@ import {
   REACT_SNIPPET,
   TYPES_SNIPPET,
 } from '../data';
+import { captureEvent } from '../analytics';
 import { Code, CopyButton, REPO } from '../ui';
 import { Lead } from './Lead';
 
@@ -44,6 +45,11 @@ export function Api() {
   const sample = SAMPLES.find((s) => s.id === active) ?? (SAMPLES[0] as Sample);
   const listRef = useRef<HTMLDivElement>(null);
 
+  const selectSample = (id: string): void => {
+    setActive(id);
+    captureEvent('api_example_selected', { example: id });
+  };
+
   /** Left and right move between tabs; Home and End go to the ends. */
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
@@ -56,7 +62,7 @@ export function Api() {
           ? SAMPLES.length - 1
           : (at + (event.key === 'ArrowRight' ? 1 : -1) + SAMPLES.length) % SAMPLES.length;
     const id = SAMPLES[next]?.id ?? 'core';
-    setActive(id);
+    selectSample(id);
     listRef.current?.querySelector<HTMLButtonElement>(`#tab-${id}`)?.focus();
   };
 
@@ -66,7 +72,12 @@ export function Api() {
 
       <div className="api">
         <div className="api-install">
-          <CopyButton className="btn code" text={INSTALL} label={INSTALL} />
+          <CopyButton
+            className="btn code"
+            text={INSTALL}
+            label={INSTALL}
+            source="api_install"
+          />
           <span className="api-note">React is a peer dependency. Everything else is included.</span>
         </div>
 
@@ -88,7 +99,7 @@ export function Api() {
                 aria-controls="api-panel"
                 tabIndex={s.id === active ? 0 : -1}
                 data-divide={s.divide ? '1' : undefined}
-                onClick={() => setActive(s.id)}
+                onClick={() => selectSample(s.id)}
               >
                 {s.label}
               </button>
@@ -98,7 +109,12 @@ export function Api() {
           <figure className="api-panel" id="api-panel" role="tabpanel" aria-labelledby={`tab-${active}`}>
             <figcaption>
               <span className="qs-file">{sample.file}</span>
-              <CopyButton className="btn small" text={sample.code} label="Copy" />
+              <CopyButton
+                className="btn small"
+                text={sample.code}
+                label="Copy"
+                source={`api_${sample.id}`}
+              />
             </figcaption>
             <Code code={sample.code} />
           </figure>
@@ -107,7 +123,14 @@ export function Api() {
         <p className="api-foot">
           Try them in the <a href="#playground">playground</a>, or read the full
           tables on{' '}
-          <a href={NPM} target="_blank" rel="noreferrer">
+          <a
+            href={NPM}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() =>
+              captureEvent('outbound_clicked', { destination: 'npm', source: 'api' })
+            }
+          >
             npm
           </a>
           .

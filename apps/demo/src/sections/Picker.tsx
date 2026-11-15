@@ -18,6 +18,7 @@ import {
 } from '@blobbies/react';
 import type { AvatarOptions } from '@blobbies/react';
 import { CheckCircle, EditPencil } from 'iconoir-react';
+import { captureEvent } from '../analytics';
 import { Code, CopyButton, Mark } from '../ui';
 import { Lead } from './Lead';
 
@@ -38,6 +39,12 @@ export function Picker({ name }: { name: string }) {
   const [id, setId] = useState(PLACES[0]?.id ?? 'dialog');
   const place = PLACES.find((p) => p.id === id) ?? PLACES[0];
 
+  const selectPlace = (next: PlaceId): void => {
+    if (next === id) return;
+    setId(next);
+    captureEvent('picker_example_selected', { surface: next });
+  };
+
   /** Up and down move between places, Home and End go to the ends. */
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key))
@@ -54,7 +61,7 @@ export function Picker({ name }: { name: string }) {
               PLACES.length) %
             PLACES.length;
     const nextId = PLACES[next]?.id ?? 'dialog';
-    setId(nextId);
+    selectPlace(nextId);
     document.getElementById(`pl-tab-${nextId}`)?.focus();
   };
 
@@ -81,7 +88,7 @@ export function Picker({ name }: { name: string }) {
               aria-selected={id === p.id}
               aria-controls="pl-stage"
               tabIndex={id === p.id ? 0 : -1}
-              onClick={() => setId(p.id)}
+              onClick={() => selectPlace(p.id)}
             >
               {p.label}
             </button>
@@ -105,6 +112,7 @@ export function Picker({ name }: { name: string }) {
                 className="btn small"
                 text={place?.code ?? ''}
                 label="Copy"
+                source={`picker_${id}`}
               />
             </figcaption>
             <Code code={place?.code ?? ''} />
@@ -269,6 +277,15 @@ function Place({ id, name }: { id: PlaceId; name: string }): JSX.Element {
 /** The look the map opens on: its centre cell. */
 const START: AvatarOptions = { color: PALETTE[2], expression: 'smirk', blush: true };
 
+/** The look itself is the interesting part of a save, not just the surface. */
+function lookProps(look: AvatarOptions): Record<string, string | boolean> {
+  return {
+    color: look.color ?? '',
+    expression: look.expression ?? '',
+    blush: look.blush ?? false,
+  };
+}
+
 /** True below a breakpoint, so a popover can become a sheet on a phone. */
 function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(
@@ -413,6 +430,7 @@ function InDialog({ name }: { name: string }) {
                 setSaved(look);
                 setLive(look);
                 setOpen(false);
+                captureEvent('avatar_picker_saved', { surface: 'dialog', ...lookProps(look) });
                 toast.success('Profile photo updated');
               }}
               onCancel={close}
@@ -451,6 +469,7 @@ function OnPage({ name }: { name: string }) {
           onChange={setLive}
           onSave={(look) => {
             setLive(look);
+            captureEvent('avatar_picker_saved', { surface: 'page', ...lookProps(look) });
             toast.success('Avatar updated');
           }}
         />
@@ -504,6 +523,7 @@ function InPopover({ name }: { name: string }) {
     setSaved(look);
     setLive(look);
     setOpen(false);
+    captureEvent('avatar_picker_saved', { surface: 'popover', ...lookProps(look) });
     toast.success('Avatar updated');
   };
 
@@ -659,6 +679,7 @@ function SignUp({ name }: { name: string }) {
         onSave={(look) => {
           setLive(look);
           setDone(true);
+          captureEvent('avatar_picker_saved', { surface: 'onboarding', ...lookProps(look) });
           toast.success('Welcome, Maya');
         }}
       />
@@ -694,8 +715,9 @@ function Themed({ name }: { name: string }) {
             setLive(look);
             setSaved(false);
           }}
-          onSave={() => {
+          onSave={(look) => {
             setSaved(true);
+            captureEvent('avatar_picker_saved', { surface: 'themed', ...lookProps(look) });
             toast.success('Brand avatar saved');
           }}
         />
@@ -721,6 +743,7 @@ function Custom({ name }: { name: string }) {
       className="cu"
       onSave={(look) => {
         setSaved(look);
+        captureEvent('avatar_picker_saved', { surface: 'custom', ...lookProps(look) });
         toast.success('Look saved');
       }}
     >

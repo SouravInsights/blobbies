@@ -8,7 +8,10 @@ import 'sonner/dist/styles.css';
 import './styles.css';
 
 import { App } from './App';
+import { initAnalytics } from './analytics';
 import { installSprings } from './motion/spring';
+
+initAnalytics();
 
 // Every spring the page uses, sampled into a CSS easing and written to :root
 // once. A real spring then runs on the compositor, with no JS per frame.

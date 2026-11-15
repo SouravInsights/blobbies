@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 import { Avatar } from '@blobbies/react';
 import { buildNames } from '../data';
 import { layoutField, type Blob } from '../motion/field';
+import { captureEvent } from '../analytics';
 import { CopyButton, GitHubIcon, REPO, Words } from '../ui';
 
 const NAMES = buildNames(140);
@@ -99,8 +100,21 @@ export function Hero() {
           <Words text="Same name, same face. Every time." />
         </p>
         <div className="cta">
-          <CopyButton className="btn primary code" text="npm i blobbies" label="npm i blobbies" />
-          <a className="btn" href={REPO} target="_blank" rel="noreferrer">
+          <CopyButton
+            className="btn primary code"
+            text="npm i blobbies"
+            label="npm i blobbies"
+            source="hero_install"
+          />
+          <a
+            className="btn"
+            href={REPO}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() =>
+              captureEvent('outbound_clicked', { destination: 'github', source: 'hero' })
+            }
+          >
             <GitHubIcon /> Source
           </a>
         </div>

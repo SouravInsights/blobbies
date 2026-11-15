@@ -16,6 +16,7 @@ import {
   STROKE_WIDTH,
   LETTER_BOX,
 } from "blobbies";
+import { captureEvent } from "./analytics";
 import { highlight, highlightShell } from "./highlight";
 
 export const REPO = "https://github.com/SouravInsights/blobbies";
@@ -39,8 +40,9 @@ export function CopyButton(props: {
   label: string;
   className?: string;
   icon?: ReactNode;
+  source: string;
 }) {
-  const { text, label, className, icon } = props;
+  const { text, label, className, icon, source } = props;
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
 
   useEffect(() => {
@@ -55,7 +57,10 @@ export function CopyButton(props: {
       className={className}
       onClick={() =>
         navigator.clipboard.writeText(text).then(
-          () => setState("copied"),
+          () => {
+            setState("copied");
+            captureEvent("code_snippet_copied", { source });
+          },
           () => setState("failed"),
         )
       }

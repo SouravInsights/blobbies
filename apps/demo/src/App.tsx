@@ -15,6 +15,7 @@ import {
 import { Picker } from "./sections/Picker";
 import { QuickStart } from "./sections/QuickStart";
 import { Steps } from "./sections/Steps";
+import { captureEvent } from "./analytics";
 import { buildNames } from "./data";
 import { GitHubIcon, Mark, ThemeIcon, REPO } from "./ui";
 
@@ -98,8 +99,10 @@ export function App(): JSX.Element {
 
   const [themeTurns, setThemeTurns] = useState(0);
   const flipTheme = (): void => {
-    setTheme((t) => (t === "dark" ? "light" : "dark"));
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
     setThemeTurns((n) => n + 1);
+    captureEvent("theme_changed", { theme: nextTheme });
   };
   const themeLabel = `Switch to ${theme === "dark" ? "light" : "dark"} theme`;
 
@@ -125,7 +128,15 @@ export function App(): JSX.Element {
         </nav>
 
         <div className="bar-end">
-          <a className="bar-cta" href={REPO} target="_blank" rel="noreferrer">
+          <a
+            className="bar-cta"
+            href={REPO}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() =>
+              captureEvent("outbound_clicked", { destination: "github", source: "nav" })
+            }
+          >
             <GitHubIcon size={15} />
             <span>GitHub</span>
           </a>
@@ -167,7 +178,14 @@ export function App(): JSX.Element {
             ))}
           </nav>
           <div className="bar-menu-foot">
-            <a href={REPO} target="_blank" rel="noreferrer">
+            <a
+              href={REPO}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() =>
+                captureEvent("outbound_clicked", { destination: "github", source: "menu" })
+              }
+            >
               <GitHubIcon size={15} />
               <span>GitHub</span>
             </a>

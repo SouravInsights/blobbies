@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { RefreshDouble } from "iconoir-react";
 import { Burst } from "./Burst";
+import { captureEvent } from "../analytics";
 import { NPM } from "../data";
 import { AUTHOR, CopyButton, REPO } from "../ui";
 
@@ -51,6 +52,7 @@ export function Ending() {
             className="btn primary code"
             text="npm i blobbies"
             label="npm i blobbies"
+            source="ending_install"
           />
           <button
             type="button"
@@ -78,10 +80,24 @@ export function Ending() {
             phone. What you can go to, then who made it. */}
         <div className="fin-foot">
           <nav className="fin-links" aria-label="Elsewhere">
-            <a href={NPM} target="_blank" rel="noreferrer">
+            <a
+              href={NPM}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() =>
+                captureEvent("outbound_clicked", { destination: "npm", source: "ending" })
+              }
+            >
               npm
             </a>
-            <a href={REPO} target="_blank" rel="noreferrer">
+            <a
+              href={REPO}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() =>
+                captureEvent("outbound_clicked", { destination: "github", source: "ending" })
+              }
+            >
               Source
             </a>
             <a href="#top">Back to top</a>
@@ -91,7 +107,17 @@ export function Ending() {
             <i aria-hidden="true">·</i>
             <span>
               Made by{" "}
-              <a href={AUTHOR} target="_blank" rel="noreferrer">
+              <a
+                href={AUTHOR}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() =>
+                  captureEvent("outbound_clicked", {
+                    destination: "personal_site",
+                    source: "ending",
+                  })
+                }
+              >
                 @souravinsights
               </a>
             </span>
