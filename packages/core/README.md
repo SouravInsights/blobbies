@@ -1,8 +1,14 @@
 # blobbies
 
-Deterministic, cute SVG avatars from any name. Zero dependencies, no fonts, no
-gradients, no `Math.random` — every decision comes from a seeded hash of the
+**Deterministic, cute SVG avatars from any name.** Zero dependencies, no fonts,
+no gradients, no `Math.random` — every decision comes from a seeded hash of the
 name, so the same name always draws the same face.
+
+<p>
+  <a href="https://www.npmjs.com/package/blobbies"><img alt="npm" src="https://img.shields.io/npm/v/blobbies?color=FFD43B&labelColor=1c1c1c"></a>
+  <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-5FD068?labelColor=1c1c1c">
+  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-B79CFF?labelColor=1c1c1c"></a>
+</p>
 
 ```ts
 import { renderAvatarSvg } from 'blobbies';
@@ -13,14 +19,19 @@ renderAvatarSvg('Sourav Nanda'); // → "<svg …>"
 - **Blink in pure CSS** — works inside an `<img src="data:image/svg+xml,…">`.
 - **Cursor follow in JS** — one shared pointer listener and one rAF loop for
   every avatar on the page, from the `blobbies/motion` entry point.
-- **1.4 KB per avatar**, 2 KB of motion, and the motion is a separate entry so
+- **~1.4 KB per avatar**, ~2 KB of motion, and the motion is a separate entry so
   static users never download it.
+- **SSR-safe and typed** — `renderAvatarSvg` returns the same string on the
+  server and the client.
 
 ## Install
 
 ```sh
 npm i blobbies
 ```
+
+The package ships ESM + CJS and declares `sideEffects: false`, so bundlers drop
+whatever you do not import.
 
 ## Use
 
@@ -45,16 +56,64 @@ renderAvatarSvg('Sourav Nanda', {
   animate: 'blink',          // false | 'blink' | 'follow' | 'all'
   blinkInterval: [2500, 6000],
   rounded: true,
+  color: COLORS.sky,
+  expression: 'smirk',
+  shape: 'round',
 });
 ```
 
+## Make it yours
+
+Colors, shapes and moods are set by **name**, not by index:
+
+```ts
+import { renderAvatarSvg, COLORS } from 'blobbies';
+
+renderAvatarSvg('Sourav Nanda', {
+  color: COLORS.sky,          // or any CSS colour: '#0FA3B1'
+  shape: 'round',             // 'tall' | 'wide' | 'squat' | 'round' | 'mid'
+  expression: 'smirk',        // any value in EXPRESSIONS
+  blush: true,
+  tilt: -6,
+});
+```
+
+Use your own palette — the seed picks from whatever you pass:
+
+```ts
+renderAvatarSvg('Sourav Nanda', { palette: ['#0FA3B1', '#FFD166', '#EF476F'] });
+```
+
+Give one person many looks without changing who they are. `variant` reseeds the
+body; the eyes always come from the name:
+
+```ts
+renderAvatarSvg('Sourav Nanda', { variant: 3 });
+```
+
+Wrap the renderer in your own SVG shell with `renderAvatarBody`, which returns
+the inner markup plus the resolved metadata (letters, seed prefix, blink timing):
+
+```ts
+const { body, prefix, letters, blink } = renderAvatarBody('Sourav Nanda');
+```
+
+## Options
+
 | Option | Type | Default |
 | --- | --- | --- |
+| `color` | `string` — any CSS colour, e.g. `COLORS.sky` | seeded |
+| `shape` | `'tall' \| 'wide' \| 'squat' \| 'round' \| 'mid'` | seeded |
+| `expression` | `'smile' \| 'smirk' \| …` (see `EXPRESSIONS`) | seeded |
+| `blush` | `boolean` | seeded |
+| `tilt` | `number` (degrees) | seeded |
+| `backdrop` | `number` (0..3) | seeded |
+| `variant` | `number` — same eyes, another look | `0` |
+| `palette` | `readonly string[]` | built-in |
 | `size` | `number \| string` | `48` |
 | `rounded` | `boolean` | `false` |
 | `className` | `string` | – |
 | `title` | `boolean` | `false` |
-| `palette` | `readonly string[]` | built-in |
 | `animate` | `boolean \| 'blink' \| 'follow' \| 'all'` | `false` |
 | `blink` | `boolean` | `true` when animated |
 | `blinkInterval` | `[min, max]` ms | `[2500, 6000]` |
@@ -89,8 +148,12 @@ not, because it is CSS baked into the SVG.
 | `avatarDataUri(name, options?)` | A `data:image/svg+xml,…` URI. |
 | `resolveAvatar(name, options?)` | Every seeded decision, without rendering. |
 | `attachAvatarMotion(el, options?)` | From `blobbies/motion`. Returns cleanup. |
-| `PALETTE` | The built-in flat palette. |
-| `LETTER_PATHS` | The 36 hand-drawn glyphs as path data. |
+| `COLORS` / `PALETTE` | The built-in palette, by name and in order. |
+| `BACKDROP_COLOR` / `INK_COLOR` / `BLUSH_COLOR` | The fixed layer colours. |
+| `EXPRESSIONS` / `SHAPES` | Every mood and egg shape, by name. |
+| `EXPRESSION_NAMES` / `EXPRESSION_COUNT` / `SHAPE_COUNT` | Labels and counts for pickers. |
+| `LETTER_PATHS` / `LETTER_BOX` / `STROKE_WIDTH` / `INK_WIDTH` / `hasLetterPath` | The glyph geometry. |
+| `hashString` / `cyrb53` / `mulberry32` / `createRng` | The seeding primitives. |
 
 ## React
 
@@ -99,9 +162,11 @@ npm i @blobbies/react
 ```
 
 ```tsx
-import { Avatar } from '@blobbies/react';
+import { Avatar, AvatarPicker } from '@blobbies/react';
 
 <Avatar name="Sourav Nanda" size={40} animate="all" wink />
+
+<AvatarPicker name="Sourav Nanda" onSave={(look) => updateUser({ look })} />
 ```
 
 ## Licence
