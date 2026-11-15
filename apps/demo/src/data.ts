@@ -93,5 +93,10 @@ export const OPTIONS_SNIPPET = `type AvatarOptions = {
   rounded?: boolean                         // false
   title?: boolean                           // false
   palette?: readonly string[]               // built-in
+  variant?: number                          // 0 — same eyes, another look
+  color?: string                            // any CSS colour, e.g. COLORS.sky
+  shape?: 'tall' | 'wide' | 'squat' | 'round' | 'mid'   // seeded
+  expression?: 'smile' | 'smirk' | …        // EXPRESSIONS     seeded
+  blush?: boolean                           // seeded
   className?: string
 }`;

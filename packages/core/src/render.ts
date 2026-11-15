@@ -1,7 +1,16 @@
 import { getInitials } from './initials.js';
 import { createRng, hashString } from './hash.js';
 import { PALETTE } from './palette.js';
-import { decideTraits, renderBackdrop, renderBlob, renderDiskClip, renderEyes, renderMouth } from './parts.js';
+import {
+  applyLook,
+  decideTraits,
+  renderBackdrop,
+  renderBlob,
+  renderBrows,
+  renderDiskClip,
+  renderEyes,
+  renderMouth,
+} from './parts.js';
 import type { AvatarOptions } from './types.js';
 
 export interface ResolvedAvatar {
@@ -26,13 +35,18 @@ function round(value: number): number {
  */
 export function resolveAvatar(name: string, options: AvatarOptions = {}): ResolvedAvatar {
   const safeName = typeof name === 'string' && name.trim() !== '' ? name : '?';
+  // The eyes are always the name's; the variant only reseeds the body. Variant
+  // 0 is the untouched name, so existing avatars render byte-for-byte as before.
+  const variant = Number.isFinite(options.variant) ? Math.trunc(options.variant as number) : 0;
+  const seed = variant === 0 ? safeName : `${safeName}#${variant}`;
   const letters = getInitials(safeName);
-  const hash = hashString(safeName);
+  const hash = hashString(seed);
   const prefix = `bb-${hash.toString(36)}`;
-  const rng = createRng(safeName);
+  const rng = createRng(seed);
   const palette = options.palette && options.palette.length > 0 ? options.palette : PALETTE;
 
-  const traits = decideTraits({ rng, palette });
+  const seeded = decideTraits({ rng, palette });
+  const traits = applyLook(seeded, options);
 
   const [minInterval, maxInterval] = options.blinkInterval ?? [2500, 6000];
   const interval = round(minInterval + rng() * Math.max(0, maxInterval - minInterval));
@@ -45,7 +59,8 @@ export function resolveAvatar(name: string, options: AvatarOptions = {}): Resolv
     renderDiskClip(clipId) +
     renderBackdrop(traits.backdropDir) +
     renderBlob(traits, clipId) +
-    renderEyes(letters) +
+    renderEyes(letters, traits.mouthIndex) +
+    renderBrows(traits.mouthIndex, letters) +
     renderMouth(traits.mouthIndex);
 
   return {

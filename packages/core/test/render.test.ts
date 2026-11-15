@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { PALETTE } from '../src/palette.js';
 import {
   avatarDataUri,
   renderAvatarSvg,
@@ -148,5 +149,52 @@ describe('avatarDataUri', () => {
     const decoded = decodeURIComponent(uri.slice('data:image/svg+xml,'.length));
     expect(decoded).toContain('<svg');
     expect(decoded).toContain('bb-eye');
+  });
+});
+
+describe('variant', () => {
+  it('keeps the eyes and changes the body', () => {
+    const a = resolveAvatar('Sourav Nanda', { variant: 0 });
+    const b = resolveAvatar('Sourav Nanda', { variant: 1 });
+    expect(a.letters).toBe('SN');
+    expect(b.letters).toBe('SN');
+    expect(a.body).not.toBe(b.body);
+    // Clip ids must differ, or two variants on one page would collide.
+    expect(a.prefix).not.toBe(b.prefix);
+  });
+
+  it('is deterministic for a given variant', () => {
+    expect(renderAvatarSvg('Ira', { variant: 3 })).toBe(renderAvatarSvg('Ira', { variant: 3 }));
+  });
+
+  it('leaves variant 0 identical to the original look', () => {
+    expect(renderAvatarSvg('Ada Lovelace')).toBe(
+      renderAvatarSvg('Ada Lovelace', { variant: 0 }),
+    );
+  });
+});
+
+describe('explicit parts', () => {
+  it('sets the parts explicitly but leaves the eyes alone', () => {
+    const a = resolveAvatar('Sourav Nanda', {
+      color: PALETTE[0],
+      shape: 'tall',
+      expression: 'smile',
+      blush: false,
+    });
+    const b = resolveAvatar('Sourav Nanda', {
+      color: PALETTE[4],
+      shape: 'round',
+      expression: 'confused',
+      blush: true,
+    });
+    expect(a.letters).toBe('SN');
+    expect(b.letters).toBe('SN');
+    expect(a.body).not.toBe(b.body);
+  });
+
+  it('is deterministic', () => {
+    const parts = { color: PALETTE[2], shape: 'wide' as const, expression: 'wink' as const, blush: true };
+    expect(renderAvatarSvg('Ira', parts)).toBe(renderAvatarSvg('Ira', parts));
   });
 });

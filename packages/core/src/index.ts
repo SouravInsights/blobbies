@@ -9,12 +9,16 @@ export {
   wantsFollow,
 } from './render.js';
 export type { ResolvedAvatar } from './render.js';
-export { PALETTE, BACKDROP_COLOR, INK_COLOR, BLUSH_COLOR } from './palette.js';
+export { COLORS, PALETTE, BACKDROP_COLOR, INK_COLOR, BLUSH_COLOR } from './palette.js';
+export type { AvatarColor } from './palette.js';
+export { EXPRESSIONS, SHAPES, EXPRESSION_NAMES, EXPRESSION_COUNT, SHAPE_COUNT } from './parts.js';
 export { LETTER_PATHS, LETTER_BOX, STROKE_WIDTH, INK_WIDTH, hasLetterPath } from './letters.js';
 export { hashString, cyrb53, mulberry32, createRng } from './hash.js';
 export type {
   AvatarOptions,
   AvatarAnimate,
+  AvatarShape,
+  AvatarExpression,
   FollowTarget,
   MotionOptions,
 } from './types.js';

@@ -13,7 +13,45 @@ export type FollowTarget =
   | HTMLElement
   | { readonly current: HTMLElement | null };
 
+/** The egg shapes, by name. */
+export type AvatarShape = 'tall' | 'wide' | 'squat' | 'round' | 'mid';
+
+/** Every mood, by name. */
+export type AvatarExpression =
+  | 'smile'
+  | 'smirk'
+  | 'sad'
+  | 'wink'
+  | 'angry'
+  | 'cat'
+  | 'shy'
+  | 'annoyed'
+  | 'laugh'
+  | 'smug'
+  | 'confused'
+  | 'cheeky'
+  | 'surprised'
+  | 'coy'
+  | 'determined'
+  | 'beam'
+  | 'side-eye'
+  | 'pout'
+  | 'shocked'
+  | 'unimpressed'
+  | 'grin'
+  | 'smoulder';
+
 export interface AvatarOptions {
+  /** Any CSS colour. Defaults to one derived from the name. See `COLORS`. */
+  color?: string;
+  /** The egg shape. Defaults to one derived from the name. */
+  shape?: AvatarShape;
+  /** The mood — mouth and brows. Defaults to one derived from the name. */
+  expression?: AvatarExpression;
+  /** Blush on or off. Defaults to a seeded coin flip. */
+  blush?: boolean;
+  /** Tilt in degrees. Defaults to a small seeded lean. */
+  tilt?: number;
   /** Rendered width/height in px (or any CSS length). Default: 48. */
   size?: number | string;
   /** Apply a circular border radius to the rendered svg. Default: false. */
@@ -24,6 +62,14 @@ export interface AvatarOptions {
   title?: boolean;
   /** Custom palette of flat colors. Defaults to the built-in palette. */
   palette?: readonly string[];
+
+  /**
+   * Which of the name's looks to draw. The eyes come from the name and never
+   * change; the variant chooses the body (color, egg, mouth, blush, tilt).
+   * So a picker can offer one person many faces without changing who they are.
+   * Default: 0, which is the original look for that name.
+   */
+  variant?: number;
 
   /**
    * Convenience switch:

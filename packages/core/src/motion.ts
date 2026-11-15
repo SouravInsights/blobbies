@@ -44,13 +44,13 @@ const MOTION_STYLE_ID = 'bb-motion-styles';
 
 const MOTION_CSS =
   // Only the facial features move — the colored blob and dark disk stay put.
-  `.bb-motion .bb-eyes,.bb-motion .bb-mouth{transform-box:fill-box;transform-origin:center}` +
-  `.bb-motion .bb-eyes{transform:translate(var(--look-x,0px),var(--look-y,0px)) scale(var(--bb-scale,1))}` +
+  `.bb-motion .bb-eyes,.bb-motion .bb-brows,.bb-motion .bb-mouth{transform-box:fill-box;transform-origin:center}` +
+  `.bb-motion .bb-eyes,.bb-motion .bb-brows{transform:translate(var(--look-x,0px),var(--look-y,0px)) scale(var(--bb-scale,1))}` +
   `.bb-motion .bb-mouth{transform:translate(calc(var(--look-x,0px) * 0.7),calc(var(--look-y,0px) * 0.7)) scale(var(--bb-scale,1))}` +
   `.bb-motion.bb-surprised{--bb-scale:1.06}` +
   `.bb-motion.bb-winking .bb-eyes>g:last-child .bb-eye{animation:bb-wink-anim .34s ease-in-out !important}` +
   `@keyframes bb-wink-anim{0%,100%{transform:scaleY(1)}45%{transform:scaleY(.1)}}` +
-  `@media (prefers-reduced-motion:reduce){.bb-motion .bb-eyes,.bb-motion .bb-mouth{transform:none}}`;
+  `@media (prefers-reduced-motion:reduce){.bb-motion .bb-eyes,.bb-motion .bb-brows,.bb-motion .bb-mouth{transform:none}}`;
 
 function injectStyle(): void {
   if (typeof document === 'undefined') return;
