@@ -2,6 +2,7 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AvatarPicker } from '../src/AvatarPicker.js';
+import { AvatarPickerPreview, AvatarPickerRoot } from '../src/AvatarPicker.js';
 
 beforeEach(() => {
   vi.stubGlobal('ResizeObserver', class {
@@ -48,5 +49,16 @@ describe('AvatarPicker', () => {
     fireEvent.click(getByText('Blush'));
     expect(onChange).toHaveBeenCalled();
     expect(onChange.mock.calls.at(-1)?.[0]?.blush).toBe(false);
+  });
+
+  it('renders the chosen face with AvatarPickerPreview', () => {
+    const { container } = render(
+      <AvatarPickerRoot name="Sourav Nanda">
+        <AvatarPickerPreview size={40} />
+      </AvatarPickerRoot>,
+    );
+    const preview = container.querySelector('[data-part="preview"]');
+    expect(preview).toBeTruthy();
+    expect(preview?.getAttribute('data-blobbies')).toBe('SN');
   });
 });

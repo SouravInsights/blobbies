@@ -137,6 +137,7 @@ const CSS = `
 .bb-picker-foot {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 12px 16px;
   border-top: 1px solid var(--bb-picker-line);
@@ -177,7 +178,7 @@ const CSS = `
 }
 .bb-picker-reset:active { transform: scale(0.97); }
 .bb-picker-reset:hover { color: var(--bb-picker-ink); }
-.bb-picker-reset:disabled { visibility: hidden; pointer-events: none; }
+.bb-picker-reset:disabled { display: none; pointer-events: none; }
 
 .bb-picker-blush,
 .bb-picker-spotlight {
@@ -214,10 +215,20 @@ const CSS = `
 
 @keyframes bb-picker-mood-in { from { opacity: 0; translate: 0 3px; } }
 
-@container (max-width: 420px) {
+@container (max-width: 440px) {
   .bb-picker-head { padding: 14px 14px 8px; }
   .bb-picker-mood { padding: 6px 14px 8px; }
   .bb-picker-foot { padding: 10px 12px; }
+  /* The grower becomes a full-width break, so Cancel and Save share the last
+     row instead of being pushed past the edge of a phone-sized panel. */
+  .bb-picker-foot .bb-picker-grow { flex-basis: 100%; height: 0; }
+  .bb-picker-foot .bb-picker-btn { flex: 1 1 0; justify-content: center; }
+}
+
+@container (max-width: 360px) {
+  .bb-picker-foot { gap: 6px; }
+  .bb-picker-blush,
+  .bb-picker-spotlight { padding: 0 9px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

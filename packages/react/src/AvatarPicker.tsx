@@ -16,6 +16,7 @@ import {
 import { EXPRESSIONS, EXPRESSION_COUNT, EXPRESSION_NAMES, PALETTE } from 'blobbies';
 import type { AvatarExpression, AvatarOptions } from 'blobbies';
 import { Avatar } from './Avatar.js';
+import type { AvatarProps } from './Avatar.js';
 import { usePickerStyles } from './picker-styles.js';
 
 /**
@@ -38,15 +39,19 @@ const CENTER_I = 2;
 const CENTER_J = 1;
 const BCOLS = COLS + 2;
 const BROWS = ROWS + 2;
-const GAP = 8;
-const MIN_CELL = 48;
+// The gap and the cell are measured from the panel, not fixed: on a phone the
+// whole 5 × 3 grid has to fit the same box it fits on a laptop. A small floor
+// keeps the initials legible; the grid never grows past MAX_CELL.
+const MIN_GAP = 4;
+const MAX_GAP = 8;
+const MIN_CELL = 24;
 const MAX_CELL = 78;
 const LENS = 2.6;
 const MAX_BLUR = 3.2;
 const PUSH = 6;
-// Padding equal to the gap: enough room for an edge ring, not enough to
-// reveal the buffer column/row that waits outside the visible grid.
-const PAD = GAP;
+// Padding from the surface edge to the lens: enough room for an edge ring, not
+// enough to reveal the buffer column or row that waits outside the visible grid.
+const PAD = 8;
 
 const mod = (n: number, m: number): number => ((Math.trunc(n) % m) + m) % m;
 const clamp = (v: number, a: number, b: number): number => Math.min(b, Math.max(a, v));
@@ -183,7 +188,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     blush: defaultValue?.blush ?? true,
   });
 
-  const [cell, setCell] = useState(68);
+  const [metrics, setMetrics] = useState({ cell: 68, gap: MAX_GAP });
   const [blush, setBlush] = useState(initial.current.blush ?? true);
   const [pinned, setPinned] = useState<{ color: number; expression: number } | null>(null);
   const [spotlightOn, setSpotlightOn] = useState(spotlight);
@@ -193,9 +198,10 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   const [settling, setSettling] = useState(false);
   const [version, setVersion] = useState(0);
 
-  const pitch = cell + GAP;
-  const vw = COLS * cell + (COLS - 1) * GAP;
-  const vh = ROWS * cell + (ROWS - 1) * GAP;
+  const { cell, gap } = metrics;
+  const pitch = cell + gap;
+  const vw = COLS * cell + (COLS - 1) * gap;
+  const vh = ROWS * cell + (ROWS - 1) * gap;
   const surfaceW = vw + PAD * 2;
   const surfaceH = vh + PAD * 2;
 
@@ -417,17 +423,38 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   };
 
   useLayoutEffect(() => {
-    const el = cardRef.current;
-    if (!el) return undefined;
+    const card = cardRef.current;
+    if (!card) return undefined;
+    // Size to the box the surface actually lives in, not the root. In the
+    // preset that is the panel; in a custom layout it may be a narrow column
+    // beside a sidebar, and measuring the root would overflow it.
+    const host = stageRef.current?.parentElement ?? card;
     const measure = (): void => {
-      const w = el.clientWidth;
-      const next = clamp(Math.floor((w - 32 - PAD * 2 - (COLS - 1) * GAP) / COLS), MIN_CELL, MAX_CELL);
-      setCell((c) => (c === next ? c : next));
+      // `clientWidth` includes the host's own padding. A custom layout may put
+      // padding on it (the preset puts its padding on the header and footer),
+      // so measure the content box the surface actually lives in.
+      const style = getComputedStyle(host);
+      const padX =
+        (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+      const w = host.clientWidth - padX;
+      // Keep a little more breathing room at every size: the panel inset
+      // shrinks with it. `surfaceW` is then guaranteed to fit inside `w`, so
+      // the edge cells are never clipped by the panel.
+      const inset = Math.min(16, Math.max(6, Math.round(w * 0.03)));
+      const nextGap = clamp(Math.round(w * 0.02), MIN_GAP, MAX_GAP);
+      const nextCell = clamp(
+        Math.floor((w - inset * 2 - PAD * 2 - (COLS - 1) * nextGap) / COLS),
+        MIN_CELL,
+        MAX_CELL,
+      );
+      setMetrics((m) =>
+        m.cell === nextCell && m.gap === nextGap ? m : { cell: nextCell, gap: nextGap },
+      );
     };
     measure();
     if (typeof ResizeObserver === 'undefined') return undefined;
     const observer = new ResizeObserver(measure);
-    observer.observe(el);
+    observer.observe(host);
     return () => observer.disconnect();
   }, []);
 
@@ -441,7 +468,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     }
     apply();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell]);
+  }, [cell, gap]);
 
   // Re-apply the lens after every render (hover, size, origin).
   useLayoutEffect(() => {
@@ -775,6 +802,17 @@ export function AvatarPickerSurface(props: AvatarPickerSurfaceProps) {
       </div>
     </div>
   );
+}
+
+/**
+ * The chosen face, for a layout that wants to show it outside the map. It
+ * reads the picker's current value, so it stays in step with the surface.
+ */
+export type AvatarPickerPreviewProps = Omit<AvatarProps, 'name'>;
+
+export function AvatarPickerPreview(props: AvatarPickerPreviewProps) {
+  const { name, value } = usePickerContext();
+  return <Avatar name={name} {...value} {...props} data-part="preview" />;
 }
 
 export type AvatarPickerMoodProps = HTMLAttributes<HTMLDivElement>;
