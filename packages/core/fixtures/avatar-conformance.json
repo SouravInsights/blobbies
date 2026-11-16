@@ -1,7 +1,7 @@
 {
   "contract": 1,
   "engine": "blobbies",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "cases": [
     {
       "id": "base:Sourav Nanda",
