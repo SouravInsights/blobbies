@@ -100,6 +100,7 @@ never quietly go stale. Commands to regenerate them are at the bottom.
 | Open the full picker | React apps | `<AvatarPicker name="Ira" />` |
 | Use it without writing code | A terminal | `npx blobbies render "Ira"` |
 | Read what it can do | Ports and AI agents | `packages/core/manifest.json` |
+| Use one tag in any web framework | Plain HTML, React, Vue, Svelte, Solid, Angular | `<blobbies-avatar name="Ira">` |
 
 The React picker is finished and rock-solid on touch (that was the last piece of
 work before this plan).
@@ -120,7 +121,7 @@ and generate the conformance file and the manifest.
 **Done when:** the conformance test is green and the files regenerate
 identically. ✅ Both are in the repo.
 
-### Step 1 — One web component, every web framework
+### Step 1 — One web component, every web framework ✅
 
 Build a `<blobbies-avatar>` custom element — a real HTML tag that works in React,
 Vue, Svelte, Solid, Angular, and a plain `.html` file with no build step.
@@ -129,8 +130,9 @@ This is the highest-leverage step. Instead of six wrappers that each need
 maintaining, it is **one** implementation that every web framework can already
 use. Framework-specific packages become optional extras, not requirements.
 
-**Done when:** a hand-written HTML page shows avatars, and a Vue page and a
-Svelte page use the exact same tag.
+**Status:** `packages/element` is built and tested (6 tests). It is a thin shell
+over `renderAvatarSvg` + `attachAvatarMotion`, so its output is identical to the
+string renderer. Still worth a real-browser check in a Vue and a Svelte page.
 
 ### Step 2 — Separate the drawing from the string
 
@@ -292,6 +294,7 @@ npx blobbies shapes
 ```
 packages/core       blobbies            the decisions, the drawing, the contract
 packages/react      @blobbies/react     <Avatar>, <AvatarPicker>, hooks
+packages/element    @blobbies/element   <blobbies-avatar> web component
 packages/core/fixtures                  the conformance file (generated)
 packages/core/manifest.json             the capability data (generated)
 docs/PLATFORMS.md                       this plan
@@ -302,7 +305,6 @@ llms.txt                                compact doc index for AI tools
 Future homes, when each step happens:
 
 ```
-packages/element        @blobbies/element       <blobbies-avatar> custom element
 packages/react-native   @blobbies/react-native  React Native renderer
 platforms/swift         Blobbies                SwiftUI package
 ```

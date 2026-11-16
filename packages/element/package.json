@@ -1,0 +1,59 @@
+{
+  "name": "@blobbies/element",
+  "version": "0.1.0",
+  "description": "Blobbies as a web component: <blobbies-avatar> works in React, Vue, Svelte, Solid, Angular and plain HTML.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/index.js",
+    "./dist/index.cjs"
+  ],
+  "keywords": [
+    "avatar",
+    "avatars",
+    "web-component",
+    "custom-element",
+    "blobbies",
+    "profile"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SouravInsights/blobbies.git",
+    "directory": "packages/element"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepack": "pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "blobbies": "workspace:*"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

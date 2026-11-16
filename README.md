@@ -18,12 +18,13 @@ every decision comes from a seeded hash of the name. The core is zero
 dependencies, the React bindings depend only on the core, and one avatar is
 about **1.4 KB** of SVG.
 
-Two packages, and you only ship the one you use:
+A small set of packages, and you only ship the one you use:
 
 | Package | What it is | Install |
 | --- | --- | --- |
-| [`blobbies`](https://www.npmjs.com/package/blobbies) | Renderer, hash, glyphs, motion runtime. Framework-agnostic. | `npm i blobbies` |
+| [`blobbies`](https://www.npmjs.com/package/blobbies) | Renderer, hash, glyphs, motion runtime, CLI. Framework-agnostic. | `npm i blobbies` |
 | [`@blobbies/react`](https://www.npmjs.com/package/@blobbies/react) | `<Avatar>`, the `<AvatarPicker>`, and React hooks. | `npm i @blobbies/react` |
+| `@blobbies/element` | `<blobbies-avatar>` — a web component that works in any framework. | `npm i @blobbies/element` |
 
 ```ts
 import { renderAvatarSvg } from 'blobbies';
