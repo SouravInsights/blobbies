@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 import { Avatar } from "@blobbies/react";
 import { Api } from "./sections/Api";
 import { Draws } from "./sections/Draws";
+import { Platforms } from "./sections/Platforms";
 import { Ending } from "./sections/Ending";
 import { Film } from "./sections/Film";
 import { Hero } from "./sections/Hero";
@@ -24,6 +25,7 @@ const STRESS = buildNames(200);
 /** The sections the bar links to. */
 const SECTIONS = [
   ["#start", "Quick start"],
+  ["#platforms", "Platforms"],
   ["#playground", "Playground"],
   ["#picker", "Picker"],
   ["#draws", "Glyphs"],
@@ -116,7 +118,7 @@ export function App(): JSX.Element {
         <a className="brand" href="#top">
           <Mark />
           <span className="brand-word">blobbies</span>
-          <span className="brand-version">0.2.1</span>
+          <span className="brand-version">0.6.0</span>
         </a>
 
         <nav className="barnav" aria-label="Sections">
@@ -202,6 +204,10 @@ export function App(): JSX.Element {
           <section className="section" style={{ marginTop: 72 }}>
             <Picker name={name} />
           </section>
+        ) : only === "platforms" ? (
+          <section className="section" style={{ marginTop: 72 }}>
+            <Platforms name={name} />
+          </section>
         ) : stress ? (
           <section className="stress" style={{ marginTop: 40 }}>
             <div className="lead">
@@ -228,6 +234,7 @@ export function App(): JSX.Element {
             <Film />
             <Steps />
             <QuickStart />
+            <Platforms name={name} />
             <Playground
               value={controls}
               onChange={setControls}
