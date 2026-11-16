@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cellAtPoint, dragSlop, exceedsSlop } from '../src/picker-gesture.js';
+import { cellAtPoint, dragSlop, exceedsSlop } from 'blobbies';
 
 describe('dragSlop', () => {
   it('gives touch more slack than a mouse', () => {

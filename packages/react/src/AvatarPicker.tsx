@@ -13,13 +13,33 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { EXPRESSIONS, EXPRESSION_COUNT, EXPRESSION_NAMES, PALETTE } from 'blobbies';
-import type { AvatarExpression, AvatarOptions } from 'blobbies';
+import {
+  EXPRESSIONS,
+  EXPRESSION_COUNT,
+  EXPRESSION_NAMES,
+  PALETTE,
+  COLS,
+  ROWS,
+  CENTER_I,
+  CENTER_J,
+  MIN_GAP,
+  MAX_GAP,
+  MIN_CELL,
+  MAX_CELL,
+  PAD,
+  mod,
+  clamp,
+  lookCells,
+  centeredCell,
+  lensEffect,
+  cellAtPoint,
+  dragSlop,
+  exceedsSlop,
+} from 'blobbies';
+import type { AvatarExpression, AvatarOptions, CellIndex, LookCell } from 'blobbies';
 import { Avatar } from './Avatar.js';
 import type { AvatarProps } from './Avatar.js';
 import { usePickerStyles } from './picker-styles.js';
-import { cellAtPoint, dragSlop, exceedsSlop } from './picker-gesture.js';
-import type { CellIndex } from './picker-gesture.js';
 
 // `useLayoutEffect` warns when it runs during server rendering. The picker is
 // SSR-safe, so fall back to `useEffect` where there is no DOM; the effect only
@@ -41,38 +61,9 @@ const useIsomorphicLayoutEffect =
  * the parts are composable, and `AvatarPicker` is the preset.
  */
 
-const COLS = 5;
-const ROWS = 3;
-const CENTER_I = 2;
-const CENTER_J = 1;
-const BCOLS = COLS + 2;
-const BROWS = ROWS + 2;
-// The gap and the cell are measured from the panel, not fixed: on a phone the
-// whole 5 × 3 grid has to fit the same box it fits on a laptop. A small floor
-// keeps the initials legible; the grid never grows past MAX_CELL.
-const MIN_GAP = 4;
-const MAX_GAP = 8;
-const MIN_CELL = 24;
-const MAX_CELL = 78;
-const LENS = 2.6;
-const MAX_BLUR = 3.2;
-const PUSH = 6;
-// Padding from the surface edge to the lens: enough room for an edge ring, not
-// enough to reveal the buffer column or row that waits outside the visible grid.
-const PAD = 8;
-
-const mod = (n: number, m: number): number => ((Math.trunc(n) % m) + m) % m;
-const clamp = (v: number, a: number, b: number): number => Math.min(b, Math.max(a, v));
-
 type Focus = CellIndex;
 
-interface Cell {
-  key: string;
-  i: number;
-  j: number;
-  color: number;
-  expression: number;
-}
+type Cell = LookCell;
 
 interface MapController {
   stageRef: RefObject<HTMLDivElement>;
@@ -284,30 +275,24 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
 
     lensOn.current = true;
     positioned.current = true;
-    const lx = (hovered.i + 0.5) * p + pos.current.x;
-    const ly = (hovered.j + 0.5) * p + pos.current.y;
+    const lens = hovered;
     for (const [key, el] of cellEls.current) {
       const [i, j] = key.split(':').map(Number) as [number, number];
-      const sx = i * p + pos.current.x + size / 2;
-      const sy = j * p + pos.current.y + size / 2;
-      const d = Math.hypot(sx - lx, sy - ly) / p;
-      const t = Math.min(1, d / LENS);
-      const fall = 1 - t * t;
-      let px = 0;
-      let py = 0;
-      if (d >= 1e-3) {
-        const len = Math.hypot(sx - lx, sy - ly) || 1;
-        const push = reduced.current ? 0 : fall * PUSH;
-        px = ((sx - lx) / len) * push;
-        py = ((sy - ly) / len) * push;
-      }
-      const opacity = d < 1e-3 ? 1 : 0.7 + 0.3 * fall;
-      const blur = spotlightRef.current && d >= 1e-3 ? Math.min(MAX_BLUR, t * MAX_BLUR) : 0;
+      const { dx, dy, opacity, blur } = lensEffect({
+        cell: { i, j },
+        lens,
+        pitch: p,
+        size,
+        offsetX: pos.current.x,
+        offsetY: pos.current.y,
+        push: !reduced.current,
+        spotlight: spotlightRef.current,
+      });
       // The cell's base position lives in `left`/`top`, which is never
       // transitioned. Only the lens push rides on `transform`, so a resize or
       // a re-wrap moves the grid instantly instead of animating all 35 cells
       // across the screen.
-      el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0)`;
+      el.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
       el.style.opacity = opacity.toFixed(3);
       el.style.filter = blur > 0.06 ? `blur(${blur.toFixed(2)}px)` : '';
     }
@@ -342,10 +327,9 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       world.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
     }
     const p = pitchRef.current;
-    const i = pos.current.x < p / 2 ? CENTER_I : CENTER_I - 1;
-    const j = pos.current.y < p / 2 ? CENTER_J : CENTER_J - 1;
-    if (i !== center.current.i || j !== center.current.j) {
-      center.current = { i, j };
+    const next = centeredCell(pos.current.x, pos.current.y, p);
+    if (next.i !== center.current.i || next.j !== center.current.j) {
+      center.current = next;
       bump();
     }
     renderLens();
@@ -688,22 +672,11 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     }
   };
 
-  const cells = useMemo(() => {
-    const out: Cell[] = [];
-    for (let j = -1; j < BROWS - 1; j++) {
-      for (let i = -1; i < BCOLS - 1; i++) {
-        out.push({
-          key: `${i}:${j}`,
-          i,
-          j,
-          color: mod(ox.current + i, palette.length),
-          expression: mod(oy.current + j, EXPRESSION_COUNT),
-        });
-      }
-    }
-    return out;
+  const cells = useMemo(
+    () => lookCells(ox.current, oy.current, palette.length, EXPRESSION_COUNT),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version, palette.length]);
+    [version, palette.length],
+  );
 
   const lens = hover ?? { i: center.current.i, j: center.current.j };
   const selectedIndex = pinned ?? {
