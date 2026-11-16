@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
-import { AccessibilityInfo } from 'react-native';
 import Svg, { Circle, ClipPath, Defs, Ellipse, G, Path, Text } from 'react-native-svg';
 import { resolveAvatar, wantsBlink } from 'blobbies';
 import type { AvatarOptions } from 'blobbies';
@@ -120,23 +119,11 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
       timer = setTimeout(dip, delay + flatMs);
     };
 
-    // The native `prefers-reduced-motion`: skip the blink when it is on.
-    const respectsReduced = options.respectReducedMotion !== false;
-    if (respectsReduced && typeof AccessibilityInfo?.isReduceMotionEnabled === 'function') {
-      AccessibilityInfo.isReduceMotionEnabled()
-        .then((reduce) => {
-          if (!cancelled && !reduce) begin();
-        })
-        .catch(() => {
-          if (!cancelled) begin();
-        });
-    } else {
-      begin();
-    }
+    begin();
 
     return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blinkOn, resolved, options.respectReducedMotion]);
+  }, [blinkOn, resolved]);
 
   const size = options.size ?? 48;
   const radius =
