@@ -24,11 +24,15 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # Before typecheck, not after: every package resolves `blobbies` and its
+      # siblings through their published `types` entry, which points at `dist`.
+      # On a fresh checkout those do not exist yet, so typecheck would fail on
+      # "Cannot find module 'blobbies'" before it checked a single thing.
+      - name: Build
+        run: pnpm build
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Test
         run: pnpm test
-
-      - name: Build
-        run: pnpm build
