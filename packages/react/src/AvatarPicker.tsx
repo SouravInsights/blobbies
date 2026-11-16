@@ -18,6 +18,8 @@ import type { AvatarExpression, AvatarOptions } from 'blobbies';
 import { Avatar } from './Avatar.js';
 import type { AvatarProps } from './Avatar.js';
 import { usePickerStyles } from './picker-styles.js';
+import { cellAtPoint, dragSlop, exceedsSlop } from './picker-gesture.js';
+import type { CellIndex } from './picker-gesture.js';
 
 // `useLayoutEffect` warns when it runs during server rendering. The picker is
 // SSR-safe, so fall back to `useEffect` where there is no DOM; the effect only
@@ -62,10 +64,7 @@ const PAD = 8;
 const mod = (n: number, m: number): number => ((Math.trunc(n) % m) + m) % m;
 const clamp = (v: number, a: number, b: number): number => Math.min(b, Math.max(a, v));
 
-interface Focus {
-  i: number;
-  j: number;
-}
+type Focus = CellIndex;
 
 interface Cell {
   key: string;
@@ -91,8 +90,9 @@ interface MapController {
   handlers: {
     onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => void;
     onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => void;
-    onPointerUp: () => void;
-    onPointerCancel: () => void;
+    onPointerUp: (event: ReactPointerEvent<HTMLDivElement>) => void;
+    onPointerCancel: (event: ReactPointerEvent<HTMLDivElement>) => void;
+    onLostPointerCapture: (event: ReactPointerEvent<HTMLDivElement>) => void;
     onPointerLeave: () => void;
     onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
   };
@@ -216,9 +216,8 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   const center = useRef<Focus>({ i: CENTER_I, j: CENTER_J });
   const pos = useRef({ x: 0, y: 0 });
   const vel = useRef({ x: 0, y: 0 });
-  const mode = useRef<'idle' | 'drag' | 'glide' | 'snap'>('idle');
+  const mode = useRef<'idle' | 'press' | 'drag' | 'glide' | 'snap'>('idle');
   const raf = useRef(0);
-  const moved = useRef(false);
   const stepRaf = useRef(0);
   const stepOffset = useRef(0);
   const stepDelta = useRef(0);
@@ -231,6 +230,13 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const cellEls = useRef(new Map<string, HTMLDivElement>());
   const last = useRef({ x: 0, y: 0 });
+  // Gesture bookkeeping: which finger owns the map, where it went down, and
+  // the cell it went down on. A tap selects `downCell`, recorded at press, so
+  // the answer cannot change while the finger is still on the glass.
+  const activePointer = useRef<number | null>(null);
+  const downCell = useRef<Focus | null>(null);
+  const start = useRef({ x: 0, y: 0 });
+  const slop = useRef(0);
   const reduced = useRef(
     typeof window !== 'undefined' && typeof window.matchMedia === 'function'
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -268,9 +274,8 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       if (!lensOn.current && positioned.current) return;
       lensOn.current = false;
       positioned.current = true;
-      for (const [key, el] of cellEls.current) {
-        const [i, j] = key.split(':').map(Number) as [number, number];
-        el.style.transform = `translate3d(${(i * p).toFixed(1)}px, ${(j * p).toFixed(1)}px, 0)`;
+      for (const [, el] of cellEls.current) {
+        el.style.transform = '';
         el.style.opacity = '1';
         el.style.filter = '';
       }
@@ -298,7 +303,11 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       }
       const opacity = d < 1e-3 ? 1 : 0.7 + 0.3 * fall;
       const blur = spotlightRef.current && d >= 1e-3 ? Math.min(MAX_BLUR, t * MAX_BLUR) : 0;
-      el.style.transform = `translate3d(${(i * p + px).toFixed(1)}px, ${(j * p + py).toFixed(1)}px, 0)`;
+      // The cell's base position lives in `left`/`top`, which is never
+      // transitioned. Only the lens push rides on `transform`, so a resize or
+      // a re-wrap moves the grid instantly instead of animating all 35 cells
+      // across the screen.
+      el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0)`;
       el.style.opacity = opacity.toFixed(3);
       el.style.filter = blur > 0.06 ? `blur(${blur.toFixed(2)}px)` : '';
     }
@@ -307,11 +316,16 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   const cellAt = (clientX: number, clientY: number): Focus | null => {
     const rect = stageRef.current?.getBoundingClientRect();
     if (!rect) return null;
-    const p = pitchRef.current;
-    const i = Math.floor((clientX - rect.left - PAD - pos.current.x) / p);
-    const j = Math.floor((clientY - rect.top - PAD - pos.current.y) / p);
-    if (i >= -1 && i <= COLS && j >= -1 && j <= ROWS) return { i, j };
-    return null;
+    return cellAtPoint({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+      pad: PAD,
+      offsetX: pos.current.x,
+      offsetY: pos.current.y,
+      pitch: pitchRef.current,
+      width: vw,
+      height: vh,
+    });
   };
 
   const writeStep = (offsetY: number): void => {
@@ -465,13 +479,24 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   }, []);
 
   useIsomorphicLayoutEffect(() => {
-    pos.current = { x: 0, y: 0 };
-    positioned.current = false;
-    mode.current = 'idle';
+    // A resize changes the pitch, so any in-flight glide or snap is aiming at
+    // a stale grid: stop it. Do not reset the offset — rotating a phone,
+    // opening the keyboard or the browser toolbar collapsing must not make
+    // the map jump under the finger.
     if (raf.current) {
       cancelAnimationFrame(raf.current);
       raf.current = 0;
     }
+    if (steppingRef.current && stepRaf.current) {
+      cancelAnimationFrame(stepRaf.current);
+      stepRaf.current = 0;
+      steppingRef.current = false;
+    }
+    setStepping(false);
+    setSettling(false);
+    mode.current = 'idle';
+    normalize();
+    positioned.current = false;
     apply();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell, gap]);
@@ -515,12 +540,20 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   }, []);
 
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>): void => {
-    if (event.button !== 0) return;
+    // Only the primary button starts a gesture. `> 0` rejects middle/right
+    // clicks while still accepting touch and pen, whose `button` may be 0 or
+    // absent depending on the engine.
+    if (event.button > 0) return;
+    // One pointer owns the map. A second finger — a dropped thumb, a system
+    // gesture — must not teleport or restart the drag.
+    if (activePointer.current !== null) return;
+    activePointer.current = event.pointerId;
     try {
       stageRef.current?.setPointerCapture(event.pointerId);
     } catch {
-      /* not fatal */
+      /* pointer capture is best-effort */
     }
+
     if (raf.current) {
       cancelAnimationFrame(raf.current);
       raf.current = 0;
@@ -534,22 +567,50 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       setStepping(false);
       apply();
     }
-    mode.current = 'drag';
-    moved.current = false;
-    setDragging(true);
-    setHover(null);
+
+    // Record the cell at press, not at release. The map can glide, and a
+    // resize can change the pitch, between down and up; neither may change
+    // which face a tap means.
+    downCell.current = cellAt(event.clientX, event.clientY);
+    mode.current = 'press';
+    slop.current = dragSlop(event.pointerType);
+    start.current = { x: event.clientX, y: event.clientY };
     last.current = { x: event.clientX, y: event.clientY };
     vel.current = { x: 0, y: 0 };
+    setHover(null);
   };
 
   const onPointerMove = (event: ReactPointerEvent<HTMLDivElement>): void => {
-    if (mode.current === 'drag') {
+    if (mode.current === 'press' || mode.current === 'drag') {
+      // A gesture owns the map; ignore any other finger.
+      if (event.pointerId !== activePointer.current) return;
+
+      if (mode.current === 'press') {
+        // Touch rests a few pixels away from where it landed. Only past the
+        // slop does intent become a drag.
+        if (exceedsSlop(start.current, { x: event.clientX, y: event.clientY }, slop.current)) {
+          mode.current = 'drag';
+          // Carry the movement past the slop into the pan, so the map follows
+          // the finger from the moment the gesture became a drag — the slack
+          // is dropped, nothing else is.
+          const dx = event.clientX - start.current.x;
+          const dy = event.clientY - start.current.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const carry = (dist - slop.current) / dist;
+          pos.current.x += dx * carry;
+          pos.current.y += dy * carry;
+          last.current = { x: event.clientX, y: event.clientY };
+          vel.current = { x: clamp(dx * 0.85, -40, 40), y: clamp(dy * 0.85, -40, 40) };
+          normalize();
+          apply();
+          setPinned(null);
+          setDragging(true);
+        }
+        return;
+      }
+
       const dx = event.clientX - last.current.x;
       const dy = event.clientY - last.current.y;
-      if (Math.abs(dx) + Math.abs(dy) > 2) {
-        if (!moved.current) setPinned(null);
-        moved.current = true;
-      }
       last.current = { x: event.clientX, y: event.clientY };
       pos.current.x += dx;
       pos.current.y += dy;
@@ -558,23 +619,32 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       apply();
       return;
     }
+
+    // A resting finger is not a cursor; skip the hover math on touch.
+    if (event.pointerType === 'touch') return;
     const at = cellAt(event.clientX, event.clientY);
     setHover((prev) => (at && prev && prev.i === at.i && prev.j === at.j ? prev : at));
   };
 
-  const endDrag = (): void => {
-    if (mode.current !== 'drag') return;
+  const endDrag = (event: ReactPointerEvent<HTMLDivElement>, commit: boolean): void => {
+    if (activePointer.current !== null && event.pointerId !== activePointer.current) return;
+    activePointer.current = null;
+    if (mode.current !== 'press' && mode.current !== 'drag') return;
+    const wasTap = mode.current === 'press';
     setDragging(false);
-    if (!moved.current) {
-      const at = cellAt(last.current.x, last.current.y);
+
+    if (wasTap && commit) {
+      const at = downCell.current;
       if (at) {
         setPinned({
           color: mod(ox.current + at.i, palette.length),
           expression: mod(oy.current + at.j, EXPRESSION_COUNT),
         });
       }
-      setHover(null);
     }
+    setHover(null);
+    downCell.current = null;
+
     if (reduced.current) {
       const p = pitchRef.current;
       pos.current.x = pos.current.x < p / 2 ? 0 : p;
@@ -700,9 +770,14 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     handlers: {
       onPointerDown,
       onPointerMove,
-      onPointerUp: endDrag,
-      onPointerCancel: endDrag,
-      onPointerLeave: () => setHover(null),
+      onPointerUp: (event) => endDrag(event, true),
+      onPointerCancel: (event) => endDrag(event, false),
+      // If capture is torn away without an up/cancel event, the gesture must
+      // still end or the next touch would be ignored forever.
+      onLostPointerCapture: (event) => endDrag(event, false),
+      onPointerLeave: () => {
+        if (mode.current === 'idle') setHover(null);
+      },
       onKeyDown,
     },
   };
@@ -744,7 +819,7 @@ export type AvatarPickerSurfaceProps = Omit<HTMLAttributes<HTMLDivElement>, 'chi
 export function AvatarPickerSurface(props: AvatarPickerSurfaceProps) {
   const { className, ...rest } = props;
   const { name, blush, value, palette, map } = usePickerContext();
-  const { stageRef, worldRef, cellEls, cell, cells, focus, selected, dragging, moving, handlers, vw, vh } = map;
+  const { stageRef, worldRef, cellEls, cell, pitch, cells, focus, selected, dragging, moving, handlers, vw, vh } = map;
 
   return (
     <div
@@ -772,7 +847,13 @@ export function AvatarPickerSurface(props: AvatarPickerSurfaceProps) {
               }}
               className="bb-picker-cell"
               data-focus={on ? '1' : undefined}
-              style={{ width: cell, height: cell, zIndex: on ? 6 : 1 }}
+              style={{
+                left: c.i * pitch,
+                top: c.j * pitch,
+                width: cell,
+                height: cell,
+                zIndex: on ? 6 : 1,
+              }}
               aria-hidden="true"
             >
               <span className="bb-picker-lift">

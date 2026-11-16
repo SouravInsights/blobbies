@@ -28,9 +28,17 @@ const CSS = `
   container-type: inline-size;
   font-size: 14px;
   line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
 }
 .bb-picker * { box-sizing: border-box; }
-.bb-picker button { font: inherit; cursor: pointer; }
+.bb-picker button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
 .bb-picker h3 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
 .bb-picker p { margin: 0; }
 
@@ -46,6 +54,7 @@ const CSS = `
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
   outline: none;
 }
 .bb-picker-surface[data-dragging] { cursor: grabbing; }
@@ -131,7 +140,9 @@ const CSS = `
   transition: background-color var(--bb-picker-fade), color var(--bb-picker-fade), transform 160ms var(--bb-picker-ease-out);
 }
 .bb-picker-step:active { transform: scale(0.94); }
-.bb-picker-step:hover { background: color-mix(in oklab, var(--bb-picker-ink) 8%, transparent); color: var(--bb-picker-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .bb-picker-step:hover { background: color-mix(in oklab, var(--bb-picker-ink) 8%, transparent); color: var(--bb-picker-ink); }
+}
 .bb-picker-step:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--bb-picker-panel), 0 0 0 3.5px var(--bb-picker-ink); }
 
 .bb-picker-foot {
@@ -160,10 +171,14 @@ const CSS = `
   transition: background-color var(--bb-picker-fade), transform 160ms var(--bb-picker-ease-out);
 }
 .bb-picker-btn:active { transform: scale(0.97); }
-.bb-picker-btn:hover { background: color-mix(in oklab, var(--bb-picker-ink) 14%, transparent); }
+@media (hover: hover) and (pointer: fine) {
+  .bb-picker-btn:hover { background: color-mix(in oklab, var(--bb-picker-ink) 14%, transparent); }
+}
 .bb-picker-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--bb-picker-panel), 0 0 0 3.5px var(--bb-picker-ink); }
 .bb-picker-primary { background: var(--bb-picker-accent); color: var(--bb-picker-accent-ink); }
-.bb-picker-primary:hover { background: color-mix(in oklab, var(--bb-picker-accent) 86%, var(--bb-picker-panel)); }
+@media (hover: hover) and (pointer: fine) {
+  .bb-picker-primary:hover { background: color-mix(in oklab, var(--bb-picker-accent) 86%, var(--bb-picker-panel)); }
+}
 
 .bb-picker-reset {
   height: 28px;
@@ -177,8 +192,12 @@ const CSS = `
   transition: transform 160ms var(--bb-picker-ease-out);
 }
 .bb-picker-reset:active { transform: scale(0.97); }
-.bb-picker-reset:hover { color: var(--bb-picker-ink); }
-.bb-picker-reset:disabled { display: none; pointer-events: none; }
+@media (hover: hover) and (pointer: fine) {
+  .bb-picker-reset:hover { color: var(--bb-picker-ink); }
+}
+/* Hidden, not removed: the reset appears on the first change, and taking it
+   out of the flow would reflow the footer under the finger that just chose. */
+.bb-picker-reset:disabled { visibility: hidden; pointer-events: none; }
 
 .bb-picker-blush,
 .bb-picker-spotlight {
@@ -206,8 +225,10 @@ const CSS = `
   border: 1.5px solid currentColor;
   transition: background-color var(--bb-picker-fade), border-color var(--bb-picker-fade);
 }
-.bb-picker-blush:hover,
-.bb-picker-spotlight:hover { border-color: var(--bb-picker-muted); color: var(--bb-picker-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .bb-picker-blush:hover,
+  .bb-picker-spotlight:hover { border-color: var(--bb-picker-muted); color: var(--bb-picker-ink); }
+}
 .bb-picker-blush[data-on],
 .bb-picker-spotlight[data-on] { color: var(--bb-picker-ink); border-color: color-mix(in oklab, var(--bb-picker-ink) 28%, transparent); }
 .bb-picker-blush[data-on]::before,
