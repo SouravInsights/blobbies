@@ -64,8 +64,8 @@ function renderNode(
 /**
  * A Blobbies avatar for React Native.
  *
- * Same prop API, same decisions, same motion as the web: the face comes from
- * the shared scene, and the blink plays the web's exact keyframes. The one thing
+ * Same prop API, same decisions, same motion as the web: the face comes from the
+ * shared scene, and the blink plays the web's exact keyframes. The one thing
  * that cannot be identical is cursor following — a phone has no cursor.
  */
 export function Avatar({ name, ...options }: AvatarProps): ReactElement {
@@ -77,9 +77,41 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const blinkOn = wantsBlink(options);
 
   const [scale, setScale] = useState(1);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
+  // Watch the OS setting, the native `prefers-reduced-motion`.
   useEffect(() => {
-    if (!blinkOn) {
+    if (options.respectReducedMotion === false) {
+      setReduceMotion(false);
+      return undefined;
+    }
+    let cancelled = false;
+    let subscription: { remove?: () => void } | undefined;
+    try {
+      const info: typeof AccessibilityInfo | undefined = AccessibilityInfo;
+      if (info && typeof info.isReduceMotionEnabled === 'function') {
+        void info.isReduceMotionEnabled().then(
+          (reduce) => {
+            if (!cancelled) setReduceMotion(reduce);
+          },
+          () => undefined,
+        );
+        subscription = info.addEventListener?.('reduceMotionChanged', (reduce) => {
+          if (!cancelled) setReduceMotion(reduce);
+        });
+      }
+    } catch {
+      /* no reduce-motion support on this platform; leave it off */
+    }
+    return () => {
+      cancelled = true;
+      subscription?.remove?.();
+    };
+  }, [options.respectReducedMotion]);
+
+  // The blink loop. Off entirely while Reduce Motion is on.
+  useEffect(() => {
+    if (!blinkOn || reduceMotion) {
       setScale(1);
       return undefined;
     }
@@ -88,19 +120,16 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
     const startPhase = firstActivePhase(double);
     const flatMs = startPhase * interval;
     const activeMs = Math.max(16, interval - flatMs);
-
     let timer: ReturnType<typeof setTimeout> | undefined;
     let frame = 0;
     let cancelled = false;
-    let running = false;
 
     // One dip: from `startPhase` to the end of the interval, then repeat after
     // the flat stretch. This is the web's keyframe cycle, in time.
     const dip = (): void => {
-      if (cancelled || !running) return;
       const began = Date.now();
       const tick = (): void => {
-        if (cancelled || !running) return;
+        if (cancelled) return;
         const t = Math.min(1, (Date.now() - began) / activeMs);
         setScale(blinkScaleAtPhase(startPhase + t * (1 - startPhase), double));
         if (t < 1) {
@@ -113,60 +142,17 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
       frame = requestAnimationFrame(tick);
     };
 
-    const stop = (): void => {
-      running = false;
-      if (frame) {
-        cancelAnimationFrame(frame);
-        frame = 0;
-      }
-      if (timer) {
-        clearTimeout(timer);
-        timer = undefined;
-      }
-      setScale(1);
-    };
-
-    const start = (): void => {
-      if (cancelled || running) return;
-      running = true;
-      timer = setTimeout(dip, delay + flatMs);
-    };
-
-    // The native `prefers-reduced-motion`, live. Guarded, because a missing or
-    // throwing API must never be able to unmount the app.
-    const onReduceChange = (reduce: boolean): void => {
-      if (cancelled) return;
-      if (reduce) stop();
-      else start();
-    };
-
-    let subscription: { remove?: () => void } | undefined;
-    try {
-      const info: typeof AccessibilityInfo | undefined = AccessibilityInfo;
-      if (
-        options.respectReducedMotion !== false &&
-        info &&
-        typeof info.isReduceMotionEnabled === 'function'
-      ) {
-        void info.isReduceMotionEnabled().then(onReduceChange, () => start());
-        subscription = info.addEventListener?.('reduceMotionChanged', onReduceChange);
-      } else {
-        start();
-      }
-    } catch {
-      start();
-    }
-
+    timer = setTimeout(dip, delay + flatMs);
     return () => {
       cancelled = true;
-      running = false;
       if (frame) cancelAnimationFrame(frame);
       if (timer) clearTimeout(timer);
-      subscription?.remove?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blinkOn, resolved, options.respectReducedMotion]);
+  }, [blinkOn, resolved, reduceMotion]);
 
+  // Reduce Motion must leave the eyes *open and still* — never caught mid-blink.
+  const eyeScale = blinkOn && !reduceMotion ? scale : 1;
   const size = options.size ?? 48;
   const radius =
     options.rounded && typeof size === 'number' ? { borderRadius: size / 2 } : undefined;
@@ -180,7 +166,9 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
       accessibilityRole="image"
       accessibilityLabel={name}
     >
-      {nodes.map((node, i) => renderNode(node, `${resolved.prefix}.${i}`, eyeTransform(scale)))}
+      {nodes.map((node, i) =>
+        renderNode(node, `${resolved.prefix}.${i}`, eyeTransform(eyeScale)),
+      )}
     </Svg>
   );
 }
