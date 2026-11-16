@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
+import { AccessibilityInfo } from 'react-native';
 import Svg, { Circle, ClipPath, Defs, Ellipse, G, Path, Text } from 'react-native-svg';
 import { resolveAvatar, wantsBlink } from 'blobbies';
 import type { AvatarOptions } from 'blobbies';
@@ -87,16 +88,19 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
     const startPhase = firstActivePhase(double);
     const flatMs = startPhase * interval;
     const activeMs = Math.max(16, interval - flatMs);
+
     let timer: ReturnType<typeof setTimeout> | undefined;
     let frame = 0;
     let cancelled = false;
+    let running = false;
 
     // One dip: from `startPhase` to the end of the interval, then repeat after
     // the flat stretch. This is the web's keyframe cycle, in time.
     const dip = (): void => {
+      if (cancelled || !running) return;
       const began = Date.now();
       const tick = (): void => {
-        if (cancelled) return;
+        if (cancelled || !running) return;
         const t = Math.min(1, (Date.now() - began) / activeMs);
         setScale(blinkScaleAtPhase(startPhase + t * (1 - startPhase), double));
         if (t < 1) {
@@ -109,21 +113,59 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
       frame = requestAnimationFrame(tick);
     };
 
-    const cleanup = (): void => {
-      cancelled = true;
-      if (frame) cancelAnimationFrame(frame);
-      if (timer) clearTimeout(timer);
+    const stop = (): void => {
+      running = false;
+      if (frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+      if (timer) {
+        clearTimeout(timer);
+        timer = undefined;
+      }
+      setScale(1);
     };
 
-    const begin = (): void => {
+    const start = (): void => {
+      if (cancelled || running) return;
+      running = true;
       timer = setTimeout(dip, delay + flatMs);
     };
 
-    begin();
+    // The native `prefers-reduced-motion`, live. Guarded, because a missing or
+    // throwing API must never be able to unmount the app.
+    const onReduceChange = (reduce: boolean): void => {
+      if (cancelled) return;
+      if (reduce) stop();
+      else start();
+    };
 
-    return cleanup;
+    let subscription: { remove?: () => void } | undefined;
+    try {
+      const info: typeof AccessibilityInfo | undefined = AccessibilityInfo;
+      if (
+        options.respectReducedMotion !== false &&
+        info &&
+        typeof info.isReduceMotionEnabled === 'function'
+      ) {
+        void info.isReduceMotionEnabled().then(onReduceChange, () => start());
+        subscription = info.addEventListener?.('reduceMotionChanged', onReduceChange);
+      } else {
+        start();
+      }
+    } catch {
+      start();
+    }
+
+    return () => {
+      cancelled = true;
+      running = false;
+      if (frame) cancelAnimationFrame(frame);
+      if (timer) clearTimeout(timer);
+      subscription?.remove?.();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blinkOn, resolved]);
+  }, [blinkOn, resolved, options.respectReducedMotion]);
 
   const size = options.size ?? 48;
   const radius =
