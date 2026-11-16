@@ -15,6 +15,9 @@ public struct BlobbiesAvatar: View {
   private let scene: [SceneNode]
   private let blink: Blink
 
+  @State private var start = Date()
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
   public init(_ name: String, _ options: AvatarOptions = AvatarOptions()) {
     self.name = name
     self.options = options
@@ -23,7 +26,10 @@ public struct BlobbiesAvatar: View {
   }
 
   public var body: some View {
-    let size = options.size ?? 48
+    let size = CGFloat(options.size ?? 48)
+    let respectsReduced = options.respectReducedMotion ?? true
+    let blinkOn = wantsBlink(options) && !(respectsReduced && reduceMotion)
+
     TimelineView(.animation) { timeline in
       Canvas { context, canvasSize in
         var ctx = context
@@ -32,7 +38,10 @@ public struct BlobbiesAvatar: View {
         if options.rounded {
           ctx.clip(to: circlePath(cx: 50, cy: 50, r: 50))
         }
-        let blinkValue = wantsBlink(options) ? Self.blinkScale(at: timeline.date, blink: blink) : 1
+        let elapsed = timeline.date.timeIntervalSince(start)
+        let blinkValue = blinkOn
+          ? BlinkAnimation.scale(elapsed: elapsed, blink: blink)
+          : 1
         draw(scene, into: &ctx, .identity, blink: blinkValue)
       }
     }
@@ -128,26 +137,6 @@ public struct BlobbiesAvatar: View {
       green: Double((int >> 8) & 0xFF) / 255,
       blue: Double(int & 0xFF) / 255
     )
-  }
-
-  /// The CSS blink, sampled for the current time: a quick dip near the end of
-  /// each interval, following the same 92% / 95% / 100% keyframes.
-  static func blinkScale(at date: Date, blink: Blink) -> Double {
-    let period = max(0.4, blink.interval / 1000)
-    let elapsed = date.timeIntervalSinceReferenceDate
-    let phase = elapsed.truncatingRemainder(dividingBy: period) / period
-
-    func dip(_ p: Double) -> Double {
-      if p < 0.92 { return 1 }
-      if p < 0.95 { return 1 + (0.1 - 1) * ((p - 0.92) / 0.03) }
-      return 0.1 + (1 - 0.1) * ((p - 0.95) / 0.05)
-    }
-
-    if blink.double {
-      let half = phase < 0.5 ? phase * 2 : (phase - 0.5) * 2
-      return dip(half)
-    }
-    return dip(phase)
   }
 }
 #endif

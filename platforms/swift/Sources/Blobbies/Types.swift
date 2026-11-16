@@ -96,6 +96,14 @@ public struct AvatarOptions: Sendable {
   public var blink: Bool?
   public var blinkInterval: (Double, Double)?
   public var follow: Bool?
+  public var followRange: Double?
+  public var smoothing: Double?
+  public var idleTimeout: Double?
+  public var paused: Bool?
+  public var respectReducedMotion: Bool?
+  public var wink: Bool?
+  public var glance: Bool?
+  public var surprise: Bool?
 
   public init(
     color: String? = nil,
@@ -112,7 +120,15 @@ public struct AvatarOptions: Sendable {
     animate: String? = nil,
     blink: Bool? = nil,
     blinkInterval: (Double, Double)? = nil,
-    follow: Bool? = nil
+    follow: Bool? = nil,
+    followRange: Double? = nil,
+    smoothing: Double? = nil,
+    idleTimeout: Double? = nil,
+    paused: Bool? = nil,
+    respectReducedMotion: Bool? = nil,
+    wink: Bool? = nil,
+    glance: Bool? = nil,
+    surprise: Bool? = nil
   ) {
     self.color = color
     self.shape = shape
@@ -129,5 +145,13 @@ public struct AvatarOptions: Sendable {
     self.blink = blink
     self.blinkInterval = blinkInterval
     self.follow = follow
+    self.followRange = followRange
+    self.smoothing = smoothing
+    self.idleTimeout = idleTimeout
+    self.paused = paused
+    self.respectReducedMotion = respectReducedMotion
+    self.wink = wink
+    self.glance = glance
+    self.surprise = surprise
   }
 }
