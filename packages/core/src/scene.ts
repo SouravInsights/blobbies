@@ -84,6 +84,11 @@ function transformString(ops: readonly TransformOp[]): string {
     .join(' ');
 }
 
+/** Serialise transform ops to the SVG transform string. */
+export function serializeTransform(ops: readonly TransformOp[]): string {
+  return transformString(ops);
+}
+
 /** Serialise one node. Attribute order matches the original output exactly. */
 export function serializeNode(node: SceneNode): string {
   switch (node.kind) {
