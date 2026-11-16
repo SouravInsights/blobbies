@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
+import { AccessibilityInfo } from 'react-native';
 import Svg, { Circle, ClipPath, Defs, Ellipse, G, Path, Text } from 'react-native-svg';
 import { resolveAvatar, wantsBlink } from 'blobbies';
 import type { AvatarOptions } from 'blobbies';
+import { blinkScaleAtPhase, firstActivePhase } from './blink.js';
 import { sceneToNodes } from './scene-to-nodes.js';
 import type { RNNode } from './scene-to-nodes.js';
 
@@ -11,13 +13,85 @@ export interface AvatarProps extends AvatarOptions {
   name: string;
 }
 
-/** How long a blink takes, open → closed → open. */
-const BLINK_MS = 140;
-
 /** Scale the eyes vertically about their own centre (a fixed 24×24 box). */
 function eyeTransform(scale: number): string | undefined {
   if (scale === 1) return undefined;
   return `translate(12 12) scale(1 ${scale}) translate(-12 -12)`;
+}
+
+/** OS reduce-motion, the React Native equivalent of `prefers-reduced-motion`. */
+function useReduceMotion(respect: boolean): boolean {
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => {
+    if (!respect) {
+      setReduce(false);
+      return undefined;
+    }
+    let mounted = true;
+    AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
+      if (mounted) setReduce(enabled);
+    });
+    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduce);
+    return () => {
+      mounted = false;
+      subscription?.remove?.();
+    };
+  }, [respect]);
+  return reduce;
+}
+
+/**
+ * Play the shared keyframes and return the current eye scale.
+ *
+ * The timings are the web's, exactly: an initial `delay`, then every `interval`
+ * a dip that starts at `firstActivePhase`. Frames only run during the dip, so
+ * the long open stretch costs nothing.
+ */
+function useBlinkScale(
+  enabled: boolean,
+  interval: number,
+  delay: number,
+  double: boolean,
+): number {
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    if (!enabled) {
+      setScale(1);
+      return undefined;
+    }
+    const start = firstActivePhase(double);
+    const flatMs = start * interval;
+    const activeMs = Math.max(16, interval - flatMs);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let frame = 0;
+    let cancelled = false;
+
+    const runDip = (): void => {
+      const began = Date.now();
+      const tick = (): void => {
+        if (cancelled) return;
+        const t = Math.min(1, (Date.now() - began) / activeMs);
+        setScale(blinkScaleAtPhase(start + t * (1 - start), double));
+        if (t < 1) frame = requestAnimationFrame(tick);
+        else cycle();
+      };
+      frame = requestAnimationFrame(tick);
+    };
+
+    const cycle = (): void => {
+      setScale(1);
+      timer = setTimeout(runDip, flatMs);
+    };
+
+    // CSS `animation-delay`: the first cycle waits, then repeats.
+    timer = setTimeout(cycle, delay);
+    return () => {
+      cancelled = true;
+      if (frame) cancelAnimationFrame(frame);
+      if (timer) clearTimeout(timer);
+    };
+  }, [enabled, interval, delay, double]);
+  return scale;
 }
 
 function renderNode(
@@ -65,15 +139,10 @@ function renderNode(
 /**
  * A Blobbies avatar for React Native.
  *
- * The avatar is drawn by `react-native-svg` from the shared scene, so it is the
- * same face as the web and Swift versions.
- *
- * Blink is a short frame loop that re-renders the eye transform. That is
- * deliberate: the native SVG transform prop only accepts an already-computed
- * matrix, so driving an animated prop through Reanimated either does nothing or
- * crashes the native module. A blink fires every few seconds and lasts ~140ms,
- * so a plain loop is both reliable and cheap. Cursor following is not ported —
- * a phone has no cursor.
+ * Same prop API, same decisions, same motion as the web component: the face
+ * comes from the shared scene, and the blink plays the web's exact keyframes.
+ * The one thing that cannot be identical is cursor following — a phone has no
+ * cursor — so that is left to a future touch/tilt version.
  */
 export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const key = `${name}\u0000${JSON.stringify(options)}`;
@@ -81,57 +150,32 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const resolved = useMemo(() => resolveAvatar(name, options), [key]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const nodes = useMemo(() => sceneToNodes(resolved.scene), [resolved]);
-  const blinkOn = wantsBlink(options);
 
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    if (!blinkOn) {
-      setScale(1);
-      return undefined;
-    }
-    let frame = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let cancelled = false;
-
-    const run = (): void => {
-      const start = Date.now();
-      const tick = (): void => {
-        if (cancelled) return;
-        const t = Math.min(1, (Date.now() - start) / BLINK_MS);
-        // Open → closed over the first half, closed → open over the second.
-        const value = t < 0.5 ? 1 - 0.9 * (t / 0.5) : 0.1 + 0.9 * ((t - 0.5) / 0.5);
-        setScale(value);
-        if (t < 1) frame = requestAnimationFrame(tick);
-        else schedule();
-      };
-      frame = requestAnimationFrame(tick);
-    };
-
-    const schedule = (): void => {
-      timer = setTimeout(run, resolved.blink.interval);
-    };
-
-    schedule();
-    return () => {
-      cancelled = true;
-      if (frame) cancelAnimationFrame(frame);
-      if (timer) clearTimeout(timer);
-    };
-  }, [blinkOn, resolved]);
+  const reduceMotion = useReduceMotion(options.respectReducedMotion !== false);
+  const blinkOn = wantsBlink(options) && !reduceMotion;
+  const scale = useBlinkScale(
+    blinkOn,
+    resolved.blink.interval,
+    resolved.blink.delay,
+    resolved.blink.double,
+  );
 
   const size = options.size ?? 48;
-  const transform = eyeTransform(scale);
+  const radius =
+    options.rounded && typeof size === 'number' ? { borderRadius: size / 2 } : undefined;
 
   return (
     <Svg
       viewBox="0 0 100 100"
       width={size}
       height={size}
+      style={radius}
       accessibilityRole="image"
       accessibilityLabel={name}
     >
-      {nodes.map((node, i) => renderNode(node, `${resolved.prefix}.${i}`, transform))}
+      {nodes.map((node, i) =>
+        renderNode(node, `${resolved.prefix}.${i}`, eyeTransform(scale)),
+      )}
     </Svg>
   );
 }

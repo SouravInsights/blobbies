@@ -42,11 +42,14 @@ The core produces a **scene** — a small draw tree with named layers
 `react-native` maps that tree to `react-native-svg` elements. There is no SVG
 string parsing and no second renderer to keep in sync.
 
-- **Blink** is a short frame loop (~140ms) that re-renders the eye transform.
-  That is deliberate. The native SVG transform prop only accepts an
-  already-computed matrix, so an animated prop driven by Reanimated either does
-  nothing or crashes the native module. A blink fires every few seconds, so a
-  plain loop is both reliable and cheap.
+- **Blink** plays the web's exact keyframes. `src/blink.ts` mirrors
+  `buildBlinkStyle` in the core: open until 92% of the interval, a dip to `0.1`
+  at 95%, back to `1` at 100%, with the CSS `ease-in-out` curve, the seed's
+  `delay`, and the seed's double-blink variant. Frames only run during the dip.
+  It is a plain frame loop rather than Reanimated because the native SVG
+  transform prop only accepts an already-computed matrix.
+- **Reduce motion** is honoured through `AccessibilityInfo`, the native
+  equivalent of `prefers-reduced-motion`.
 - **Cursor following** is intentionally not ported: a phone has no cursor.
   Motion that fits touch (a drag to move the eyes, or a device-tilt mode) is the
   next step for this package.

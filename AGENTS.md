@@ -12,6 +12,27 @@ truth. Everything else — an SVG string, a React element, a SwiftUI `Path` — 
 thin way of drawing those decisions. Never copy the algorithm into a binding.
 Change the core and every platform gets it at once.
 
+## Parity is the product
+
+A binding is not done because it draws something. A platform is done when it is
+**the same product** as the web:
+
+- **Same prop API.** `size`, `color`, `shape`, `expression`, `blush`, `rounded`,
+  `palette`, `variant`, `animate`, `blinkInterval`, `respectReducedMotion`, and
+  so on. A prop may be ignored only where the platform genuinely has no
+  equivalent, and then it is documented, not silently dropped.
+- **Same defaults.** Anything seeded or defaulted by the core stays seeded and
+  defaulted by the core — never re-decided in a binding.
+- **Same motion.** Animation timings are shared data, not per-platform taste.
+  The blink keyframes live in `packages/react-native/src/blink.ts` and mirror
+  `buildBlinkStyle` in the core; change one, change both, and test it.
+- **Same accessibility.** `accessibilityLabel` / `aria-label` from the name,
+  reduce-motion honoured everywhere.
+
+The only genuinely platform-specific thing is the *input*: the web follows a
+cursor, a phone has none. The behaviour around it should still feel like the same
+product.
+
 ## Commands
 
 ```bash
@@ -43,9 +64,10 @@ fails after your change, that is the safety net working — do not delete the te
   The conformance file is how you prove you got it right.
 - **`getInitials` is Unicode-aware** (grapheme clusters, non-Latin letters). It is
   covered by the conformance file; treat edge cases there as real requirements.
-- **Motion is per-platform.** The web follows a cursor; a phone has no cursor.
-  Do not port the web's pointer-following to native — design the right motion
-  for the platform.
+- **Motion is per-platform *in input*, not in feel.** The web follows a cursor;
+  a phone has no cursor, so the input differs. But the timings, the keyframes
+  and the prop names are shared, not invented per platform. See *Parity is the
+  product* above.
 - **`packages/react` is published and must keep its current API.** Add, do not
   rename or remove.
 

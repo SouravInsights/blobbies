@@ -1,6 +1,6 @@
 {
   "name": "@blobbies/react-native",
-  "version": "0.1.2",
+  "version": "0.1.1",
   "description": "Blobbies for React Native — the same deterministic avatars, drawn with react-native-svg.",
   "license": "MIT",
   "type": "module",
