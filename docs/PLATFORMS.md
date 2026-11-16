@@ -101,7 +101,8 @@ never quietly go stale. Commands to regenerate them are at the bottom.
 | Use it without writing code | A terminal | `npx blobbies render "Ira"` |
 | Read what it can do | Ports and AI agents | `packages/core/manifest.json` |
 | Use one tag in any web framework | Plain HTML, React, Vue, Svelte, Solid, Angular | `<blobbies-avatar name="Ira">` |
-| Draw the same avatar in Swift | iOS, macOS, watchOS, visionOS | `renderAvatarSvg("Ira")` from `platforms/swift` |
+| Draw the same avatar in Swift | iOS, macOS, watchOS, visionOS | `BlobbiesAvatar("Ira")` from `platforms/swift` |
+| Draw the same avatar in React Native | iOS + Android apps | `import { Avatar } from '@blobbies/react-native'` |
 
 The React picker is finished and rock-solid on touch (that was the last piece of
 work before this plan).
@@ -150,16 +151,15 @@ platform could plausibly consume the shape list.
 
 ### Step 3 — React Native
 
-React Native can share the JavaScript core directly — no port needed. Build
-`@blobbies/react-native`: draw the shape list with `react-native-svg`, and do
-blinking and eye-following with Reanimated on the UI thread.
+React Native can share the JavaScript core directly — no port needed.
+`@blobbies/react-native` draws the shared scene with `react-native-svg`, and
+blinks natively. A phone has no mouse cursor, so "follow" becomes following a
+touch, or the device's tilt; that is rebuilt to fit the platform, not copied
+from the web.
 
-A phone has no mouse cursor, so "follow" becomes following a touch, or the
-device's tilt. This is not a place to copy the web — motion is rebuilt to fit
-the platform.
-
-**Done when:** the conformance test passes and a demo app blinks and follows on
-a real device.
+**Status:** the renderer and the scene mapping are done, and the pure mapping
+is unit-tested in Node. Blink runs as a Reanimated worklet. Still needs a real
+device to judge; touch/tilt follow is the next step.
 
 ### Step 4 — SwiftUI
 
@@ -168,10 +168,11 @@ and trait-selection logic, plus a renderer. The data (letters, mouths, shapes)
 is generated from the manifest, and the conformance test proves the port is
 correct without a human eyeballing it.
 
-**Status:** the engine and the SVG renderer are done and tested —
-`platforms/swift` reproduces all 24 conformance cases **byte-for-byte** under
-`swift test`. The native SwiftUI view (drawing the shapes with `Path`/`Canvas`,
-blinking and eye-movement with SwiftUI springs) is the next step.
+**Status:** the engine, the SVG renderer and the native `BlobbiesAvatar` view
+are done and tested. `platforms/swift` reproduces all 24 conformance cases
+**byte-for-byte**, the scene is verified against the string renderer, and the
+SVG path parser is tested — all under `swift test`. Eye movement on pointer
+hover / drag is the next step.
 
 Motion will follow Apple's rules: springs that start from the current value,
 respond on touch-down, and can be interrupted mid-flight.
@@ -298,7 +299,8 @@ npx blobbies shapes
 packages/core       blobbies            the decisions, the drawing, the contract
 packages/react      @blobbies/react     <Avatar>, <AvatarPicker>, hooks
 packages/element    @blobbies/element   <blobbies-avatar> web component
-platforms/swift     Blobbies            Swift engine + SVG renderer (SPM)
+packages/react-native  @blobbies/react-native  <Avatar> over the scene
+platforms/swift     Blobbies            Swift engine, SVG renderer, SwiftUI view
 packages/core/fixtures                  the conformance file (generated)
 packages/core/manifest.json             the capability data (generated)
 docs/PLATFORMS.md                       this plan
@@ -306,9 +308,6 @@ AGENTS.md                               repo guide for AI agents
 llms.txt                                compact doc index for AI tools
 ```
 
-Future homes, when each step happens:
-
-```
-packages/react-native   @blobbies/react-native  React Native renderer
-platforms/swift/Sources/BlobbiesUI              native SwiftUI Avatar view
-```
+The remaining work is the picker across frameworks (Step 6): its state becomes a
+framework-free module, and React, React Native and SwiftUI each present it in
+their own way.

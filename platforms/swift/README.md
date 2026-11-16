@@ -35,6 +35,18 @@ print(look.traits.color)     // e.g. "#5FD068"
 let wink = renderAvatarSvg("Ira", AvatarOptions(expression: "wink", size: 64))
 ```
 
+### In a SwiftUI screen
+
+```swift
+import Blobbies
+
+BlobbiesAvatar("Sourav Nanda", AvatarOptions(size: 64, animate: "blink"))
+```
+
+`BlobbiesAvatar` draws the avatar natively with `Canvas` — no web view, no
+image decoding — by walking the same scene the other platforms use. Blink runs
+off `TimelineView`, scaling the eyes about their own centre.
+
 ### Options
 
 `AvatarOptions` mirrors the JavaScript options: `color`, `shape`, `expression`,
@@ -73,5 +85,7 @@ pnpm --filter blobbies codegen:swift
 ## Roadmap
 
 - [x] The engine, the renderer, and the conformance test.
-- [ ] A native SwiftUI `Avatar` view (renders the drawn shapes, animates the
-      blink and the eyes with SwiftUI springs, respects Reduce Motion).
+- [x] A native SwiftUI `BlobbiesAvatar` view that draws the scene with `Canvas`
+      and animates the blink.
+- [ ] Eye movement that follows a pointer (`onContinuousHover`) or a drag, with
+      a velocity-aware spring, and Reduce Motion handling.

@@ -10,7 +10,7 @@ func escapeXml(_ value: String) -> String {
   return s
 }
 
-private let directions: [(Double, Double)] = [(-1, -0.35), (1, -0.35), (-1, 0.35), (1, 0.35)]
+let directions: [(Double, Double)] = [(-1, -0.35), (1, -0.35), (-1, 0.35), (1, 0.35)]
 
 func shapeOf(_ traits: BlobTraits) -> ShapeGeometry {
   let n = BlobData.shapes.count
