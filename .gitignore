@@ -10,3 +10,8 @@ reference/
 .env
 .env.local
 .env.*.local
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved

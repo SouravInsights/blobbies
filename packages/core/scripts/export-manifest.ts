@@ -17,7 +17,14 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CONTRACT_VERSION } from '../src/contract.js';
 import { BLUSH_COLOR, BLUSH_OPACITY, COLORS, BACKDROP_COLOR, INK_COLOR } from '../src/palette.js';
-import { EXPRESSION_DEFS, EXPRESSIONS, LAYOUT, SHAPES, SHAPE_GEOMETRY } from '../src/parts.js';
+import {
+  EXPRESSION_DEFS,
+  EXPRESSIONS,
+  LAYOUT,
+  SHAPES,
+  SHAPE_GEOMETRY,
+} from '../src/parts.js';
+import { INK_WIDTH, LETTER_BOX, LETTER_PATHS, STROKE_WIDTH } from '../src/letters.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(here, '../manifest.json');
@@ -39,6 +46,10 @@ export function buildManifest(): Record<string, unknown> {
       blushOpacity: BLUSH_OPACITY,
     },
     palette: Object.entries(COLORS).map(([name, value]) => ({ name, value })),
+    letters: LETTER_PATHS,
+    letterBox: LETTER_BOX,
+    strokeWidth: STROKE_WIDTH,
+    inkWidth: INK_WIDTH,
     shapes: SHAPES.map((name, i) => {
       const geometry = SHAPE_GEOMETRY[i];
       return { name, ...geometry };

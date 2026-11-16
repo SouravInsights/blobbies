@@ -64,6 +64,7 @@
     "test:watch": "vitest",
     "export:fixtures": "tsx scripts/export-fixtures.ts",
     "export:manifest": "tsx scripts/export-manifest.ts",
+    "codegen:swift": "tsx scripts/emit-swift.ts",
     "typecheck": "tsc --noEmit",
     "preview:letters": "tsx scripts/preview-letters.ts",
     "preview:avatars": "tsx scripts/preview-avatars.ts",
