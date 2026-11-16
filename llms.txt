@@ -1,0 +1,74 @@
+# Blobbies
+
+> Deterministic, cute SVG avatars from a name. Zero dependencies. The same name
+> always produces the same avatar, on every platform.
+
+The decisions that make an avatar (the two letters used as eyes, colour, egg
+shape, mood, blush, tilt) are a pure function of the name and live in
+`packages/core`. Every framework binding is a thin renderer over those
+decisions. A shared conformance file proves the renderers agree.
+
+## Packages
+
+- `blobbies` — core. Hash, initials, trait decisions, SVG string, data URI, DOM motion, CLI. Framework-agnostic, zero dependencies.
+- `@blobbies/react` — `<Avatar>`, `<AvatarPicker>`, `useAvatarMotion`. Peer: `react >= 18`.
+
+## Docs
+
+- [README](README.md): install, quick start, every option with examples.
+- [Platform plan](docs/PLATFORMS.md): how Blobbies works on every platform, and how to add one.
+- [Agent guide](AGENTS.md): repo commands, the rules, the traps.
+- [Core README](packages/core/README.md): the string renderer and motion runtime.
+- [React README](packages/react/README.md): the components and the picker parts.
+
+## Machine-readable data
+
+- [manifest.json](packages/core/manifest.json): every shape, mood, colour and layout value as JSON. Use this to port Blobbies to another language.
+- [avatar-conformance.json](packages/core/fixtures/avatar-conformance.json): 24 known-correct input/output cases. A port must reproduce these byte-for-byte.
+
+## Core API (`blobbies`)
+
+```ts
+import { renderAvatarSvg, renderAvatarBody, avatarDataUri, resolveAvatar } from 'blobbies';
+import { attachAvatarMotion } from 'blobbies/motion';
+
+renderAvatarSvg(name: string, options?: AvatarOptions): string
+renderAvatarBody(name: string, options?: AvatarOptions): ResolvedAvatar
+avatarDataUri(name: string, options?: AvatarOptions): string
+resolveAvatar(name: string, options?: AvatarOptions): ResolvedAvatar
+attachAvatarMotion(element: SVGSVGElement, options?: MotionOptions): () => void
+```
+
+`resolveAvatar` returns `{ name, letters, prefix, traits, body, blink }` where
+`traits` is the portable set of decisions.
+
+Enumerable options (see `manifest.json` for the values):
+
+- `shape`: `tall | wide | squat | round | mid`
+- `expression`: 22 moods, e.g. `smile | smirk | wink | angry | cat | shy`
+- `color`: any CSS colour, or a name from the built-in palette
+- `blush`: boolean
+- `variant`: number — a different body for the same name; `0` is the original.
+
+Object options: `size`, `rounded`, `title`, `className`, `palette`, `tilt`,
+`animate` (`false | 'blink' | 'follow' | 'all'`), `blinkInterval`, `follow`,
+`followRange`, `smoothing`, `idleTimeout`, `paused`, `respectReducedMotion`,
+`wink`, `glance`, `surprise`.
+
+## CLI
+
+```bash
+npx blobbies render "Sourav Nanda" > avatar.svg
+npx blobbies render "Ira" --expression wink --color sky --animate all
+npx blobbies shapes
+npx blobbies expressions
+npx blobbies palette
+npx blobbies manifest
+```
+
+## Rules for tools and agents
+
+- Never re-implement the algorithm in a binding; change `packages/core` instead.
+- Never edit `manifest.json` or `avatar-conformance.json` by hand — regenerate them.
+- `variant: 0` must keep producing the original avatar forever.
+- A port is correct when it reproduces `avatar-conformance.json` byte-for-byte.

@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     motion: 'src/motion.ts',
+    cli: 'src/cli.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

@@ -1,0 +1,346 @@
+{
+  "engine": "blobbies",
+  "version": "0.2.2",
+  "contract": 1,
+  "viewBox": "0 0 100 100",
+  "colors": {
+    "backdrop": "#2f2f2f",
+    "ink": "#1c1c1c",
+    "blush": "#ff6fa5",
+    "blushOpacity": 0.45
+  },
+  "palette": [
+    {
+      "name": "yellow",
+      "value": "#FFD43B"
+    },
+    {
+      "name": "green",
+      "value": "#5FD068"
+    },
+    {
+      "name": "sky",
+      "value": "#6CC8FF"
+    },
+    {
+      "name": "coral",
+      "value": "#FF7B7B"
+    },
+    {
+      "name": "lavender",
+      "value": "#B79CFF"
+    },
+    {
+      "name": "peach",
+      "value": "#FFB074"
+    },
+    {
+      "name": "mint",
+      "value": "#5EE0C0"
+    },
+    {
+      "name": "pink",
+      "value": "#FF8FC7"
+    },
+    {
+      "name": "orange",
+      "value": "#FFA64D"
+    }
+  ],
+  "shapes": [
+    {
+      "name": "tall",
+      "rx": 39,
+      "ry": 39.6,
+      "eb": 0.3
+    },
+    {
+      "name": "wide",
+      "rx": 43.5,
+      "ry": 38,
+      "eb": 0.28
+    },
+    {
+      "name": "squat",
+      "rx": 44,
+      "ry": 37.7,
+      "eb": 0.27
+    },
+    {
+      "name": "round",
+      "rx": 40.2,
+      "ry": 38.8,
+      "eb": 0.3
+    },
+    {
+      "name": "mid",
+      "rx": 41.5,
+      "ry": 39,
+      "eb": 0.28
+    }
+  ],
+  "expressions": [
+    {
+      "key": "smile",
+      "name": "Smile",
+      "mouth": {
+        "d": "M-6.5 1 Q0 4.5 6.5 1",
+        "width": 4
+      },
+      "brow": "none"
+    },
+    {
+      "key": "smirk",
+      "name": "Smirk",
+      "mouth": {
+        "d": "M-7 2 Q0 4.5 7 -1.5",
+        "width": 4
+      },
+      "brow": "none"
+    },
+    {
+      "key": "sad",
+      "name": "Sad",
+      "mouth": {
+        "d": "M-7 4 Q0 -3 7 4",
+        "width": 4
+      },
+      "brow": "sad"
+    },
+    {
+      "key": "wink",
+      "name": "Wink",
+      "mouth": {
+        "d": "M-6.5 1 Q0 4.5 6.5 1",
+        "width": 4
+      },
+      "brow": "none",
+      "squint": "r"
+    },
+    {
+      "key": "angry",
+      "name": "Angry",
+      "mouth": {
+        "d": "M-9 4 Q0 -5 9 4",
+        "width": 4
+      },
+      "brow": "angry"
+    },
+    {
+      "key": "cat",
+      "name": "Cat",
+      "mouth": {
+        "d": "M-9 2 Q-4.5 7 0 2 Q4.5 7 9 2",
+        "width": 3.6
+      },
+      "brow": "none"
+    },
+    {
+      "key": "shy",
+      "name": "Shy",
+      "mouth": {
+        "d": "M-6.5 1 Q0 4.5 6.5 1",
+        "width": 4
+      },
+      "brow": "none",
+      "eye": [
+        0,
+        1.8
+      ]
+    },
+    {
+      "key": "annoyed",
+      "name": "Annoyed",
+      "mouth": {
+        "d": "M-8 2 H8",
+        "width": 4
+      },
+      "brow": "annoyed"
+    },
+    {
+      "key": "laugh",
+      "name": "Laugh",
+      "mouth": {
+        "half": [
+          10.5,
+          7
+        ]
+      },
+      "brow": "raised"
+    },
+    {
+      "key": "smug",
+      "name": "Smug",
+      "mouth": {
+        "d": "M-7 2 Q0 4.5 7 -1.5",
+        "width": 4
+      },
+      "brow": "cocky"
+    },
+    {
+      "key": "confused",
+      "name": "Confused",
+      "mouth": {
+        "d": "M-9 3 Q-4.5 0 0 3 T9 3",
+        "width": 3.6
+      },
+      "brow": "confused"
+    },
+    {
+      "key": "cheeky",
+      "name": "Cheeky",
+      "mouth": {
+        "half": [
+          10.5,
+          6.5
+        ],
+        "tongue": true
+      },
+      "brow": "cocky"
+    },
+    {
+      "key": "surprised",
+      "name": "Surprised",
+      "mouth": {
+        "circle": [
+          0,
+          2,
+          3.4
+        ]
+      },
+      "brow": "raised"
+    },
+    {
+      "key": "coy",
+      "name": "Coy",
+      "mouth": {
+        "d": "M-7 2 Q0 4.5 7 -1.5",
+        "width": 4
+      },
+      "brow": "cocky",
+      "eye": [
+        -2.6,
+        0.8
+      ]
+    },
+    {
+      "key": "determined",
+      "name": "Determined",
+      "mouth": {
+        "d": "M-8 2 H8",
+        "width": 4
+      },
+      "brow": "determined"
+    },
+    {
+      "key": "beam",
+      "name": "Beam",
+      "mouth": {
+        "half": [
+          11.5,
+          8
+        ]
+      },
+      "brow": "none"
+    },
+    {
+      "key": "side-eye",
+      "name": "Side-eye",
+      "mouth": {
+        "d": "M-7 2 Q0 4.5 7 -1.5",
+        "width": 4
+      },
+      "brow": "flat",
+      "eye": [
+        2.6,
+        0
+      ]
+    },
+    {
+      "key": "pout",
+      "name": "Pout",
+      "mouth": {
+        "d": "M-4 4 Q0 1 4 4",
+        "width": 4
+      },
+      "brow": "worried"
+    },
+    {
+      "key": "shocked",
+      "name": "Shocked",
+      "mouth": {
+        "ellipse": [
+          0,
+          2,
+          2.8,
+          4.8
+        ]
+      },
+      "brow": "raised"
+    },
+    {
+      "key": "unimpressed",
+      "name": "Unimpressed",
+      "mouth": {
+        "d": "M-8 2 H8",
+        "width": 4
+      },
+      "brow": "cocky"
+    },
+    {
+      "key": "grin",
+      "name": "Grin",
+      "mouth": {
+        "half": [
+          9.5,
+          6
+        ]
+      },
+      "brow": "none"
+    },
+    {
+      "key": "smoulder",
+      "name": "Smoulder",
+      "mouth": {
+        "d": "M-6.5 1 Q0 4.5 6.5 1",
+        "width": 4
+      },
+      "brow": "determined"
+    }
+  ],
+  "layout": {
+    "backdrop": {
+      "cx": 50,
+      "cy": 50,
+      "r": 50
+    },
+    "blob": {
+      "cx": 50,
+      "bottom": 99.4
+    },
+    "eyes": {
+      "cx": 49.5,
+      "cy": 56.2,
+      "scale": 1.1,
+      "visualGap": 5
+    },
+    "mouth": {
+      "cx": 50,
+      "cy": 78
+    },
+    "cheeks": [
+      {
+        "cx": 24,
+        "cy": 70,
+        "rx": 6.5,
+        "ry": 4.8
+      },
+      {
+        "cx": 76,
+        "cy": 70,
+        "rx": 6.5,
+        "ry": 4.8
+      }
+    ]
+  }
+}

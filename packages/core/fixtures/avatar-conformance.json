@@ -1,0 +1,677 @@
+{
+  "contract": 1,
+  "engine": "blobbies",
+  "version": "0.2.2",
+  "cases": [
+    {
+      "id": "base:Sourav Nanda",
+      "name": "Sourav Nanda",
+      "options": {},
+      "expected": {
+        "letters": "SN",
+        "prefix": "bb-rpd5oy",
+        "traits": {
+          "color": "#5FD068",
+          "shapeIndex": 1,
+          "rotate": 1.7062492277473211,
+          "offsetX": 0.7429805537685752,
+          "offsetY": -0.3351061256136745,
+          "mouthIndex": 3,
+          "cheeks": false,
+          "backdropDir": 3
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 5157.7,
+          "delay": 5034.78,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-rpd5oy-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-rpd5oy-c)\"><g transform=\"translate(51.74 61.41) rotate(1.71)\"><path d=\"M43.5 10.64C43.5 -23.41 21.75 -38 0 -38C-21.75 -38 -43.5 -23.41 -43.5 10.64C-43.5 25.69 -23.92 38 0 38C23.93 38 43.5 25.69 43.5 10.64Z\" fill=\"#5FD068\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(63.28 56.2) scale(1 0.4) translate(-63.27 -56.2)\"><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-6.5 1 Q0 4.5 6.5 1\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Sourav Nanda\" width=\"48\" height=\"48\" class=\"bb bb-rpd5oy\"><defs><clipPath id=\"bb-rpd5oy-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-rpd5oy-c)\"><g transform=\"translate(51.74 61.41) rotate(1.71)\"><path d=\"M43.5 10.64C43.5 -23.41 21.75 -38 0 -38C-21.75 -38 -43.5 -23.41 -43.5 10.64C-43.5 25.69 -23.92 38 0 38C23.93 38 43.5 25.69 43.5 10.64Z\" fill=\"#5FD068\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(63.28 56.2) scale(1 0.4) translate(-63.27 -56.2)\"><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-6.5 1 Q0 4.5 6.5 1\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:Ira",
+      "name": "Ira",
+      "options": {},
+      "expected": {
+        "letters": "IR",
+        "prefix": "bb-1ekkjo5",
+        "traits": {
+          "color": "#B79CFF",
+          "shapeIndex": 3,
+          "rotate": -1.926228494849056,
+          "offsetX": 0.24954763520509005,
+          "offsetY": -0.10015878409612924,
+          "mouthIndex": 13,
+          "cheeks": true,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4371.45,
+          "delay": 1666.97,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1ekkjo5-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1ekkjo5-c)\"><g transform=\"translate(49.25 60.15) rotate(-1.93)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#B79CFF\"/><ellipse cx=\"-26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 H13 A5 5 0 0 1 13 12 H5 M11.5 12 L19 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Ira\" width=\"48\" height=\"48\" class=\"bb bb-1ekkjo5\"><defs><clipPath id=\"bb-1ekkjo5-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1ekkjo5-c)\"><g transform=\"translate(49.25 60.15) rotate(-1.93)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#B79CFF\"/><ellipse cx=\"-26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 H13 A5 5 0 0 1 13 12 H5 M11.5 12 L19 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:Ada Lovelace",
+      "name": "Ada Lovelace",
+      "options": {},
+      "expected": {
+        "letters": "AL",
+        "prefix": "bb-12yuszq",
+        "traits": {
+          "color": "#FFD43B",
+          "shapeIndex": 3,
+          "rotate": -0.5142673593945801,
+          "offsetX": 0.16052324185147882,
+          "offsetY": 0.13056932508479802,
+          "mouthIndex": 4,
+          "cheeks": true,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4547.11,
+          "delay": 377.03,
+          "double": true
+        },
+        "body": "<defs><clipPath id=\"bb-12yuszq-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-12yuszq-c)\"><g transform=\"translate(51.16 60.38) rotate(-0.51)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFD43B\"/><ellipse cx=\"-26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 34.8L40.725 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 34.8L58.275 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 4 Q0 -5 9 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Ada Lovelace\" width=\"48\" height=\"48\" class=\"bb bb-12yuszq\"><defs><clipPath id=\"bb-12yuszq-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-12yuszq-c)\"><g transform=\"translate(51.16 60.38) rotate(-0.51)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFD43B\"/><ellipse cx=\"-26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 34.8L40.725 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 34.8L58.275 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 4 Q0 -5 9 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:Grace Hopper",
+      "name": "Grace Hopper",
+      "options": {},
+      "expected": {
+        "letters": "GH",
+        "prefix": "bb-1qoxyk",
+        "traits": {
+          "color": "#FF8FC7",
+          "shapeIndex": 2,
+          "rotate": 2.4034760096110404,
+          "offsetX": -0.2812651596032083,
+          "offsetY": -0.14054657423403114,
+          "mouthIndex": 18,
+          "cheeks": false,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 5002.06,
+          "delay": 264.03,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1qoxyk-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1qoxyk-c)\"><g transform=\"translate(50.72 61.21) rotate(2.4)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FF8FC7\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M20 7.5 A9 9.7 0 1 0 20 16.5 V12.5 H13\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 M19 2 V22 M5 12 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 38Q35.725 34 40.725 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M58.275 38Q63.275 34 68.275 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><ellipse cx=\"50\" cy=\"80\" rx=\"2.8\" ry=\"4.8\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Grace Hopper\" width=\"48\" height=\"48\" class=\"bb bb-1qoxyk\"><defs><clipPath id=\"bb-1qoxyk-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1qoxyk-c)\"><g transform=\"translate(50.72 61.21) rotate(2.4)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FF8FC7\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M20 7.5 A9 9.7 0 1 0 20 16.5 V12.5 H13\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 M19 2 V22 M5 12 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 38Q35.725 34 40.725 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M58.275 38Q63.275 34 68.275 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><ellipse cx=\"50\" cy=\"80\" rx=\"2.8\" ry=\"4.8\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:田中太郎",
+      "name": "田中太郎",
+      "options": {},
+      "expected": {
+        "letters": "田中",
+        "prefix": "bb-1tj2gnc",
+        "traits": {
+          "color": "#FF7B7B",
+          "shapeIndex": 1,
+          "rotate": 0.794161390978843,
+          "offsetX": 0.11840266268700361,
+          "offsetY": -0.22273908867500722,
+          "mouthIndex": 15,
+          "cheeks": false,
+          "backdropDir": 2
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 3937.26,
+          "delay": 2575.74,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1tj2gnc-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1tj2gnc-c)\"><g transform=\"translate(49.12 61.53) rotate(0.79)\"><path d=\"M43.5 10.64C43.5 -23.41 21.75 -38 0 -38C-21.75 -38 -43.5 -23.41 -43.5 10.64C-43.5 25.69 -23.92 38 0 38C23.93 38 43.5 25.69 43.5 10.64Z\" fill=\"#FF7B7B\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">田</text></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">中</text></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-11.5 0 A11.5 8 0 0 0 11.5 0 Z\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"田中太郎\" width=\"48\" height=\"48\" class=\"bb bb-1tj2gnc\"><defs><clipPath id=\"bb-1tj2gnc-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1tj2gnc-c)\"><g transform=\"translate(49.12 61.53) rotate(0.79)\"><path d=\"M43.5 10.64C43.5 -23.41 21.75 -38 0 -38C-21.75 -38 -43.5 -23.41 -43.5 10.64C-43.5 25.69 -23.92 38 0 38C23.93 38 43.5 25.69 43.5 10.64Z\" fill=\"#FF7B7B\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">田</text></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">中</text></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-11.5 0 A11.5 8 0 0 0 11.5 0 Z\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:李 雷",
+      "name": "李 雷",
+      "options": {},
+      "expected": {
+        "letters": "李雷",
+        "prefix": "bb-n65pye",
+        "traits": {
+          "color": "#FF7B7B",
+          "shapeIndex": 0,
+          "rotate": 0.461350598372519,
+          "offsetX": 0.3150652889162302,
+          "offsetY": 0.212422642367892,
+          "mouthIndex": 15,
+          "cheeks": true,
+          "backdropDir": 3
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4835.52,
+          "delay": 4417.29,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-n65pye-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-n65pye-c)\"><g transform=\"translate(51.32 60.36) rotate(0.46)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FF7B7B\"/><ellipse cx=\"-26\" cy=\"9.64\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.64\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">李</text></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">雷</text></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-11.5 0 A11.5 8 0 0 0 11.5 0 Z\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"李 雷\" width=\"48\" height=\"48\" class=\"bb bb-n65pye\"><defs><clipPath id=\"bb-n65pye-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-n65pye-c)\"><g transform=\"translate(51.32 60.36) rotate(0.46)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FF7B7B\"/><ellipse cx=\"-26\" cy=\"9.64\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.64\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">李</text></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">雷</text></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-11.5 0 A11.5 8 0 0 0 11.5 0 Z\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:😀",
+      "name": "😀",
+      "options": {},
+      "expected": {
+        "letters": "?",
+        "prefix": "bb-usi372",
+        "traits": {
+          "color": "#FFB074",
+          "shapeIndex": 2,
+          "rotate": 0.4297572048380971,
+          "offsetX": 0.5778470686636865,
+          "offsetY": 0.22889113074634226,
+          "mouthIndex": 21,
+          "cheeks": false,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4449.27,
+          "delay": 4298.71,
+          "double": true
+        },
+        "body": "<defs><clipPath id=\"bb-usi372-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-usi372-c)\"><g transform=\"translate(49.58 61.58) rotate(0.43)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">?</text></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 35.8L54.5 38.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-6.5 1 Q0 4.5 6.5 1\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"😀\" width=\"48\" height=\"48\" class=\"bb bb-usi372\"><defs><clipPath id=\"bb-usi372-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-usi372-c)\"><g transform=\"translate(49.58 61.58) rotate(0.43)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">?</text></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 35.8L54.5 38.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-6.5 1 Q0 4.5 6.5 1\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:",
+      "name": "",
+      "options": {},
+      "expected": {
+        "letters": "?",
+        "prefix": "bb-6o0dvx",
+        "traits": {
+          "color": "#FFB074",
+          "shapeIndex": 0,
+          "rotate": -1.5422552791424096,
+          "offsetX": -0.3991792816668749,
+          "offsetY": -0.22052181616891173,
+          "mouthIndex": 8,
+          "cheeks": false,
+          "backdropDir": 3
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 3141.69,
+          "delay": 2390.87,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-6o0dvx-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-6o0dvx-c)\"><g transform=\"translate(50.6 59.93) rotate(-1.54)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">?</text></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 38Q49.5 34 54.5 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-10.5 0 A10.5 7 0 0 0 10.5 0 Z\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"?\" width=\"48\" height=\"48\" class=\"bb bb-6o0dvx\"><defs><clipPath id=\"bb-6o0dvx-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-6o0dvx-c)\"><g transform=\"translate(50.6 59.93) rotate(-1.54)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">?</text></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 38Q49.5 34 54.5 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-10.5 0 A10.5 7 0 0 0 10.5 0 Z\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:   ",
+      "name": "   ",
+      "options": {},
+      "expected": {
+        "letters": "?",
+        "prefix": "bb-6o0dvx",
+        "traits": {
+          "color": "#FFB074",
+          "shapeIndex": 0,
+          "rotate": -1.5422552791424096,
+          "offsetX": -0.3991792816668749,
+          "offsetY": -0.22052181616891173,
+          "mouthIndex": 8,
+          "cheeks": false,
+          "backdropDir": 3
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 3141.69,
+          "delay": 2390.87,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-6o0dvx-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-6o0dvx-c)\"><g transform=\"translate(50.6 59.93) rotate(-1.54)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">?</text></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 38Q49.5 34 54.5 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-10.5 0 A10.5 7 0 0 0 10.5 0 Z\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"?\" width=\"48\" height=\"48\" class=\"bb bb-6o0dvx\"><defs><clipPath id=\"bb-6o0dvx-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-6o0dvx-c)\"><g transform=\"translate(50.6 59.93) rotate(-1.54)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">?</text></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 38Q49.5 34 54.5 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-10.5 0 A10.5 7 0 0 0 10.5 0 Z\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:A",
+      "name": "A",
+      "options": {},
+      "expected": {
+        "letters": "A",
+        "prefix": "bb-1vtdtvh",
+        "traits": {
+          "color": "#FFB074",
+          "shapeIndex": 4,
+          "rotate": -0.49304260639473796,
+          "offsetX": -0.4784079589881003,
+          "offsetY": 0.19858062532730403,
+          "mouthIndex": 10,
+          "cheeks": false,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 5942.83,
+          "delay": 5421.75,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1vtdtvh-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1vtdtvh-c)\"><g transform=\"translate(50.52 60.25) rotate(-0.49)\"><path d=\"M41.5 10.92C41.5 -24.02 20.75 -39 0 -39C-20.75 -39 -41.5 -24.02 -41.5 10.92C-41.5 26.36 -22.83 39 0 39C22.83 39 41.5 26.36 41.5 10.92Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 38Q49.5 33.4 54.5 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 3 Q-4.5 0 0 3 T9 3\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"A\" width=\"48\" height=\"48\" class=\"bb bb-1vtdtvh\"><defs><clipPath id=\"bb-1vtdtvh-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1vtdtvh-c)\"><g transform=\"translate(50.52 60.25) rotate(-0.49)\"><path d=\"M41.5 10.92C41.5 -24.02 20.75 -39 0 -39C-20.75 -39 -41.5 -24.02 -41.5 10.92C-41.5 26.36 -22.83 39 0 39C22.83 39 41.5 26.36 41.5 10.92Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 38Q49.5 33.4 54.5 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 3 Q-4.5 0 0 3 T9 3\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:Zed 9",
+      "name": "Zed 9",
+      "options": {},
+      "expected": {
+        "letters": "Z9",
+        "prefix": "bb-9w972h",
+        "traits": {
+          "color": "#FFA64D",
+          "shapeIndex": 0,
+          "rotate": -1.4021725854836404,
+          "offsetX": 0.732217516284436,
+          "offsetY": -0.12979704269673675,
+          "mouthIndex": 20,
+          "cheeks": true,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 3883.77,
+          "delay": 663.92,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-9w972h-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-9w972h-c)\"><g transform=\"translate(49.73 59.32) rotate(-1.4)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FFA64D\"/><ellipse cx=\"-26\" cy=\"10.68\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"10.68\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 H19 L5 22 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18 14 C18 7 13 2.5 8.5 5 M6 11.5 A5.5 5.5 0 1 1 17 11.5 A5.5 5.5 0 1 1 6 11.5 M18 12.5 C18 19 15 22.5 8.5 22.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9.5 0 A9.5 6 0 0 0 9.5 0 Z\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Zed 9\" width=\"48\" height=\"48\" class=\"bb bb-9w972h\"><defs><clipPath id=\"bb-9w972h-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-9w972h-c)\"><g transform=\"translate(49.73 59.32) rotate(-1.4)\"><path d=\"M39 11.88C39 -24.16 19.5 -39.6 0 -39.6C-19.5 -39.6 -39 -24.16 -39 11.88C-39 27.13 -21.45 39.6 0 39.6C21.45 39.6 39 27.13 39 11.88Z\" fill=\"#FFA64D\"/><ellipse cx=\"-26\" cy=\"10.68\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"10.68\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 H19 L5 22 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18 14 C18 7 13 2.5 8.5 5 M6 11.5 A5.5 5.5 0 1 1 17 11.5 A5.5 5.5 0 1 1 6 11.5 M18 12.5 C18 19 15 22.5 8.5 22.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9.5 0 A9.5 6 0 0 0 9.5 0 Z\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:O'Brien",
+      "name": "O'Brien",
+      "options": {},
+      "expected": {
+        "letters": "OB",
+        "prefix": "bb-1tirnzl",
+        "traits": {
+          "color": "#FFA64D",
+          "shapeIndex": 1,
+          "rotate": 1.1752154482528567,
+          "offsetX": -0.8839809047058225,
+          "offsetY": -0.043836785340681694,
+          "mouthIndex": 13,
+          "cheeks": false,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 5203.81,
+          "delay": 4742.9,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1tirnzl-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1tirnzl-c)\"><g transform=\"translate(48.12 61.01) rotate(1.18)\"><path d=\"M43.5 10.64C43.5 -23.41 21.75 -38 0 -38C-21.75 -38 -43.5 -23.41 -43.5 10.64C-43.5 25.69 -23.92 38 0 38C23.93 38 43.5 25.69 43.5 10.64Z\" fill=\"#FFA64D\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 A8 10 0 1 0 12 22 A8 10 0 1 0 12 2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 M5 2 H13.5 A5 5 0 0 1 13.5 12 H5 M5 12 H15 A5 5 0 0 1 15 22 H5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"O&apos;Brien\" width=\"48\" height=\"48\" class=\"bb bb-1tirnzl\"><defs><clipPath id=\"bb-1tirnzl-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1tirnzl-c)\"><g transform=\"translate(48.12 61.01) rotate(1.18)\"><path d=\"M43.5 10.64C43.5 -23.41 21.75 -38 0 -38C-21.75 -38 -43.5 -23.41 -43.5 10.64C-43.5 25.69 -23.92 38 0 38C23.93 38 43.5 25.69 43.5 10.64Z\" fill=\"#FFA64D\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 A8 10 0 1 0 12 22 A8 10 0 1 0 12 2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 M5 2 H13.5 A5 5 0 0 1 13.5 12 H5 M5 12 H15 A5 5 0 0 1 15 22 H5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:@souravinsights",
+      "name": "@souravinsights",
+      "options": {},
+      "expected": {
+        "letters": "SO",
+        "prefix": "bb-1jy8g81",
+        "traits": {
+          "color": "#FFB074",
+          "shapeIndex": 3,
+          "rotate": -0.7045713253319263,
+          "offsetX": -0.6391890086233616,
+          "offsetY": 0.15125215146690607,
+          "mouthIndex": 4,
+          "cheeks": true,
+          "backdropDir": 3
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 5851.18,
+          "delay": 4261.17,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1jy8g81-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1jy8g81-c)\"><g transform=\"translate(50.36 61.1) rotate(-0.7)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFB074\"/><ellipse cx=\"-26\" cy=\"8.9\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"8.9\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 A8 10 0 1 0 12 22 A8 10 0 1 0 12 2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 34.8L40.725 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 34.8L58.275 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 4 Q0 -5 9 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"@souravinsights\" width=\"48\" height=\"48\" class=\"bb bb-1jy8g81\"><defs><clipPath id=\"bb-1jy8g81-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1jy8g81-c)\"><g transform=\"translate(50.36 61.1) rotate(-0.7)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFB074\"/><ellipse cx=\"-26\" cy=\"8.9\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"8.9\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 A8 10 0 1 0 12 22 A8 10 0 1 0 12 2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 34.8L40.725 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 34.8L58.275 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 4 Q0 -5 9 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:Ångström",
+      "name": "Ångström",
+      "options": {},
+      "expected": {
+        "letters": "ÅN",
+        "prefix": "bb-f74abh",
+        "traits": {
+          "color": "#FFB074",
+          "shapeIndex": 3,
+          "rotate": -0.28021916979923844,
+          "offsetX": 0.3685121820308268,
+          "offsetY": -0.3092503533931449,
+          "mouthIndex": 5,
+          "cheeks": false,
+          "backdropDir": 2
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4708.92,
+          "delay": 379.48,
+          "double": true
+        },
+        "body": "<defs><clipPath id=\"bb-f74abh-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-f74abh-c)\"><g transform=\"translate(49.37 60.64) rotate(-0.28)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">Å</text></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 2 Q-4.5 7 0 2 Q4.5 7 9 2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Ångström\" width=\"48\" height=\"48\" class=\"bb bb-f74abh\"><defs><clipPath id=\"bb-f74abh-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-f74abh-c)\"><g transform=\"translate(49.37 60.64) rotate(-0.28)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFB074\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><text x=\"12\" y=\"21\" text-anchor=\"middle\" font-family=\"ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif\" font-size=\"22\" font-weight=\"800\" fill=\"#1c1c1c\">Å</text></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 2 Q-4.5 7 0 2 Q4.5 7 9 2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:María José",
+      "name": "María José",
+      "options": {},
+      "expected": {
+        "letters": "MJ",
+        "prefix": "bb-wcznnn",
+        "traits": {
+          "color": "#B79CFF",
+          "shapeIndex": 2,
+          "rotate": 1.077699651941657,
+          "offsetX": -0.789491621311754,
+          "offsetY": 0.18294895053841176,
+          "mouthIndex": 13,
+          "cheeks": true,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 2808.3,
+          "delay": 1886.69,
+          "double": true
+        },
+        "body": "<defs><clipPath id=\"bb-wcznnn-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-wcznnn-c)\"><g transform=\"translate(50.21 61.53) rotate(1.08)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#B79CFF\"/><ellipse cx=\"-26\" cy=\"8.47\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"8.47\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L12 13 L19 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18 2 V15.5 A6.5 6.5 0 0 1 5 15.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"María José\" width=\"48\" height=\"48\" class=\"bb bb-wcznnn\"><defs><clipPath id=\"bb-wcznnn-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-wcznnn-c)\"><g transform=\"translate(50.21 61.53) rotate(1.08)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#B79CFF\"/><ellipse cx=\"-26\" cy=\"8.47\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"8.47\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L12 13 L19 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18 2 V15.5 A6.5 6.5 0 0 1 5 15.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:X Æ A-12",
+      "name": "X Æ A-12",
+      "options": {},
+      "expected": {
+        "letters": "XA",
+        "prefix": "bb-1l6k845",
+        "traits": {
+          "color": "#FFD43B",
+          "shapeIndex": 4,
+          "rotate": 0.5201214565895498,
+          "offsetX": -0.8568656728602946,
+          "offsetY": -0.12905198717489838,
+          "mouthIndex": 13,
+          "cheeks": true,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4733.33,
+          "delay": 2839.54,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1l6k845-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1l6k845-c)\"><g transform=\"translate(48.14 59.92) rotate(0.52)\"><path d=\"M41.5 10.92C41.5 -24.02 20.75 -39 0 -39C-20.75 -39 -41.5 -24.02 -41.5 10.92C-41.5 26.36 -22.83 39 0 39C22.83 39 41.5 26.36 41.5 10.92Z\" fill=\"#FFD43B\"/><ellipse cx=\"-26\" cy=\"10.08\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"10.08\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 L19 22 M19 2 L5 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"X Æ A-12\" width=\"48\" height=\"48\" class=\"bb bb-1l6k845\"><defs><clipPath id=\"bb-1l6k845-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1l6k845-c)\"><g transform=\"translate(48.14 59.92) rotate(0.52)\"><path d=\"M41.5 10.92C41.5 -24.02 20.75 -39 0 -39C-20.75 -39 -41.5 -24.02 -41.5 10.92C-41.5 26.36 -22.83 39 0 39C22.83 39 41.5 26.36 41.5 10.92Z\" fill=\"#FFD43B\"/><ellipse cx=\"-26\" cy=\"10.08\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"10.08\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 L19 22 M19 2 L5 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:a",
+      "name": "a",
+      "options": {},
+      "expected": {
+        "letters": "A",
+        "prefix": "bb-10ae7sx",
+        "traits": {
+          "color": "#5EE0C0",
+          "shapeIndex": 3,
+          "rotate": -1.9147064094431698,
+          "offsetX": 0.5576464859768748,
+          "offsetY": -0.3021148323547095,
+          "mouthIndex": 11,
+          "cheeks": false,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4539.3,
+          "delay": 2750.8,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-10ae7sx-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-10ae7sx-c)\"><g transform=\"translate(49.56 59.95) rotate(-1.91)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#5EE0C0\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 37L54.5 37\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-10.5 0 A10.5 6.5 0 0 0 10.5 0 Z\" fill=\"#1c1c1c\"/><path transform=\"translate(50 78)\" d=\"M-3.8 2.5 Q0 13 3.8 2.5 Z\" fill=\"#ff6fa5\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"a\" width=\"48\" height=\"48\" class=\"bb bb-10ae7sx\"><defs><clipPath id=\"bb-10ae7sx-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-10ae7sx-c)\"><g transform=\"translate(49.56 59.95) rotate(-1.91)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#5EE0C0\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(36.3 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M44.5 37L54.5 37\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-10.5 0 A10.5 6.5 0 0 0 10.5 0 Z\" fill=\"#1c1c1c\"/><path transform=\"translate(50 78)\" d=\"M-3.8 2.5 Q0 13 3.8 2.5 Z\" fill=\"#ff6fa5\"/></g></svg>"
+      }
+    },
+    {
+      "id": "base:A B C D",
+      "name": "A B C D",
+      "options": {},
+      "expected": {
+        "letters": "AD",
+        "prefix": "bb-12oobir",
+        "traits": {
+          "color": "#FF7B7B",
+          "shapeIndex": 4,
+          "rotate": -2.0785009721294045,
+          "offsetX": 0.30113542499020696,
+          "offsetY": 0.173577930778265,
+          "mouthIndex": 17,
+          "cheeks": true,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 2795.33,
+          "delay": 708.35,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-12oobir-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-12oobir-c)\"><g transform=\"translate(51.3 60.22) rotate(-2.08)\"><path d=\"M41.5 10.92C41.5 -24.02 20.75 -39 0 -39C-20.75 -39 -41.5 -24.02 -41.5 10.92C-41.5 26.36 -22.83 39 0 39C22.83 39 41.5 26.36 41.5 10.92Z\" fill=\"#FF7B7B\"/><ellipse cx=\"-26\" cy=\"9.78\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.78\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 M5 2 H12 A10 10 0 0 1 12 22 H5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 39.2L40.725 34.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 39.2L58.275 34.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-4 4 Q0 1 4 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"A B C D\" width=\"48\" height=\"48\" class=\"bb bb-12oobir\"><defs><clipPath id=\"bb-12oobir-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-12oobir-c)\"><g transform=\"translate(51.3 60.22) rotate(-2.08)\"><path d=\"M41.5 10.92C41.5 -24.02 20.75 -39 0 -39C-20.75 -39 -41.5 -24.02 -41.5 10.92C-41.5 26.36 -22.83 39 0 39C22.83 39 41.5 26.36 41.5 10.92Z\" fill=\"#FF7B7B\"/><ellipse cx=\"-26\" cy=\"9.78\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.78\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 M5 2 H12 A10 10 0 0 1 12 22 H5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 39.2L40.725 34.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 39.2L58.275 34.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-4 4 Q0 1 4 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "explicit-look",
+      "name": "Sourav Nanda",
+      "options": {
+        "color": "#0FA3B1",
+        "shape": "round",
+        "expression": "smirk",
+        "blush": true
+      },
+      "expected": {
+        "letters": "SN",
+        "prefix": "bb-rpd5oy",
+        "traits": {
+          "color": "#0FA3B1",
+          "shapeIndex": 3,
+          "rotate": 1.7062492277473211,
+          "offsetX": 0.7429805537685752,
+          "offsetY": -0.3351061256136745,
+          "mouthIndex": 1,
+          "cheeks": true,
+          "backdropDir": 3
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 5157.7,
+          "delay": 5034.78,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-rpd5oy-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-rpd5oy-c)\"><g transform=\"translate(51.74 60.61) rotate(1.71)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#0FA3B1\"/><ellipse cx=\"-26\" cy=\"9.39\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.39\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Sourav Nanda\" width=\"48\" height=\"48\" class=\"bb bb-rpd5oy\"><defs><clipPath id=\"bb-rpd5oy-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-rpd5oy-c)\"><g transform=\"translate(51.74 60.61) rotate(1.71)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#0FA3B1\"/><ellipse cx=\"-26\" cy=\"9.39\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.39\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "variant-3",
+      "name": "Sourav Nanda",
+      "options": {
+        "variant": 3
+      },
+      "expected": {
+        "letters": "SN",
+        "prefix": "bb-h4detg",
+        "traits": {
+          "color": "#FF8FC7",
+          "shapeIndex": 2,
+          "rotate": -2.3779436429031193,
+          "offsetX": -0.5141984452493489,
+          "offsetY": -0.07632121476344766,
+          "mouthIndex": 15,
+          "cheeks": false,
+          "backdropDir": 2
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4842.75,
+          "delay": 2813.05,
+          "double": true
+        },
+        "body": "<defs><clipPath id=\"bb-h4detg-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-h4detg-c)\"><g transform=\"translate(48.49 61.97) rotate(-2.38)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FF8FC7\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-11.5 0 A11.5 8 0 0 0 11.5 0 Z\" fill=\"#1c1c1c\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Sourav Nanda\" width=\"48\" height=\"48\" class=\"bb bb-h4detg\"><defs><clipPath id=\"bb-h4detg-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-h4detg-c)\"><g transform=\"translate(48.49 61.97) rotate(-2.38)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FF8FC7\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M18.5 7 C18.5 1.5 5.5 1.5 5.5 7.5 C5.5 12.5 18.5 11 18.5 16.5 C18.5 22.5 5.5 22.5 5.5 17.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 L19 22 V2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-11.5 0 A11.5 8 0 0 0 11.5 0 Z\" fill=\"#1c1c1c\"/></g></svg>"
+      }
+    },
+    {
+      "id": "tilt",
+      "name": "Ada Lovelace",
+      "options": {
+        "tilt": -6
+      },
+      "expected": {
+        "letters": "AL",
+        "prefix": "bb-12yuszq",
+        "traits": {
+          "color": "#FFD43B",
+          "shapeIndex": 3,
+          "rotate": -6,
+          "offsetX": 0.16052324185147882,
+          "offsetY": 0.13056932508479802,
+          "mouthIndex": 4,
+          "cheeks": true,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4547.11,
+          "delay": 377.03,
+          "double": true
+        },
+        "body": "<defs><clipPath id=\"bb-12yuszq-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-12yuszq-c)\"><g transform=\"translate(51.16 60.38) rotate(-6)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFD43B\"/><ellipse cx=\"-26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 34.8L40.725 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 34.8L58.275 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 4 Q0 -5 9 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Ada Lovelace\" width=\"48\" height=\"48\" class=\"bb bb-12yuszq\"><defs><clipPath id=\"bb-12yuszq-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-12yuszq-c)\"><g transform=\"translate(51.16 60.38) rotate(-6)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFD43B\"/><ellipse cx=\"-26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.62\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M4 22 L12 2 L20 22 M6.6 15.5 H17.4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 34.8L40.725 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M68.275 34.8L58.275 39.2\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-9 4 Q0 -5 9 4\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "blink",
+      "name": "Grace Hopper",
+      "options": {
+        "animate": "blink"
+      },
+      "expected": {
+        "letters": "GH",
+        "prefix": "bb-1qoxyk",
+        "traits": {
+          "color": "#FF8FC7",
+          "shapeIndex": 2,
+          "rotate": 2.4034760096110404,
+          "offsetX": -0.2812651596032083,
+          "offsetY": -0.14054657423403114,
+          "mouthIndex": 18,
+          "cheeks": false,
+          "backdropDir": 1
+        },
+        "blink": {
+          "enabled": true,
+          "interval": 5002.06,
+          "delay": 264.03,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1qoxyk-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1qoxyk-c)\"><g transform=\"translate(50.72 61.21) rotate(2.4)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FF8FC7\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M20 7.5 A9 9.7 0 1 0 20 16.5 V12.5 H13\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 M19 2 V22 M5 12 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 38Q35.725 34 40.725 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M58.275 38Q63.275 34 68.275 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><ellipse cx=\"50\" cy=\"80\" rx=\"2.8\" ry=\"4.8\" fill=\"#1c1c1c\"/></g><style>.bb-1qoxyk .bb-eye{transform-box:fill-box;transform-origin:center;animation:bb-1qoxyk-blink 5002.06ms ease-in-out 264.03ms infinite}@keyframes bb-1qoxyk-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}@media (prefers-reduced-motion:reduce){.bb-1qoxyk .bb-eye{animation:none}}</style>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Grace Hopper\" width=\"48\" height=\"48\" class=\"bb bb-1qoxyk\"><defs><clipPath id=\"bb-1qoxyk-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1qoxyk-c)\"><g transform=\"translate(50.72 61.21) rotate(2.4)\"><path d=\"M44 10.18C44 -23.34 22 -37.7 0 -37.7C-22 -37.7 -44 -23.34 -44 10.18C-44 25.32 -24.2 37.7 0 37.7C24.2 37.7 44 25.32 44 10.18Z\" fill=\"#FF8FC7\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(22.53 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M20 7.5 A9 9.7 0 1 0 20 16.5 V12.5 H13\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(50.08 43) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 2 V22 M19 2 V22 M5 12 H19\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M30.725 38Q35.725 34 40.725 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M58.275 38Q63.275 34 68.275 38\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><ellipse cx=\"50\" cy=\"80\" rx=\"2.8\" ry=\"4.8\" fill=\"#1c1c1c\"/></g><style>.bb-1qoxyk .bb-eye{transform-box:fill-box;transform-origin:center;animation:bb-1qoxyk-blink 5002.06ms ease-in-out 264.03ms infinite}@keyframes bb-1qoxyk-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}@media (prefers-reduced-motion:reduce){.bb-1qoxyk .bb-eye{animation:none}}</style></svg>"
+      }
+    },
+    {
+      "id": "custom-palette",
+      "name": "Ira",
+      "options": {
+        "palette": [
+          "#0FA3B1",
+          "#FFD166",
+          "#EF476F"
+        ]
+      },
+      "expected": {
+        "letters": "IR",
+        "prefix": "bb-1ekkjo5",
+        "traits": {
+          "color": "#FFD166",
+          "shapeIndex": 3,
+          "rotate": -1.926228494849056,
+          "offsetX": 0.24954763520509005,
+          "offsetY": -0.10015878409612924,
+          "mouthIndex": 13,
+          "cheeks": true,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4371.45,
+          "delay": 1666.97,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1ekkjo5-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1ekkjo5-c)\"><g transform=\"translate(49.25 60.15) rotate(-1.93)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFD166\"/><ellipse cx=\"-26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 H13 A5 5 0 0 1 13 12 H5 M11.5 12 L19 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Ira\" width=\"48\" height=\"48\" class=\"bb bb-1ekkjo5\"><defs><clipPath id=\"bb-1ekkjo5-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1ekkjo5-c)\"><g transform=\"translate(49.25 60.15) rotate(-1.93)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#FFD166\"/><ellipse cx=\"-26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 H13 A5 5 0 0 1 13 12 H5 M11.5 12 L19 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    },
+    {
+      "id": "chrome",
+      "name": "Ira",
+      "options": {
+        "size": 64,
+        "rounded": true,
+        "className": "mine",
+        "title": true
+      },
+      "expected": {
+        "letters": "IR",
+        "prefix": "bb-1ekkjo5",
+        "traits": {
+          "color": "#B79CFF",
+          "shapeIndex": 3,
+          "rotate": -1.926228494849056,
+          "offsetX": 0.24954763520509005,
+          "offsetY": -0.10015878409612924,
+          "mouthIndex": 13,
+          "cheeks": true,
+          "backdropDir": 0
+        },
+        "blink": {
+          "enabled": false,
+          "interval": 4371.45,
+          "delay": 1666.97,
+          "double": false
+        },
+        "body": "<defs><clipPath id=\"bb-1ekkjo5-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1ekkjo5-c)\"><g transform=\"translate(49.25 60.15) rotate(-1.93)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#B79CFF\"/><ellipse cx=\"-26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 H13 A5 5 0 0 1 13 12 H5 M11.5 12 L19 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g>",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Ira\" width=\"64\" height=\"64\" class=\"bb bb-1ekkjo5 mine\" style=\"border-radius:50%\"><title>Ira</title><defs><clipPath id=\"bb-1ekkjo5-c\"><circle cx=\"50\" cy=\"50\" r=\"50\"/></clipPath></defs><g class=\"bb-backdrop\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#2f2f2f\"/></g><g class=\"bb-blob\" clip-path=\"url(#bb-1ekkjo5-c)\"><g transform=\"translate(49.25 60.15) rotate(-1.93)\"><path d=\"M40.2 11.64C40.2 -23.67 20.1 -38.8 0 -38.8C-20.1 -38.8 -40.2 -23.67 -40.2 11.64C-40.2 26.58 -22.11 38.8 0 38.8C22.11 38.8 40.2 26.58 40.2 11.64Z\" fill=\"#B79CFF\"/><ellipse cx=\"-26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/><ellipse cx=\"26\" cy=\"9.85\" rx=\"6.5\" ry=\"4.8\" fill=\"#ff6fa5\" opacity=\"0.45\"/></g></g><g class=\"bb-eyes\"><g transform=\"translate(19.92 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M12 2 V22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g><g transform=\"translate(47.48 43.8) scale(1.1)\"><g class=\"bb-eye\"><path d=\"M5 22 V2 H13 A5 5 0 0 1 13 12 H5 M11.5 12 L19 22\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4.5\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"/></g></g></g><g class=\"bb-brows\"><path d=\"M28.125 37.8L38.125 37.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><path d=\"M55.675000000000004 38.8Q60.675000000000004 34.199999999999996 65.67500000000001 38.8\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"3.4\" stroke-linecap=\"round\"/></g><g class=\"bb-mouth\"><path transform=\"translate(50 78)\" d=\"M-7 2 Q0 4.5 7 -1.5\" fill=\"none\" stroke=\"#1c1c1c\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>"
+      }
+    }
+  ]
+}

@@ -11,12 +11,15 @@ import {
   renderEyes,
   renderMouth,
 } from './parts.js';
+import type { BlobTraits } from './parts.js';
 import type { AvatarOptions } from './types.js';
 
 export interface ResolvedAvatar {
   name: string;
   letters: string;
   prefix: string;
+  /** Every seeded/overridden decision behind the face — the portable contract. */
+  traits: BlobTraits;
   body: string;
   blink: { enabled: boolean; interval: number; delay: number; double: boolean };
 }
@@ -67,6 +70,7 @@ export function resolveAvatar(name: string, options: AvatarOptions = {}): Resolv
     name: safeName,
     letters,
     prefix,
+    traits,
     body,
     blink: { enabled: false, interval, delay, double },
   };

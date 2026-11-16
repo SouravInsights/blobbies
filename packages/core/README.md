@@ -62,6 +62,20 @@ renderAvatarSvg('Sourav Nanda', {
 });
 ```
 
+## Command line
+
+The core is a pure function, so it also ships as a command — handy for scripts,
+build steps, and AI agents:
+
+```sh
+npx blobbies render "Sourav Nanda" > avatar.svg
+npx blobbies render "Ira" --expression wink --color sky --animate all
+npx blobbies shapes        # the egg shapes
+npx blobbies expressions   # the moods
+npx blobbies palette       # the built-in colours
+npx blobbies manifest      # the machine-readable capability data
+```
+
 ## Make it yours
 
 Colors, shapes and moods are set by **name**, not by index:
@@ -146,7 +160,8 @@ not, because it is CSS baked into the SVG.
 | `renderAvatarSvg(name, options?)` | A standalone SVG string. |
 | `renderAvatarBody(name, options?)` | Inner markup + resolved metadata. |
 | `avatarDataUri(name, options?)` | A `data:image/svg+xml,…` URI. |
-| `resolveAvatar(name, options?)` | Every seeded decision, without rendering. |
+| `resolveAvatar(name, options?)` | Every seeded decision (its `traits`), without rendering. |
+| `CONTRACT_VERSION` | The cross-platform contract version. Bump only on a breaking engine change. |
 | `attachAvatarMotion(el, options?)` | From `blobbies/motion`. Returns cleanup. |
 | `COLORS` / `PALETTE` | The built-in palette, by name and in order. |
 | `BACKDROP_COLOR` / `INK_COLOR` / `BLUSH_COLOR` | The fixed layer colours. |
@@ -154,6 +169,20 @@ not, because it is CSS baked into the SVG.
 | `EXPRESSION_NAMES` / `EXPRESSION_COUNT` / `SHAPE_COUNT` | Labels and counts for pickers. |
 | `LETTER_PATHS` / `LETTER_BOX` / `STROKE_WIDTH` / `INK_WIDTH` / `hasLetterPath` | The glyph geometry. |
 | `hashString` / `cyrb53` / `mulberry32` / `createRng` | The seeding primitives. |
+
+## Porting to another platform
+
+The decisions are the source of truth, and two generated files make a port
+possible without reverse-engineering this package:
+
+- **`manifest.json`** — every shape, mood, colour and layout value as JSON.
+  Read it, or generate native data files from it; never retype the glyphs.
+- **`fixtures/avatar-conformance.json`** — 24 known-correct input/output cases.
+  Your port is correct when it reproduces them byte-for-byte.
+
+Both are exported from the package (`blobbies/manifest.json`) and guarded by a
+test, so they cannot drift from the code. The full plan — including React Native
+and SwiftUI — is in [`docs/PLATFORMS.md`](../../docs/PLATFORMS.md).
 
 ## React
 

@@ -50,6 +50,18 @@ Both packages ship ESM + CJS, are fully typed, and declare `sideEffects: false`
 so bundlers drop whatever you do not import. `blobbies/motion` is a separate
 entry point, so static users never download the animation runtime.
 
+### Without writing any code
+
+The core is a pure function, so it also ships as a command. Useful in a script,
+a design tool, or an AI agent:
+
+```bash
+npx blobbies render "Sourav Nanda" > avatar.svg
+npx blobbies render "Ira" --expression wink --color sky --animate all
+npx blobbies shapes        # list the egg shapes
+npx blobbies manifest      # the machine-readable capability data
+```
+
 ---
 
 ## Quick start
@@ -463,6 +475,17 @@ pnpm test         # vitest across packages
 pnpm build        # tsup build of both packages
 pnpm typecheck    # tsc across the workspace
 ```
+
+Two files are generated from the code and checked by a test, so they can never go
+stale. Never edit them by hand — change the source, run the script, commit both:
+
+```bash
+pnpm --filter blobbies export:fixtures   # fixtures/avatar-conformance.json
+pnpm --filter blobbies export:manifest   # manifest.json
+```
+
+Planning a new framework or platform? Read [`docs/PLATFORMS.md`](docs/PLATFORMS.md).
+Working with an AI agent? Point it at [`AGENTS.md`](AGENTS.md) and [`llms.txt`](llms.txt).
 
 Preview sheets (generated, then opened in a browser):
 

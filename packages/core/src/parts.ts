@@ -42,7 +42,8 @@ export interface DecideInput {
  * reference profile (narrower dome on top, wider rounded bottom); they differ
  * in aspect ratio, like the references do.
  */
-const SHAPE_GEOMETRY: ReadonlyArray<{ rx: number; ry: number; eb: number }> = [
+/** The five egg shapes and their fitted curve numbers. Porting data. */
+export const SHAPE_GEOMETRY: ReadonlyArray<{ rx: number; ry: number; eb: number }> = [
   { rx: 39, ry: 39.6, eb: 0.3 }, // tall
   { rx: 43.5, ry: 38, eb: 0.28 }, // wide
   { rx: 44, ry: 37.7, eb: 0.27 }, // widest
@@ -137,13 +138,13 @@ function renderCheeks(blobCy: number): string {
     .join('');
 }
 
-type Mouth =
+export type Mouth =
   | { half: readonly [number, number]; tongue?: boolean } // filled half-ellipse (open smile)
   | { circle: readonly [number, number, number] }
   | { ellipse: readonly [number, number, number, number] } // dx, dy, rx, ry
   | { d: string; width: number; tongue?: boolean };
 
-type BrowStyle =
+export type BrowStyle =
   | 'none'
   | 'flat'
   | 'raised'
@@ -155,7 +156,7 @@ type BrowStyle =
   | 'worried'
   | 'annoyed';
 
-interface Expression {
+export interface Expression {
   /** Human name, for pickers and screen readers. */
   name: string;
   mouth: Mouth;
@@ -179,7 +180,9 @@ interface Expression {
  * any three neighbouring rows need to read as three different moods. Grouping
  * all the smiles together would make the map look like one face repeated.
  */
-const EXPRESSION_DEFS: ReadonlyArray<Expression> = [
+/** The 22 expressions, each a mouth plus the brows that carry the mood.
+ *  Porting data: a native renderer draws these without retyping them. */
+export const EXPRESSION_DEFS: ReadonlyArray<Expression> = [
   { name: 'Smile', mouth: { d: 'M-6.5 1 Q0 4.5 6.5 1', width: 4 }, brow: 'none' },
   { name: 'Smirk', mouth: { d: 'M-7 2 Q0 4.5 7 -1.5', width: 4 }, brow: 'none' },
   { name: 'Sad', mouth: { d: 'M-7 4 Q0 -3 7 4', width: 4 }, brow: 'sad' },
