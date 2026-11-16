@@ -1,6 +1,6 @@
 {
   "name": "@blobbies/react",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "React bindings for Blobbies — deterministic, cute SVG avatars with blink and cursor-follow.",
   "license": "MIT",
   "type": "module",

@@ -10,8 +10,11 @@ decisions. A shared conformance file proves the renderers agree.
 
 ## Packages
 
-- `blobbies` — core. Hash, initials, trait decisions, SVG string, data URI, DOM motion, CLI. Framework-agnostic, zero dependencies.
+- `blobbies` — core. Hash, initials, trait decisions, scene, SVG string, data URI, DOM motion, CLI. Framework-agnostic, zero dependencies.
 - `@blobbies/react` — `<Avatar>`, `<AvatarPicker>`, `useAvatarMotion`. Peer: `react >= 18`.
+- `@blobbies/element` — `<blobbies-avatar>` web component. Works in every web framework and plain HTML.
+- `@blobbies/react-native` — `<Avatar>` over `react-native-svg`. Peers: `react-native`, `react-native-svg`, `react-native-reanimated`.
+- `Blobbies` (Swift) — engine, SVG renderer and native `BlobbiesAvatar` SwiftUI view. SPM, no dependencies.
 
 ## Docs
 

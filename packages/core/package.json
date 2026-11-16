@@ -1,6 +1,6 @@
 {
   "name": "blobbies",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Deterministic, cute SVG blobby avatars generated from a name. Zero dependencies.",
   "license": "MIT",
   "type": "module",

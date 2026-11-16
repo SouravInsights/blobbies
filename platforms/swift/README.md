@@ -10,7 +10,7 @@ Zero dependencies.
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/SouravInsights/blobbies.git", from: "0.3.0")
+  .package(url: "https://github.com/SouravInsights/blobbies.git", from: "0.4.0")
 ]
 ```
 
@@ -80,6 +80,14 @@ generated from `packages/core/manifest.json` into
 
 ```bash
 pnpm --filter blobbies codegen:swift
+```
+
+## Develop
+
+The package manifest is at the repository root, so from the root:
+
+```bash
+swift test
 ```
 
 ## Roadmap
