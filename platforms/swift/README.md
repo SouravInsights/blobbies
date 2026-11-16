@@ -10,7 +10,7 @@ Zero dependencies.
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/SouravInsights/blobbies.git", from: "0.4.0")
+  .package(url: "https://github.com/SouravInsights/blobbies.git", from: "0.5.0")
 ]
 ```
 
