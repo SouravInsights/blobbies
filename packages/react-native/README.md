@@ -52,5 +52,45 @@ string parsing and no second renderer to keep in sync.
 ## Testing
 
 The scene → `react-native-svg` mapping is a pure function and is unit-tested in
-plain Node (`sceneToNodes`). The `<Avatar>` component itself needs a real
-device or emulator to judge — see `../../docs/PLATFORMS.md`.
+plain Node (`pnpm --filter @blobbies/react-native test`), so the rendering logic
+is verified without a device. The **component** needs a real device or
+simulator. The fastest way to see it:
+
+```bash
+# 1. publish this package first (it is not on npm yet)
+pnpm --filter @blobbies/react-native publish --access public
+
+# 2. a fresh Expo app
+npx create-expo-app blobbies-try --template blank-typescript
+cd blobbies-try
+npx expo install react-native-svg react-native-reanimated
+npm i @blobbies/react-native
+```
+
+Then replace `App.tsx` with:
+
+```tsx
+import { View, Text } from 'react-native';
+import { Avatar } from '@blobbies/react-native';
+
+export default function App() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 20, backgroundColor: '#111' }}>
+      <Avatar name="Sourav Nanda" size={96} animate="blink" />
+      <Avatar name="Ira" size={96} expression="wink" animate="blink" />
+      <Text style={{ color: '#fff' }}>Blobbies on React Native</Text>
+    </View>
+  );
+}
+```
+
+```bash
+npx expo start   # press i for iOS simulator, a for Android, or scan on a device
+```
+
+Reanimated needs the New Architecture and its Babel plugin; Expo's
+`babel-preset-expo` sets the plugin up for you. If the avatars render but do not
+blink, that setup is the first thing to check.
+
+`react-native-svg` cannot run the SVG's CSS blink, which is why blink is a
+Reanimated animation here rather than the embedded `<style>` the web uses.

@@ -87,8 +87,12 @@ pnpm --filter blobbies codegen:swift
 The package manifest is at the repository root, so from the root:
 
 ```bash
-swift test
+swift test                 # engine, scene, paths and byte-for-byte conformance
+swift run BlobbiesDemo     # a small SwiftUI window with a grid of avatars
 ```
+
+On macOS, `swift run BlobbiesDemo` opens a window you can eyeball. In Xcode,
+open the package and use the SwiftUI preview on `BlobbiesAvatar`.
 
 ## Roadmap
 

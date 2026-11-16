@@ -24,6 +24,11 @@ let package = Package(
   ],
   targets: [
     .target(name: "Blobbies", path: "platforms/swift/Sources/Blobbies"),
+    .executableTarget(
+      name: "BlobbiesDemo",
+      dependencies: ["Blobbies"],
+      path: "platforms/swift/Demo"
+    ),
     .testTarget(
       name: "BlobbiesTests",
       dependencies: ["Blobbies"],
