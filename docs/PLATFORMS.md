@@ -104,8 +104,14 @@ never quietly go stale. Commands to regenerate them are at the bottom.
 | Draw the same avatar in Swift | iOS, macOS, watchOS, visionOS | `BlobbiesAvatar("Ira")` from `platforms/swift` |
 | Draw the same avatar in React Native | iOS + Android apps | `import { Avatar } from '@blobbies/react-native'` |
 
-The React picker is finished and rock-solid on touch (that was the last piece of
-work before this plan).
+The React picker is finished and rock-solid on touch. Like DiceBear, we ship a
+**picker on the web and only the `Avatar` everywhere else** — a native picker is
+a large, platform-specific surface, and the avatar is what an app actually
+needs on a phone.
+
+The picker is built on shared maths in the core (`blobbies/picker`), so a
+future `<blobbies-picker>` web component can reuse it. The native packages ship
+the `Avatar` and nothing more, on purpose.
 
 ---
 
@@ -183,15 +189,16 @@ Vue, Svelte, Solid, and Angular wrappers, each tiny, each with a server-render
 snapshot test. **Skip these entirely if the custom element from Step 1 is
 enough** — that is the whole point of Step 1.
 
-### Step 6 — The picker, everywhere
+### Step 6 — The picker, on the web only
 
-The picker is the biggest surface and the most React-shaped. Its *logic* (which
-avatar is selected, the wrapping grid, the expression stepper) moves into a
-framework-free module. React keeps its look. React Native and SwiftUI get their
-own look over the same logic.
+The picker stays a **web** component. Its maths (the wrapping grid, the lens,
+the hit test) already lives in the core as `blobbies/picker`, so a vanilla
+`<blobbies-picker>` element can reuse it across every web framework — the same
+move as `<blobbies-avatar>`.
 
-The picker is deliberately last. Ship a great `<Avatar>` everywhere first, then
-the interactive picker where there is demand.
+We deliberately do **not** ship a picker for React Native or SwiftUI. DiceBear
+does not either: a native integration exposes the avatar, and the picker is a
+web surface. Those packages ship the `Avatar` component and nothing more.
 
 ### Parallel track — a hosted image API
 
@@ -308,6 +315,7 @@ AGENTS.md                               repo guide for AI agents
 llms.txt                                compact doc index for AI tools
 ```
 
-The remaining work is the picker across frameworks (Step 6): its state becomes a
-framework-free module, and React, React Native and SwiftUI each present it in
-their own way.
+The remaining work: the hosted **HTTP API** — the zero-install delivery channel
+(`/v1/avatar.svg?name=Ira`, straight into an `<img>`, email, PDF or
+`AsyncImage`) — and a `<blobbies-picker>` web component. The native packages
+ship the `Avatar` and are considered done.
