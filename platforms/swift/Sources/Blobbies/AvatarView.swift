@@ -64,10 +64,12 @@ public struct BlobbiesAvatar: View {
       break
 
     case let .group(className, ops, clipId, children):
-      var local = transform.concatenating(Self.matrix(ops))
+      // The node's own transform applies first (innermost), then its ancestors.
+      var local = cgMatrix(ops)
       if className == "bb-eye", blink != 1 {
-        local = local.concatenating(Self.scaleYAbout(blink, cx: 12, cy: 12))
+        local = cgScaleYAbout(blink, cx: 12, cy: 12).concatenating(local)
       }
+      local = local.concatenating(transform)
       var sub = context
       if clipId != nil {
         sub.clip(to: circlePath(cx: 50, cy: 50, r: 50).applying(local))
@@ -84,7 +86,8 @@ public struct BlobbiesAvatar: View {
       context.fill(path, with: .color(Self.color(fill).opacity(opacity ?? 1)))
 
     case let .path(d, fill, stroke, strokeWidth, _, _, ops):
-      let path = SVGPathParser.path(from: d).applying(transform.concatenating(Self.matrix(ops)))
+      let local = cgMatrix(ops).concatenating(transform)
+      let path = SVGPathParser.path(from: d).applying(local)
       if let fill, fill != "none" {
         context.fill(path, with: .color(Self.color(fill)))
       }
@@ -93,33 +96,20 @@ public struct BlobbiesAvatar: View {
       }
 
     case let .text(x, y, _, _, fontSize, _, fill, value):
-      var resolved = context.resolve(Text(value).font(.system(size: fontSize, weight: .heavy)))
+      // The non-Latin fallback. Position it with the eye's transform, and scale
+      // the font with it too, or the glyph lands in the avatar's top-left.
+      let local = cgMatrix([]).concatenating(transform)
+      let point = CGPoint(x: x, y: y).applying(local)
+      let scale = sqrt(abs(local.a * local.d - local.b * local.c))
+      var resolved = context.resolve(
+        Text(value).font(.system(size: fontSize * scale, weight: .heavy))
+      )
       resolved.shading = .color(Self.color(fill))
-      context.draw(resolved, at: CGPoint(x: x, y: y), anchor: .center)
+      context.draw(resolved, at: point, anchor: .center)
     }
   }
 
   // MARK: - Helpers
-
-  private static func matrix(_ ops: [TransformOp]) -> CGAffineTransform {
-    ops.reduce(CGAffineTransform.identity) { acc, op in
-      switch op {
-      case let .translate(x, y):
-        return acc.concatenating(CGAffineTransform(translationX: x, y: y))
-      case let .rotate(deg):
-        return acc.concatenating(CGAffineTransform(rotationAngle: deg * .pi / 180))
-      case let .scale(x, y):
-        return acc.concatenating(CGAffineTransform(scaleX: x, y: y ?? x))
-      }
-    }
-  }
-
-  private static func scaleYAbout(_ s: Double, cx: Double, cy: Double) -> CGAffineTransform {
-    CGAffineTransform.identity
-      .concatenating(CGAffineTransform(translationX: cx, y: cy))
-      .concatenating(CGAffineTransform(scaleX: 1, y: s))
-      .concatenating(CGAffineTransform(translationX: -cx, y: -cy))
-  }
 
   private func circlePath(cx: Double, cy: Double, r: Double) -> Path {
     Path(ellipseIn: CGRect(x: cx - r, y: cy - r, width: r * 2, height: r * 2))
