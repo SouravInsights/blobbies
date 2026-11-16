@@ -9,6 +9,8 @@ export {
   wantsFollow,
 } from './render.js';
 export type { ResolvedAvatar } from './render.js';
+export { serializeScene, serializeNode } from './scene.js';
+export type { SceneNode, TransformOp, ClipDef } from './scene.js';
 export { COLORS, PALETTE, BACKDROP_COLOR, INK_COLOR, BLUSH_COLOR } from './palette.js';
 export type { AvatarColor } from './palette.js';
 export { EXPRESSIONS, SHAPES, EXPRESSION_NAMES, EXPRESSION_COUNT, SHAPE_COUNT } from './parts.js';

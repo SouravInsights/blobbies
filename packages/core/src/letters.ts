@@ -1,4 +1,6 @@
 import { INK_COLOR } from './palette.js';
+import { serializeNode } from './scene.js';
+import type { SceneNode } from './scene.js';
 
 /**
  * Hand-authored glyphs for A–Z and 0–9.
@@ -62,23 +64,53 @@ export function hasLetterPath(char: string): boolean {
 }
 
 /**
- * Render a single eye glyph. Characters outside A–Z / 0–9 fall back to a bold
- * <text> element so non-Latin names still get a sensible avatar.
+ * The glyph as a scene node: an outer positioning group, an inner `.bb-eye`
+ * group the blink can scale, and the path (or the non-Latin `<text>` fallback).
  */
+export function letterScene(
+  char: string,
+  opts: { x: number; y: number; scale: number },
+): SceneNode {
+  const { x, y, scale } = opts;
+  const transform = [
+    { kind: 'translate' as const, x: round(x), y: round(y) },
+    { kind: 'scale' as const, x: round(scale, 4) },
+  ];
+  const body: SceneNode = hasLetterPath(char)
+    ? {
+        kind: 'path',
+        d: LETTER_PATHS[char] as string,
+        fill: 'none',
+        stroke: INK_COLOR,
+        strokeWidth: STROKE_WIDTH,
+        linecap: 'butt',
+        linejoin: 'round',
+      }
+    : {
+        kind: 'text',
+        x: 12,
+        y: 21,
+        anchor: 'middle',
+        fontFamily:
+          "ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif",
+        fontSize: 22,
+        fontWeight: 800,
+        fill: INK_COLOR,
+        value: escapeXml(char),
+      };
+  return {
+    kind: 'group',
+    transform,
+    children: [{ kind: 'group', className: 'bb-eye', children: [body] }],
+  };
+}
+
+/** The glyph as an SVG string. Used by the preview sheets. */
 export function renderLetter(
   char: string,
   opts: { x: number; y: number; scale: number },
 ): string {
-  const { x, y, scale } = opts;
-  const transform = `translate(${round(x)} ${round(y)}) scale(${round(scale, 4)})`;
-  const body = hasLetterPath(char)
-    ? `<path d="${LETTER_PATHS[char]}" fill="none" stroke="${INK_COLOR}" stroke-width="${STROKE_WIDTH}" stroke-linecap="butt" stroke-linejoin="round"/>`
-    : `<text x="12" y="21" text-anchor="middle" font-family="ui-rounded, 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="22" font-weight="800" fill="${INK_COLOR}">${escapeXml(char)}</text>`;
-
-  // Positioning transform sits on the outer group; the inner `.bb-eye` group is
-  // left transform-free so the CSS blink can scale it about its own center
-  // without fighting the positioning transform.
-  return `<g transform="${transform}"><g class="bb-eye">${body}</g></g>`;
+  return serializeNode(letterScene(char, opts));
 }
 
 function escapeXml(value: string): string {

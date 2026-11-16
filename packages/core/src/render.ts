@@ -3,14 +3,16 @@ import { createRng, hashString } from './hash.js';
 import { PALETTE } from './palette.js';
 import {
   applyLook,
+  backdropScene,
+  blobScene,
+  browsScene,
   decideTraits,
-  renderBackdrop,
-  renderBlob,
-  renderBrows,
-  renderDiskClip,
-  renderEyes,
-  renderMouth,
+  diskClipScene,
+  eyesScene,
+  mouthScene,
 } from './parts.js';
+import { serializeScene } from './scene.js';
+import type { SceneNode } from './scene.js';
 import type { BlobTraits } from './parts.js';
 import type { AvatarOptions } from './types.js';
 
@@ -20,6 +22,9 @@ export interface ResolvedAvatar {
   prefix: string;
   /** Every seeded/overridden decision behind the face — the portable contract. */
   traits: BlobTraits;
+  /** The draw tree: what a non-web renderer consumes. */
+  scene: SceneNode[];
+  /** The same draw tree, serialised to SVG markup. */
   body: string;
   blink: { enabled: boolean; interval: number; delay: number; double: boolean };
 }
@@ -58,19 +63,24 @@ export function resolveAvatar(name: string, options: AvatarOptions = {}): Resolv
 
   // Seed-derived id so multiple avatars on one page never collide.
   const clipId = `${prefix}-c`;
-  const body =
-    renderDiskClip(clipId) +
-    renderBackdrop(traits.backdropDir) +
-    renderBlob(traits, clipId) +
-    renderEyes(letters, traits.mouthIndex) +
-    renderBrows(traits.mouthIndex, letters) +
-    renderMouth(traits.mouthIndex);
+  // The draw tree is the source; the SVG string is one serialiser over it, so
+  // the web and the native renderers can never disagree.
+  const scene = [
+    diskClipScene(clipId),
+    backdropScene(),
+    blobScene(traits, clipId),
+    eyesScene(letters, traits.mouthIndex),
+    browsScene(traits.mouthIndex, letters),
+    mouthScene(traits.mouthIndex),
+  ].filter((node): node is SceneNode => node !== null);
+  const body = serializeScene(scene);
 
   return {
     name: safeName,
     letters,
     prefix,
     traits,
+    scene,
     body,
     blink: { enabled: false, interval, delay, double },
   };

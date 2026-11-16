@@ -1,6 +1,7 @@
 import { BACKDROP_COLOR, BLUSH_COLOR, BLUSH_OPACITY, INK_COLOR } from './palette.js';
 import { range } from './hash.js';
-import { renderLetter, LETTER_BOX, INK_WIDTH, STROKE_WIDTH } from './letters.js';
+import { letterScene, LETTER_BOX, INK_WIDTH, STROKE_WIDTH } from './letters.js';
+import type { SceneNode } from './scene.js';
 import type { AvatarExpression, AvatarOptions, AvatarShape } from './types.js';
 
 /** Layout constants for the 100×100 viewBox. */
@@ -77,9 +78,13 @@ const DIRECTIONS: ReadonlyArray<readonly [number, number]> = [
   [1, 0.35],
 ];
 
-export function renderBackdrop(_dir: number): string {
+export function backdropScene(): SceneNode {
   const { cx, cy, r } = LAYOUT.backdrop;
-  return `<g class="bb-backdrop"><circle cx="${cx}" cy="${cy}" r="${r}" fill="${BACKDROP_COLOR}"/></g>`;
+  return {
+    kind: 'group',
+    className: 'bb-backdrop',
+    children: [{ kind: 'circle', cx, cy, r, fill: BACKDROP_COLOR }],
+  };
 }
 
 /** Egg curve fitted to the reference coloured-layer width profile. */
@@ -104,7 +109,7 @@ function shapeOf(traits: BlobTraits): { rx: number; ry: number; eb: number } {
   return SHAPE_GEOMETRY[traits.shapeIndex % SHAPE_GEOMETRY.length] as { rx: number; ry: number; eb: number };
 }
 
-export function renderBlob(traits: BlobTraits, clipId?: string): string {
+export function blobScene(traits: BlobTraits, clipId?: string): SceneNode {
   const shape = shapeOf(traits);
   const [dx, dy] = DIRECTIONS[traits.backdropDir % DIRECTIONS.length] as readonly [
     number,
@@ -113,29 +118,43 @@ export function renderBlob(traits: BlobTraits, clipId?: string): string {
   const tx = round(LAYOUT.blob.cx + dx + traits.offsetX);
   const ty = round(LAYOUT.blob.bottom - shape.ry + dy + traits.offsetY);
   const rot = round(traits.rotate);
-  const cheeks = traits.cheeks ? renderCheeks(ty) : '';
-  const clip = clipId ? ` clip-path="url(#${clipId})"` : '';
-  return (
-    `<g class="bb-blob"${clip}><g transform="translate(${tx} ${ty}) rotate(${rot})">` +
-    `<path d="${eggPath(shape.rx, shape.ry, shape.eb)}" fill="${traits.color}"/>` +
-    cheeks +
-    `</g></g>`
-  );
+  const inner: SceneNode[] = [
+    { kind: 'path', d: eggPath(shape.rx, shape.ry, shape.eb), fill: traits.color },
+  ];
+  if (traits.cheeks) inner.push(...cheekScenes(ty));
+  return {
+    kind: 'group',
+    className: 'bb-blob',
+    clipId,
+    children: [
+      {
+        kind: 'group',
+        transform: [
+          { kind: 'translate', x: tx, y: ty },
+          { kind: 'rotate', deg: rot },
+        ],
+        children: inner,
+      },
+    ],
+  };
 }
 
 /** The clip that keeps the coloured layer inside the dark disk. */
-export function renderDiskClip(id: string): string {
+export function diskClipScene(id: string): SceneNode {
   const { cx, cy, r } = LAYOUT.backdrop;
-  return `<defs><clipPath id="${id}"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath></defs>`;
+  return { kind: 'defs', clip: { id, cx, cy, r } };
 }
 
-function renderCheeks(blobCy: number): string {
-  return LAYOUT.cheeks
-    .map(
-      (c) =>
-        `<ellipse cx="${round(c.cx - LAYOUT.blob.cx)}" cy="${round(c.cy - blobCy)}" rx="${c.rx}" ry="${c.ry}" fill="${BLUSH_COLOR}" opacity="${BLUSH_OPACITY}"/>`,
-    )
-    .join('');
+function cheekScenes(blobCy: number): SceneNode[] {
+  return LAYOUT.cheeks.map((c) => ({
+    kind: 'ellipse',
+    cx: round(c.cx - LAYOUT.blob.cx),
+    cy: round(c.cy - blobCy),
+    rx: c.rx,
+    ry: c.ry,
+    fill: BLUSH_COLOR,
+    opacity: BLUSH_OPACITY,
+  }));
 }
 
 export type Mouth =
@@ -219,29 +238,59 @@ export const EXPRESSION_NAMES: readonly string[] = EXPRESSION_DEFS.map((e) => e.
 export const EXPRESSION_COUNT = EXPRESSION_DEFS.length;
 export const SHAPE_COUNT = SHAPE_GEOMETRY.length;
 
-export function renderMouth(index: number): string {
+export function mouthScene(index: number): SceneNode {
   const mouth = (EXPRESSION_DEFS[index % EXPRESSION_DEFS.length] as Expression).mouth;
   const { cx, cy } = LAYOUT.mouth;
-  let body: string;
+  const children: SceneNode[] = [];
   if ('half' in mouth) {
     const [rx, ry] = mouth.half;
-    body = `<path transform="translate(${cx} ${cy})" d="M${-rx} 0 A${rx} ${ry} 0 0 0 ${rx} 0 Z" fill="${INK_COLOR}"/>`;
+    children.push({
+      kind: 'path',
+      transform: [{ kind: 'translate', x: cx, y: cy }],
+      d: `M${-rx} 0 A${rx} ${ry} 0 0 0 ${rx} 0 Z`,
+      fill: INK_COLOR,
+    });
     if (mouth.tongue) {
       // An open mouth with a tongue filling its lower half and poking out.
-      body += `<path transform="translate(${cx} ${cy})" d="M-3.8 2.5 Q0 13 3.8 2.5 Z" fill="${BLUSH_COLOR}"/>`;
+      children.push({
+        kind: 'path',
+        transform: [{ kind: 'translate', x: cx, y: cy }],
+        d: 'M-3.8 2.5 Q0 13 3.8 2.5 Z',
+        fill: BLUSH_COLOR,
+      });
     }
   } else if ('circle' in mouth) {
-    body = `<circle cx="${cx + mouth.circle[0]}" cy="${cy + mouth.circle[1]}" r="${mouth.circle[2]}" fill="${INK_COLOR}"/>`;
+    children.push({
+      kind: 'circle',
+      cx: cx + mouth.circle[0],
+      cy: cy + mouth.circle[1],
+      r: mouth.circle[2],
+      fill: INK_COLOR,
+    });
   } else if ('ellipse' in mouth) {
     const [dx, dy, rx, ry] = mouth.ellipse;
-    body = `<ellipse cx="${cx + dx}" cy="${cy + dy}" rx="${rx}" ry="${ry}" fill="${INK_COLOR}"/>`;
+    children.push({ kind: 'ellipse', cx: cx + dx, cy: cy + dy, rx, ry, fill: INK_COLOR });
   } else {
-    body = `<path transform="translate(${cx} ${cy})" d="${mouth.d}" fill="none" stroke="${INK_COLOR}" stroke-width="${mouth.width}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    children.push({
+      kind: 'path',
+      transform: [{ kind: 'translate', x: cx, y: cy }],
+      d: mouth.d,
+      fill: 'none',
+      stroke: INK_COLOR,
+      strokeWidth: mouth.width,
+      linecap: 'round',
+      linejoin: 'round',
+    });
     if (mouth.tongue) {
-      body += `<path transform="translate(${cx} ${cy})" d="M-2.7 2 Q0 8.4 2.7 2 Z" fill="${BLUSH_COLOR}"/>`;
+      children.push({
+        kind: 'path',
+        transform: [{ kind: 'translate', x: cx, y: cy }],
+        d: 'M-2.7 2 Q0 8.4 2.7 2 Z',
+        fill: BLUSH_COLOR,
+      });
     }
   }
-  return `<g class="bb-mouth">${body}</g>`;
+  return { kind: 'group', className: 'bb-mouth', children };
 }
 
 /** Eye geometry, shared by the letters and the brows above them. */
@@ -270,7 +319,7 @@ function eyeLayout(letters: string, shift?: readonly [number, number]): {
   return { boxW, gap, left, top, single, centers };
 }
 
-export function renderEyes(letters: string, index?: number): string {
+export function eyesScene(letters: string, index?: number): SceneNode {
   const expr =
     typeof index === 'number'
       ? (EXPRESSION_DEFS[index % EXPRESSION_DEFS.length] as Expression)
@@ -279,27 +328,30 @@ export function renderEyes(letters: string, index?: number): string {
   const { scale } = LAYOUT.eyes;
   const boxH = LETTER_BOX.height * scale;
 
-  const eyeAt = (char: string, x: number, side: 'l' | 'r'): string => {
-    const cell = renderLetter(char, { x, y: top, scale });
+  const eyeAt = (char: string, x: number, side: 'l' | 'r'): SceneNode => {
+    const cell = letterScene(char, { x, y: top, scale });
     if (!expr || expr.squint !== side) {
       return cell;
     }
-    // A wink is a static squint about this eye's own centre; the blink's own
-    // scaleY lives on the inner `.bb-eye`, so the two compose cleanly.
     const cx = x + boxW / 2;
     const cy = top + boxH / 2;
-    return (
-      `<g transform="translate(${round(cx)} ${round(cy)}) scale(1 0.4) translate(${round(-cx)} ${round(-cy)})">` +
-      `${cell}</g>`
-    );
+    return {
+      kind: 'group',
+      transform: [
+        { kind: 'translate', x: round(cx), y: round(cy) },
+        { kind: 'scale', x: 1, y: 0.4 },
+        { kind: 'translate', x: round(-cx), y: round(-cy) },
+      ],
+      children: [cell],
+    };
   };
 
-  const cells: string[] = [];
+  const cells: SceneNode[] = [];
   cells.push(eyeAt(letters[0] ?? '?', left, 'l'));
   if (!single) {
     cells.push(eyeAt(letters[1] as string, left + boxW + gap, 'r'));
   }
-  return `<g class="bb-eyes">${cells.join('')}</g>`;
+  return { kind: 'group', className: 'bb-eyes', children: cells };
 }
 
 /** One brow above one eye. `side` decides which way it leans. */
@@ -334,24 +386,30 @@ function browPath(style: BrowStyle, ex: number, y: number, side: 'l' | 'r'): str
   }
 }
 
-export function renderBrows(index: number, letters: string): string {
+export function browsScene(index: number, letters: string): SceneNode | null {
   const style = (EXPRESSION_DEFS[index % EXPRESSION_DEFS.length] as Expression).brow;
   if (style === 'none') {
-    return '';
+    return null;
   }
-  const { top, centers } = eyeLayout(letters, (EXPRESSION_DEFS[index % EXPRESSION_DEFS.length] as Expression).eye);
+  const { top, centers } = eyeLayout(
+    letters,
+    (EXPRESSION_DEFS[index % EXPRESSION_DEFS.length] as Expression).eye,
+  );
   // A real forehead between the letters and the brows, or they read as accent
   // marks on top of the glyphs rather than eyebrows above them.
   const y = top - 6;
-  const body = centers
+  const children: SceneNode[] = centers
     .map((ex, i) => browPath(style, ex, y, i === 0 ? 'l' : 'r'))
     .filter(Boolean)
-    .map(
-      (d) =>
-        `<path d="${d}" fill="none" stroke="${INK_COLOR}" stroke-width="3.4" stroke-linecap="round"/>`,
-    )
-    .join('');
-  return body ? `<g class="bb-brows">${body}</g>` : '';
+    .map((d) => ({
+      kind: 'path' as const,
+      d,
+      fill: 'none',
+      stroke: INK_COLOR,
+      strokeWidth: 3.4,
+      linecap: 'round',
+    }));
+  return children.length > 0 ? { kind: 'group', className: 'bb-brows', children } : null;
 }
 
 /**
