@@ -6,9 +6,9 @@
  * swiping or the arrow keys move the world under a fixed lens; the faces
  * nearest the lens are full size, and the ones moving away shrink and fade.
  *
- * Framework-free. The React picker consumes it today; a React Native or SwiftUI
- * picker must produce the *same* numbers, so the picker feels the same
- * everywhere.
+ * Framework-free. The React picker consumes it today; a `<blobbies-picker>`
+ * web component can reuse the *same* numbers, so the picker feels the same on
+ * every web framework.
  */
 
 export const COLUMNS = 5;

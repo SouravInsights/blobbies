@@ -14,9 +14,9 @@ import {
 } from '../src/picker.js';
 
 /**
- * The Look Map is the shared picker contract. React consumes it today; a React
- * Native or SwiftUI picker must produce the same numbers, or the picker stops
- * feeling like the same product.
+ * The Look Map is the shared picker contract. React consumes it today, and a
+ * `<blobbies-picker>` web component will share the same numbers, so the picker
+ * feels the same on every web framework.
  */
 describe('wrapIndex', () => {
   it('wraps negatives into range', () => {
