@@ -84,9 +84,19 @@ export default function App() {
 npx expo start   # press i for iOS simulator, a for Android, or scan on a device
 ```
 
-Reanimated needs the New Architecture and its Babel plugin; Expo's
-`babel-preset-expo` sets the plugin up for you. If the avatars render but do not
-blink, that setup is the first thing to check.
+Reanimated needs the New Architecture and its Babel plugin, which
+`babel-preset-expo` includes. Make sure the app has a `babel.config.js`:
+
+```js
+module.exports = (api) => {
+  api.cache(true);
+  return { presets: ['babel-preset-expo'] };
+};
+```
+
+Without it the worklet plugin never runs, and the tell is exact: **the avatars
+render, but nothing blinks** — the animation logic is silently skipped. Restart
+with `npx expo start -c` after adding it.
 
 `react-native-svg` cannot run the SVG's CSS blink, which is why blink is a
 Reanimated animation here rather than the embedded `<style>` the web uses.

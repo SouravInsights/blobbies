@@ -5,7 +5,6 @@ import Animated, {
   Easing,
   useAnimatedProps,
   useSharedValue,
-  withDelay,
   withRepeat,
   withSequence,
   withTiming,
@@ -92,14 +91,21 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const blink = useSharedValue(1);
   useEffect(() => {
     if (!blinkOn) return;
-    const { interval, delay, double } = resolved.blink;
+    const { interval, double } = resolved.blink;
+    // A blink should read as a blink. The dip gets a floor of 90ms each way, so
+    // a short interval is quick but still visible rather than a one-frame
+    // flicker.
+    const dipMs = Math.max(90, interval * 0.05);
+    const openMs = Math.max(200, interval - dipMs * 2);
     const dip = withSequence(
-      withTiming(1, { duration: interval * 0.92, easing: Easing.linear }),
-      withTiming(0.1, { duration: interval * 0.04, easing: Easing.linear }),
-      withTiming(1, { duration: interval * 0.04, easing: Easing.linear }),
+      withTiming(1, { duration: openMs, easing: Easing.linear }),
+      withTiming(0.1, { duration: dipMs, easing: Easing.linear }),
+      withTiming(1, { duration: dipMs, easing: Easing.linear }),
     );
-    blink.value = withDelay(delay, withRepeat(double ? withSequence(dip, dip) : dip, -1, false));
-  }, [blink, blinkOn, resolved.blink.interval, resolved.blink.delay, resolved.blink.double]);
+    // No initial delay: the first blink should arrive soon, not a whole
+    // interval after mount.
+    blink.value = withRepeat(double ? withSequence(dip, dip) : dip, -1, false);
+  }, [blink, blinkOn, resolved.blink.interval, resolved.blink.double]);
 
   const blinkProps = useAnimatedProps(() => ({
     transform: BLINK_TRANSFORM.replace('%s', String(blink.value)),
