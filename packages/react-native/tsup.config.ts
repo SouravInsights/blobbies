@@ -10,5 +10,5 @@ export default defineConfig({
   splitting: false,
   minify: true,
   target: 'es2020',
-  external: ['react', 'react-native', 'react-native-svg', 'react-native-reanimated', 'blobbies'],
+  external: ['react', 'react-native', 'react-native-svg', 'blobbies'],
 });

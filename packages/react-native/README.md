@@ -10,12 +10,11 @@ drift.
 ## Install
 
 ```sh
-npx expo install react-native-svg react-native-reanimated
+npx expo install react-native-svg
 npm i @blobbies/react-native
 ```
 
-Both peer dependencies are required. `react-native-reanimated` needs its Babel
-plugin (Expo's `babel-preset-expo` sets it up for you) and the New Architecture.
+Only `react-native-svg` is required. No Reanimated, no worklets, no Babel setup.
 
 ## Use
 
@@ -43,8 +42,11 @@ The core produces a **scene** — a small draw tree with named layers
 `react-native` maps that tree to `react-native-svg` elements. There is no SVG
 string parsing and no second renderer to keep in sync.
 
-- **Blink** runs as a Reanimated worklet on the UI thread, scaling the `bb-eye`
-  group about its own centre, so it keeps blinking while JavaScript is busy.
+- **Blink** is a short frame loop (~140ms) that re-renders the eye transform.
+  That is deliberate. The native SVG transform prop only accepts an
+  already-computed matrix, so an animated prop driven by Reanimated either does
+  nothing or crashes the native module. A blink fires every few seconds, so a
+  plain loop is both reliable and cheap.
 - **Cursor following** is intentionally not ported: a phone has no cursor.
   Motion that fits touch (a drag to move the eyes, or a device-tilt mode) is the
   next step for this package.
@@ -52,14 +54,18 @@ string parsing and no second renderer to keep in sync.
 ## Testing
 
 The scene → `react-native-svg` mapping is a pure function and is unit-tested in
-plain Node (`pnpm --filter @blobbies/react-native test`), so the rendering logic
-is verified without a device. The **component** needs a real device or
-simulator. The fastest way to see it:
+plain Node:
+
+```bash
+pnpm --filter @blobbies/react-native test
+```
+
+The component needs a real device or simulator. The fastest way to see it:
 
 ```bash
 npx create-expo-app blobbies-try --template blank-typescript
 cd blobbies-try
-npx expo install react-native-svg react-native-reanimated
+npx expo install react-native-svg
 npm i @blobbies/react-native
 ```
 
@@ -84,16 +90,6 @@ export default function App() {
 npx expo start   # press i for iOS simulator, a for Android, or scan on a device
 ```
 
-Reanimated's Babel plugin is provided by `babel-preset-expo` and applied by
-Expo's Metro config automatically. On Expo SDK 58, do **not** add a
-hand-written `babel.config.js` — it can knock out React Native's own codegen
-plugin ("Unable to determine event arguments for …").
-
-The blink animates react-native-svg's `matrix` prop, not a `transform` string.
-Reanimated writes animated props straight to the native view, and that view's
-transform prop is the 6-value matrix `[a, b, c, d, tx, ty]`. Animating the string
-form silently does nothing, which looks exactly like **"the avatars render but
-never blink"**.
-
-`react-native-svg` cannot run the SVG's CSS blink, which is why blink is a
-Reanimated animation here rather than the embedded `<style>` the web uses.
+Do **not** add a hand-written `babel.config.js` to an Expo SDK 58 project — it can
+knock out React Native's own codegen plugin ("Unable to determine event
+arguments for …"). Expo configures Babel itself.

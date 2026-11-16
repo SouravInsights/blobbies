@@ -1,62 +1,44 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
 import Svg, { Circle, ClipPath, Defs, Ellipse, G, Path, Text } from 'react-native-svg';
-import Animated, {
-  Easing,
-  useAnimatedProps,
-  useSharedValue,
-  withRepeat,
-  withSequence,
-  withTiming,
-} from 'react-native-reanimated';
 import { resolveAvatar, wantsBlink } from 'blobbies';
 import type { AvatarOptions } from 'blobbies';
 import { sceneToNodes } from './scene-to-nodes.js';
 import type { RNNode } from './scene-to-nodes.js';
-
-const AnimatedG = Animated.createAnimatedComponent(G);
 
 export interface AvatarProps extends AvatarOptions {
   /** The person's name — the eyes every look shares. */
   name: string;
 }
 
-/**
- * The eyes are a fixed 24×24 box, so a blink is a vertical scale about
- * `(12, 12)` with nothing to measure. It is animated on the UI thread, so it
- * keeps blinking while JavaScript is busy.
- *
- * react-native-svg wants a `matrix`, not a `transform` string: Reanimated
- * writes animated props straight to the native view, and the native view's
- * transform prop is the 6-value matrix `[a, b, c, d, tx, ty]`. Animating the
- * string form silently does nothing.
- */
-function blinkMatrix(scale: number): number[] {
-  return [1, 0, 0, scale, 0, 12 * (1 - scale)];
+/** How long a blink takes, open → closed → open. */
+const BLINK_MS = 140;
+
+/** Scale the eyes vertically about their own centre (a fixed 24×24 box). */
+function eyeTransform(scale: number): string | undefined {
+  if (scale === 1) return undefined;
+  return `translate(12 12) scale(1 ${scale}) translate(-12 -12)`;
 }
 
 function renderNode(
   node: RNNode,
   key: string,
-  blinkOn: boolean,
-  blinkProps: ReturnType<typeof useAnimatedProps>,
+  blinkTransform: string | undefined,
 ): ReactElement {
-  const children = node.children?.map((child, i) => renderNode(child, `${key}.${i}`, blinkOn, blinkProps));
+  const children = node.children?.map((child, i) =>
+    renderNode(child, `${key}.${i}`, blinkTransform),
+  );
 
   switch (node.type) {
-    case 'G':
-      if (blinkOn && node.name === 'bb-eye') {
-        return (
-          <AnimatedG key={key} {...node.props} animatedProps={blinkProps}>
-            {children}
-          </AnimatedG>
-        );
-      }
+    case 'G': {
+      const transform =
+        node.name === 'bb-eye' && blinkTransform ? blinkTransform : node.props.transform;
       return (
-        <G key={key} {...node.props}>
+        <G key={key} {...node.props} transform={transform}>
           {children}
         </G>
       );
+    }
     case 'Path':
       return <Path key={key} {...node.props} />;
     case 'Circle':
@@ -83,9 +65,15 @@ function renderNode(
 /**
  * A Blobbies avatar for React Native.
  *
- * The avatar itself is drawn by `react-native-svg` from the shared scene, so it
- * is the same face as the web and Swift versions. A phone has no cursor, so
- * cursor-following is not ported; blink is, as a discreet UI-thread animation.
+ * The avatar is drawn by `react-native-svg` from the shared scene, so it is the
+ * same face as the web and Swift versions.
+ *
+ * Blink is a short frame loop that re-renders the eye transform. That is
+ * deliberate: the native SVG transform prop only accepts an already-computed
+ * matrix, so driving an animated prop through Reanimated either does nothing or
+ * crashes the native module. A blink fires every few seconds and lasts ~140ms,
+ * so a plain loop is both reliable and cheap. Cursor following is not ported —
+ * a phone has no cursor.
  */
 export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const key = `${name}\u0000${JSON.stringify(options)}`;
@@ -95,28 +83,46 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const nodes = useMemo(() => sceneToNodes(resolved.scene), [resolved]);
   const blinkOn = wantsBlink(options);
 
-  const blink = useSharedValue(1);
-  useEffect(() => {
-    if (!blinkOn) return;
-    const { interval, double } = resolved.blink;
-    // A blink should read as a blink. The dip gets a floor of 90ms each way, so
-    // a short interval is quick but still visible rather than a one-frame
-    // flicker.
-    const dipMs = Math.max(90, interval * 0.05);
-    const openMs = Math.max(200, interval - dipMs * 2);
-    const dip = withSequence(
-      withTiming(1, { duration: openMs, easing: Easing.linear }),
-      withTiming(0.1, { duration: dipMs, easing: Easing.linear }),
-      withTiming(1, { duration: dipMs, easing: Easing.linear }),
-    );
-    // No initial delay: the first blink should arrive soon, not a whole
-    // interval after mount.
-    blink.value = withRepeat(double ? withSequence(dip, dip) : dip, -1, false);
-  }, [blink, blinkOn, resolved.blink.interval, resolved.blink.double]);
+  const [scale, setScale] = useState(1);
 
-  const blinkProps = useAnimatedProps(() => ({ matrix: blinkMatrix(blink.value) }));
+  useEffect(() => {
+    if (!blinkOn) {
+      setScale(1);
+      return undefined;
+    }
+    let frame = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let cancelled = false;
+
+    const run = (): void => {
+      const start = Date.now();
+      const tick = (): void => {
+        if (cancelled) return;
+        const t = Math.min(1, (Date.now() - start) / BLINK_MS);
+        // Open → closed over the first half, closed → open over the second.
+        const value = t < 0.5 ? 1 - 0.9 * (t / 0.5) : 0.1 + 0.9 * ((t - 0.5) / 0.5);
+        setScale(value);
+        if (t < 1) frame = requestAnimationFrame(tick);
+        else schedule();
+      };
+      frame = requestAnimationFrame(tick);
+    };
+
+    const schedule = (): void => {
+      timer = setTimeout(run, resolved.blink.interval);
+    };
+
+    schedule();
+    return () => {
+      cancelled = true;
+      if (frame) cancelAnimationFrame(frame);
+      if (timer) clearTimeout(timer);
+    };
+  }, [blinkOn, resolved]);
 
   const size = options.size ?? 48;
+  const transform = eyeTransform(scale);
+
   return (
     <Svg
       viewBox="0 0 100 100"
@@ -124,9 +130,8 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
       height={size}
       accessibilityRole="image"
       accessibilityLabel={name}
-      {...(options.rounded ? {} : {})}
     >
-      {nodes.map((node, i) => renderNode(node, `${resolved.prefix}.${i}`, blinkOn, blinkProps))}
+      {nodes.map((node, i) => renderNode(node, `${resolved.prefix}.${i}`, transform))}
     </Svg>
   );
 }

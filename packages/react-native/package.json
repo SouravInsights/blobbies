@@ -1,6 +1,6 @@
 {
   "name": "@blobbies/react-native",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Blobbies for React Native — the same deterministic avatars, drawn with react-native-svg.",
   "license": "MIT",
   "type": "module",
@@ -50,14 +50,12 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-native": ">=0.70.0",
-    "react-native-reanimated": ">=3.0.0",
     "react-native-svg": ">=13.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",
     "react": "^18.3.1",
     "react-native": "^0.76.0",
-    "react-native-reanimated": "^3.16.1",
     "react-native-svg": "^15.8.0"
   },
   "publishConfig": {
