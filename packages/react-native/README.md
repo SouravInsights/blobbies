@@ -84,19 +84,16 @@ export default function App() {
 npx expo start   # press i for iOS simulator, a for Android, or scan on a device
 ```
 
-Reanimated needs the New Architecture and its Babel plugin, which
-`babel-preset-expo` includes. Make sure the app has a `babel.config.js`:
+Reanimated's Babel plugin is provided by `babel-preset-expo` and applied by
+Expo's Metro config automatically. On Expo SDK 58, do **not** add a
+hand-written `babel.config.js` — it can knock out React Native's own codegen
+plugin ("Unable to determine event arguments for …").
 
-```js
-module.exports = (api) => {
-  api.cache(true);
-  return { presets: ['babel-preset-expo'] };
-};
-```
-
-Without it the worklet plugin never runs, and the tell is exact: **the avatars
-render, but nothing blinks** — the animation logic is silently skipped. Restart
-with `npx expo start -c` after adding it.
+The blink animates react-native-svg's `matrix` prop, not a `transform` string.
+Reanimated writes animated props straight to the native view, and that view's
+transform prop is the 6-value matrix `[a, b, c, d, tx, ty]`. Animating the string
+form silently does nothing, which looks exactly like **"the avatars render but
+never blink"**.
 
 `react-native-svg` cannot run the SVG's CSS blink, which is why blink is a
 Reanimated animation here rather than the embedded `<style>` the web uses.

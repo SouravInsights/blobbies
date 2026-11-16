@@ -22,11 +22,18 @@ export interface AvatarProps extends AvatarOptions {
 }
 
 /**
- * The eyes are a fixed 24×24 box, so the blink scales about (12, 12) without
- * measuring anything. It runs as a worklet on the UI thread, so it keeps
- * blinking while JavaScript is busy.
+ * The eyes are a fixed 24×24 box, so a blink is a vertical scale about
+ * `(12, 12)` with nothing to measure. It is animated on the UI thread, so it
+ * keeps blinking while JavaScript is busy.
+ *
+ * react-native-svg wants a `matrix`, not a `transform` string: Reanimated
+ * writes animated props straight to the native view, and the native view's
+ * transform prop is the 6-value matrix `[a, b, c, d, tx, ty]`. Animating the
+ * string form silently does nothing.
  */
-const BLINK_TRANSFORM = 'translate(12 12) scale(1 %s) translate(-12 -12)';
+function blinkMatrix(scale: number): number[] {
+  return [1, 0, 0, scale, 0, 12 * (1 - scale)];
+}
 
 function renderNode(
   node: RNNode,
@@ -107,9 +114,7 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
     blink.value = withRepeat(double ? withSequence(dip, dip) : dip, -1, false);
   }, [blink, blinkOn, resolved.blink.interval, resolved.blink.double]);
 
-  const blinkProps = useAnimatedProps(() => ({
-    transform: BLINK_TRANSFORM.replace('%s', String(blink.value)),
-  }));
+  const blinkProps = useAnimatedProps(() => ({ matrix: blinkMatrix(blink.value) }));
 
   const size = options.size ?? 48;
   return (
