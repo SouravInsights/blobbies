@@ -13,33 +13,32 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
+import { EXPRESSIONS, EXPRESSION_COUNT, EXPRESSION_NAMES, PALETTE } from 'blobbies';
+import type { AvatarExpression, AvatarOptions } from 'blobbies';
 import {
-  EXPRESSIONS,
-  EXPRESSION_COUNT,
-  EXPRESSION_NAMES,
-  PALETTE,
-  COLS,
+  COLUMNS,
   ROWS,
-  CENTER_I,
-  CENTER_J,
-  MIN_GAP,
+  CENTER_COLUMN,
+  CENTER_ROW,
+  GRID_PADDING,
   MAX_GAP,
-  MIN_CELL,
-  MAX_CELL,
-  PAD,
-  mod,
-  clamp,
+  wrapIndex,
+  gridMetrics,
   lookCells,
-  centeredCell,
+  lensCell,
   lensEffect,
   cellAtPoint,
   dragSlop,
   exceedsSlop,
-} from 'blobbies';
-import type { AvatarExpression, AvatarOptions, CellIndex, LookCell } from 'blobbies';
+} from 'blobbies/picker';
+import type { CellIndex, LookCell } from 'blobbies/picker';
 import { Avatar } from './Avatar.js';
 import type { AvatarProps } from './Avatar.js';
 import { usePickerStyles } from './picker-styles.js';
+
+/** Clamp a drag or wheel delta. DOM-adapter detail; the core has no opinion. */
+const clamp = (value: number, min: number, max: number): number =>
+  Math.min(max, Math.max(min, value));
 
 // `useLayoutEffect` warns when it runs during server rendering. The picker is
 // SSR-safe, so fall back to `useEffect` where there is no DOM; the effect only
@@ -175,12 +174,12 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
 
   const initial = useRef({
     color: (() => {
-      const i = defaultValue?.color ? palette.indexOf(defaultValue.color) : CENTER_I;
-      return i >= 0 ? i : CENTER_I;
+      const i = defaultValue?.color ? palette.indexOf(defaultValue.color) : CENTER_COLUMN;
+      return i >= 0 ? i : CENTER_COLUMN;
     })(),
     expression: (() => {
-      const i = defaultValue?.expression ? EXPRESSIONS.indexOf(defaultValue.expression) : CENTER_J;
-      return i >= 0 ? i : CENTER_J;
+      const i = defaultValue?.expression ? EXPRESSIONS.indexOf(defaultValue.expression) : CENTER_ROW;
+      return i >= 0 ? i : CENTER_ROW;
     })(),
     blush: defaultValue?.blush ?? true,
   });
@@ -197,14 +196,14 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
 
   const { cell, gap } = metrics;
   const pitch = cell + gap;
-  const vw = COLS * cell + (COLS - 1) * gap;
+  const vw = COLUMNS * cell + (COLUMNS - 1) * gap;
   const vh = ROWS * cell + (ROWS - 1) * gap;
-  const surfaceW = vw + PAD * 2;
-  const surfaceH = vh + PAD * 2;
+  const surfaceW = vw + GRID_PADDING * 2;
+  const surfaceH = vh + GRID_PADDING * 2;
 
-  const ox = useRef(initial.current.color - CENTER_I);
-  const oy = useRef(initial.current.expression - CENTER_J);
-  const center = useRef<Focus>({ i: CENTER_I, j: CENTER_J });
+  const ox = useRef(initial.current.color - CENTER_COLUMN);
+  const oy = useRef(initial.current.expression - CENTER_ROW);
+  const center = useRef<Focus>({ column: CENTER_COLUMN, row: CENTER_ROW });
   const pos = useRef({ x: 0, y: 0 });
   const vel = useRef({ x: 0, y: 0 });
   const mode = useRef<'idle' | 'press' | 'drag' | 'glide' | 'snap'>('idle');
@@ -277,9 +276,9 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     positioned.current = true;
     const lens = hovered;
     for (const [key, el] of cellEls.current) {
-      const [i, j] = key.split(':').map(Number) as [number, number];
+      const [column, row] = key.split(':').map(Number) as [number, number];
       const { dx, dy, opacity, blur } = lensEffect({
-        cell: { i, j },
+        cell: { column, row },
         lens,
         pitch: p,
         size,
@@ -304,7 +303,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     return cellAtPoint({
       x: clientX - rect.left,
       y: clientY - rect.top,
-      pad: PAD,
+      pad: GRID_PADDING,
       offsetX: pos.current.x,
       offsetY: pos.current.y,
       pitch: pitchRef.current,
@@ -327,8 +326,8 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       world.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
     }
     const p = pitchRef.current;
-    const next = centeredCell(pos.current.x, pos.current.y, p);
-    if (next.i !== center.current.i || next.j !== center.current.j) {
+    const next = lensCell(pos.current.x, pos.current.y, p);
+    if (next.column !== center.current.column || next.row !== center.current.row) {
       center.current = next;
       bump();
     }
@@ -441,16 +440,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       const padX =
         (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
       const w = host.clientWidth - padX;
-      // Keep a little more breathing room at every size: the panel inset
-      // shrinks with it. `surfaceW` is then guaranteed to fit inside `w`, so
-      // the edge cells are never clipped by the panel.
-      const inset = Math.min(16, Math.max(6, Math.round(w * 0.03)));
-      const nextGap = clamp(Math.round(w * 0.02), MIN_GAP, MAX_GAP);
-      const nextCell = clamp(
-        Math.floor((w - inset * 2 - PAD * 2 - (COLS - 1) * nextGap) / COLS),
-        MIN_CELL,
-        MAX_CELL,
-      );
+      const { cell: nextCell, gap: nextGap } = gridMetrics(w);
       setMetrics((m) =>
         m.cell === nextCell && m.gap === nextGap ? m : { cell: nextCell, gap: nextGap },
       );
@@ -607,7 +597,9 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     // A resting finger is not a cursor; skip the hover math on touch.
     if (event.pointerType === 'touch') return;
     const at = cellAt(event.clientX, event.clientY);
-    setHover((prev) => (at && prev && prev.i === at.i && prev.j === at.j ? prev : at));
+    setHover((prev) =>
+      at && prev && prev.column === at.column && prev.row === at.row ? prev : at,
+    );
   };
 
   const endDrag = (event: ReactPointerEvent<HTMLDivElement>, commit: boolean): void => {
@@ -621,8 +613,8 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
       const at = downCell.current;
       if (at) {
         setPinned({
-          color: mod(ox.current + at.i, palette.length),
-          expression: mod(oy.current + at.j, EXPRESSION_COUNT),
+          color: wrapIndex(ox.current + at.column, palette.length),
+          expression: wrapIndex(oy.current + at.row, EXPRESSION_COUNT),
         });
       }
     }
@@ -678,10 +670,10 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     [version, palette.length],
   );
 
-  const lens = hover ?? { i: center.current.i, j: center.current.j };
+  const lens = hover ?? { column: center.current.column, row: center.current.row };
   const selectedIndex = pinned ?? {
-    color: mod(ox.current + center.current.i, palette.length),
-    expression: mod(oy.current + center.current.j, EXPRESSION_COUNT),
+    color: wrapIndex(ox.current + center.current.column, palette.length),
+    expression: wrapIndex(oy.current + center.current.row, EXPRESSION_COUNT),
   };
   const value: AvatarOptions = {
     color: palette[selectedIndex.color] as string,
@@ -692,8 +684,8 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     (c) => c.color === selectedIndex.color && c.expression === selectedIndex.expression,
   );
   const restFocus = valueCell
-    ? { i: valueCell.i, j: valueCell.j }
-    : { i: center.current.i, j: center.current.j };
+    ? { column: valueCell.column, row: valueCell.row }
+    : { column: center.current.column, row: center.current.row };
   const focus: Focus | null =
     dragging || stepping || settling ? null : hover ?? restFocus;
 
@@ -717,11 +709,11 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
 
   const reset = (): void => {
     setPinned(null);
-    ox.current = (initial.current.color ?? CENTER_I) - CENTER_I;
-    oy.current = (initial.current.expression ?? CENTER_J) - CENTER_J;
+    ox.current = (initial.current.color ?? CENTER_COLUMN) - CENTER_COLUMN;
+    oy.current = (initial.current.expression ?? CENTER_ROW) - CENTER_ROW;
     setBlush(initial.current.blush ?? true);
     pos.current = { x: 0, y: 0 };
-    center.current = { i: CENTER_I, j: CENTER_J };
+    center.current = { column: CENTER_COLUMN, row: CENTER_ROW };
     setHover(null);
     bump();
     apply();
@@ -761,7 +753,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
     changed,
     blush,
     expressionName: EXPRESSION_NAMES[
-      hover ? mod(oy.current + hover.j, EXPRESSION_COUNT) : selectedIndex.expression
+      hover ? wrapIndex(oy.current + hover.row, EXPRESSION_COUNT) : selectedIndex.expression
     ] as string,
     nextExpression: () => stepMood(1),
     previousExpression: () => stepMood(-1),
@@ -810,7 +802,7 @@ export function AvatarPickerSurface(props: AvatarPickerSurfaceProps) {
       <div className="bb-picker-viewport">
       <div className="bb-picker-world" ref={worldRef}>
         {cells.map((c) => {
-          const on = !!focus && c.i === focus.i && c.j === focus.j;
+          const on = !!focus && c.column === focus.column && c.row === focus.row;
           return (
             <div
               key={c.key}
@@ -821,8 +813,8 @@ export function AvatarPickerSurface(props: AvatarPickerSurfaceProps) {
               className="bb-picker-cell"
               data-focus={on ? '1' : undefined}
               style={{
-                left: c.i * pitch,
-                top: c.j * pitch,
+                left: c.column * pitch,
+                top: c.row * pitch,
                 width: cell,
                 height: cell,
                 zIndex: on ? 6 : 1,

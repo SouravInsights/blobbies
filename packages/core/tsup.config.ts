@@ -5,6 +5,7 @@ export default defineConfig({
     index: 'src/index.ts',
     motion: 'src/motion.ts',
     cli: 'src/cli.ts',
+    picker: 'src/picker.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

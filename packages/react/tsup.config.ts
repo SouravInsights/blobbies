@@ -10,5 +10,5 @@ export default defineConfig({
   splitting: false,
   minify: true,
   target: 'es2020',
-  external: ['react', 'react-dom', 'react/jsx-runtime', 'blobbies', 'blobbies/motion'],
+  external: ['react', 'react-dom', 'react/jsx-runtime', 'blobbies', 'blobbies/motion', 'blobbies/picker'],
 });

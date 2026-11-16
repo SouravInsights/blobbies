@@ -6,17 +6,17 @@
  * swiping or the arrow keys move the world under a fixed lens; the faces
  * nearest the lens are full size, and the ones moving away shrink and fade.
  *
- * This module is framework-free. The React picker consumes it today; a React
- * Native or SwiftUI picker must produce the *same* numbers, so the feel is the
- * same everywhere. Nothing here touches the DOM.
+ * Framework-free. The React picker consumes it today; a React Native or SwiftUI
+ * picker must produce the *same* numbers, so the picker feels the same
+ * everywhere.
  */
 
-export const COLS = 5;
+export const COLUMNS = 5;
 export const ROWS = 3;
-export const CENTER_I = 2;
-export const CENTER_J = 1;
+export const CENTER_COLUMN = 2;
+export const CENTER_ROW = 1;
 
-/** Floor/ceiling for the measured cell and gap, so a phone still fits. */
+/** Floor and ceiling for the measured cell and gap, so a phone still fits. */
 export const MIN_GAP = 4;
 export const MAX_GAP = 8;
 export const MIN_CELL = 24;
@@ -25,22 +25,27 @@ export const MAX_CELL = 78;
 /** The lens: reach, blur ceiling, and how far neighbours push away. */
 export const LENS = 2.6;
 export const MAX_BLUR = 3.2;
-export const PUSH = 6;
+export const LENS_PUSH = 6;
 
 /** Padding from the surface edge to the visible grid. */
-export const PAD = 8;
+export const GRID_PADDING = 8;
 
-export function mod(n: number, m: number): number {
-  return ((Math.trunc(n) % m) + m) % m;
+function wrap(n: number, size: number): number {
+  return ((Math.trunc(n) % size) + size) % size;
 }
 
-export function clamp(v: number, a: number, b: number): number {
-  return Math.min(b, Math.max(a, v));
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+/** Wrap an index into `0..size-1`, including negative indices. */
+export function wrapIndex(n: number, size: number): number {
+  return wrap(n, size);
 }
 
 export interface CellIndex {
-  i: number;
-  j: number;
+  column: number;
+  row: number;
 }
 
 export interface LookCell extends CellIndex {
@@ -50,40 +55,40 @@ export interface LookCell extends CellIndex {
 }
 
 /**
- * Every cell in the drawn window, including the one-cell buffer ring that
- * waits just outside the visible grid so a pan never shows an empty edge.
+ * Every cell in the drawn window, including the one-cell buffer ring that waits
+ * just outside the visible grid so a pan never shows an empty edge.
  */
 export function lookCells(
-  originX: number,
-  originY: number,
+  originColumn: number,
+  originRow: number,
   paletteSize: number,
   expressionCount: number,
 ): LookCell[] {
-  const out: LookCell[] = [];
-  for (let j = -1; j <= ROWS; j++) {
-    for (let i = -1; i <= COLS; i++) {
-      out.push({
-        key: `${i}:${j}`,
-        i,
-        j,
-        color: mod(originX + i, paletteSize),
-        expression: mod(originY + j, expressionCount),
+  const cells: LookCell[] = [];
+  for (let row = -1; row <= ROWS; row++) {
+    for (let column = -1; column <= COLUMNS; column++) {
+      cells.push({
+        key: `${column}:${row}`,
+        column,
+        row,
+        color: wrap(originColumn + column, paletteSize),
+        expression: wrap(originRow + row, expressionCount),
       });
     }
   }
-  return out;
+  return cells;
 }
 
 /** Which slot the lens sits over, given the world offset within one pitch. */
-export function centeredCell(offsetX: number, offsetY: number, pitch: number): CellIndex {
+export function lensCell(offsetX: number, offsetY: number, pitch: number): CellIndex {
   return {
-    i: offsetX < pitch / 2 ? CENTER_I : CENTER_I - 1,
-    j: offsetY < pitch / 2 ? CENTER_J : CENTER_J - 1,
+    column: offsetX < pitch / 2 ? CENTER_COLUMN : CENTER_COLUMN - 1,
+    row: offsetY < pitch / 2 ? CENTER_ROW : CENTER_ROW - 1,
   };
 }
 
-export interface LensInput {
-  /** The cell slot being positioned. */
+export interface LensOptions {
+  /** The cell being positioned. */
   cell: CellIndex;
   /** The slot the lens sits over. */
   lens: CellIndex;
@@ -97,7 +102,7 @@ export interface LensInput {
   spotlight: boolean;
 }
 
-export interface LensResult {
+export interface LensState {
   dx: number;
   dy: number;
   opacity: number;
@@ -105,31 +110,58 @@ export interface LensResult {
 }
 
 /**
- * A cell's lens response, computed from its *screen* distance to the lens so
- * the fade is continuous rather than snapping cell by cell.
+ * A cell's lens response, from its *screen* distance to the lens, so the fade
+ * is continuous rather than snapping cell by cell.
  */
-export function lensEffect(input: LensInput): LensResult {
-  const { cell, lens, pitch, size, offsetX, offsetY, push, spotlight } = input;
-  const lx = (lens.i + 0.5) * pitch + offsetX;
-  const ly = (lens.j + 0.5) * pitch + offsetY;
-  const sx = cell.i * pitch + offsetX + size / 2;
-  const sy = cell.j * pitch + offsetY + size / 2;
-  const dxRaw = sx - lx;
-  const dyRaw = sy - ly;
-  const d = Math.hypot(dxRaw, dyRaw) / pitch;
-  const t = Math.min(1, d / LENS);
+export function lensEffect(options: LensOptions): LensState {
+  const { cell, lens, pitch, size, offsetX, offsetY, push, spotlight } = options;
+  const lensX = (lens.column + 0.5) * pitch + offsetX;
+  const lensY = (lens.row + 0.5) * pitch + offsetY;
+  const cellX = cell.column * pitch + offsetX + size / 2;
+  const cellY = cell.row * pitch + offsetY + size / 2;
+  const dxRaw = cellX - lensX;
+  const dyRaw = cellY - lensY;
+  const distance = Math.hypot(dxRaw, dyRaw) / pitch;
+  const t = Math.min(1, distance / LENS);
   const fall = 1 - t * t;
 
   let dx = 0;
   let dy = 0;
-  if (d >= 1e-3) {
-    const len = Math.hypot(dxRaw, dyRaw) || 1;
-    const amount = push ? fall * PUSH : 0;
-    dx = (dxRaw / len) * amount;
-    dy = (dyRaw / len) * amount;
+  if (distance >= 1e-3) {
+    const length = Math.hypot(dxRaw, dyRaw) || 1;
+    const amount = push ? fall * LENS_PUSH : 0;
+    dx = (dxRaw / length) * amount;
+    dy = (dyRaw / length) * amount;
   }
 
-  const opacity = d < 1e-3 ? 1 : 0.7 + 0.3 * fall;
-  const blur = spotlight && d >= 1e-3 ? Math.min(MAX_BLUR, t * MAX_BLUR) : 0;
+  const opacity = distance < 1e-3 ? 1 : 0.7 + 0.3 * fall;
+  const blur = spotlight && distance >= 1e-3 ? Math.min(MAX_BLUR, t * MAX_BLUR) : 0;
   return { dx, dy, opacity, blur };
+}
+
+export interface GridMetrics {
+  /** Size of one cell, in pixels. */
+  cell: number;
+  /** Gap between cells, in pixels. */
+  gap: number;
+  /** Padding from the host edge to the surface, in pixels. */
+  inset: number;
+}
+
+/**
+ * Size the grid to the width it actually has. The cell and the gap are measured
+ * from the host, not fixed: the whole grid has to fit the same box on a phone as
+ * on a laptop, with a small floor so the initials stay legible.
+ */
+export function gridMetrics(availableWidth: number): GridMetrics {
+  const inset = Math.min(16, Math.max(6, Math.round(availableWidth * 0.03)));
+  const gap = clamp(Math.round(availableWidth * 0.02), MIN_GAP, MAX_GAP);
+  const cell = clamp(
+    Math.floor(
+      (availableWidth - inset * 2 - GRID_PADDING * 2 - (COLUMNS - 1) * gap) / COLUMNS,
+    ),
+    MIN_CELL,
+    MAX_CELL,
+  );
+  return { cell, gap, inset };
 }

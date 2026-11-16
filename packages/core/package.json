@@ -1,6 +1,6 @@
 {
   "name": "blobbies",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Deterministic, cute SVG blobby avatars generated from a name. Zero dependencies.",
   "license": "MIT",
   "type": "module",
@@ -45,6 +45,16 @@
       "require": {
         "types": "./dist/motion.d.cts",
         "default": "./dist/motion.cjs"
+      }
+    },
+    "./picker": {
+      "import": {
+        "types": "./dist/picker.d.ts",
+        "default": "./dist/picker.js"
+      },
+      "require": {
+        "types": "./dist/picker.d.cts",
+        "default": "./dist/picker.cjs"
       }
     },
     "./package.json": "./package.json",

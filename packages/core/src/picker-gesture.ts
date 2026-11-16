@@ -32,7 +32,7 @@ export function exceedsSlop(start: GesturePoint, current: GesturePoint, slop: nu
   return dx * dx + dy * dy > slop * slop;
 }
 
-export interface CellHitTest {
+export interface HitTestOptions {
   /** Pointer position relative to the surface's top-left corner. */
   x: number;
   y: number;
@@ -51,16 +51,16 @@ export interface CellHitTest {
 /**
  * Which map cell sits under a point.
  *
- * The map wraps, so there is no clamping: a point in the buffer ring returns
- * the wrapped index and the caller adds the world origin. A point in the
- * padding returns `null`, because it is not over the grid at all.
+ * The map wraps, so there is no clamping: a point in the buffer ring returns the
+ * wrapped index and the caller adds the world origin. A point in the padding
+ * returns `null`, because it is not over the grid at all.
  */
-export function cellAtPoint(hit: CellHitTest): CellIndex | null {
+export function cellAtPoint(hit: HitTestOptions): CellIndex | null {
   const x = hit.x - hit.pad;
   const y = hit.y - hit.pad;
   if (x < 0 || y < 0 || x >= hit.width || y >= hit.height) return null;
   return {
-    i: Math.floor((x - hit.offsetX) / hit.pitch),
-    j: Math.floor((y - hit.offsetY) / hit.pitch),
+    column: Math.floor((x - hit.offsetX) / hit.pitch),
+    row: Math.floor((y - hit.offsetY) / hit.pitch),
   };
 }

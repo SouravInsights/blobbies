@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cellAtPoint, dragSlop, exceedsSlop } from 'blobbies';
+import { cellAtPoint, dragSlop, exceedsSlop } from 'blobbies/picker';
 
 describe('dragSlop', () => {
   it('gives touch more slack than a mouse', () => {
@@ -44,14 +44,14 @@ describe('cellAtPoint', () => {
   };
 
   it('maps the centre of each cell', () => {
-    expect(cellAtPoint({ ...base, x: 8 + 12, y: 8 + 12 })).toEqual({ i: 0, j: 0 });
+    expect(cellAtPoint({ ...base, x: 8 + 12, y: 8 + 12 })).toEqual({ column: 0, row: 0 });
     expect(cellAtPoint({ ...base, x: 8 + 2 * 28 + 12, y: 8 + 1 * 28 + 12 })).toEqual({
-      i: 2,
-      j: 1,
+      column: 2,
+      row: 1,
     });
     expect(cellAtPoint({ ...base, x: 8 + 4 * 28 + 12, y: 8 + 2 * 28 + 12 })).toEqual({
-      i: 4,
-      j: 2,
+      column: 4,
+      row: 2,
     });
   });
 
@@ -66,8 +66,8 @@ describe('cellAtPoint', () => {
     // The world has shifted one full pitch left, so the same screen point now
     // sits over the next cell.
     expect(cellAtPoint({ ...base, offsetX: -28, x: 8 + 12, y: 8 + 12 })).toEqual({
-      i: 1,
-      j: 0,
+      column: 1,
+      row: 0,
     });
   });
 });

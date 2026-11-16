@@ -10,6 +10,7 @@ export default defineConfig({
     alias: {
       // Run the demo straight off source so `pnpm dev` needs no prior build.
       'blobbies/motion': resolve(repo, 'packages/core/src/motion.ts'),
+      'blobbies/picker': resolve(repo, 'packages/core/src/picker.ts'),
       blobbies: resolve(repo, 'packages/core/src/index.ts'),
       '@blobbies/react': resolve(repo, 'packages/react/src/index.ts'),
     },
