@@ -101,6 +101,7 @@ never quietly go stale. Commands to regenerate them are at the bottom.
 | Use it without writing code | A terminal | `npx blobbies render "Ira"` |
 | Read what it can do | Ports and AI agents | `packages/core/manifest.json` |
 | Use one tag in any web framework | Plain HTML, React, Vue, Svelte, Solid, Angular | `<blobbies-avatar name="Ira">` |
+| Draw the same avatar in Swift | iOS, macOS, watchOS, visionOS | `renderAvatarSvg("Ira")` from `platforms/swift` |
 
 The React picker is finished and rock-solid on touch (that was the last piece of
 work before this plan).
@@ -162,16 +163,18 @@ a real device.
 
 ### Step 4 — SwiftUI
 
-Swift cannot run JavaScript, so this one is a real (but small) port: about 200
-lines of the hashing and trait-selection logic, plus a renderer. The good news
-is that the data (letters, mouths, shapes) is generated from the manifest, and
-the conformance test proves the port is correct without a human eyeballing it.
+Swift cannot run JavaScript, so this one is a real (but small) port: the hashing
+and trait-selection logic, plus a renderer. The data (letters, mouths, shapes)
+is generated from the manifest, and the conformance test proves the port is
+correct without a human eyeballing it.
 
-Motion follows Apple's rules: springs that start from the current value, respond
-on touch-down, and can be interrupted mid-flight.
+**Status:** the engine and the SVG renderer are done and tested —
+`platforms/swift` reproduces all 24 conformance cases **byte-for-byte** under
+`swift test`. The native SwiftUI view (drawing the shapes with `Path`/`Canvas`,
+blinking and eye-movement with SwiftUI springs) is the next step.
 
-**Done when:** the Swift test reads the conformance file and its SVG output
-matches byte-for-byte, and a SwiftUI preview shows a grid of avatars blinking.
+Motion will follow Apple's rules: springs that start from the current value,
+respond on touch-down, and can be interrupted mid-flight.
 
 ### Step 5 — The other web frameworks (only if needed)
 
@@ -295,6 +298,7 @@ npx blobbies shapes
 packages/core       blobbies            the decisions, the drawing, the contract
 packages/react      @blobbies/react     <Avatar>, <AvatarPicker>, hooks
 packages/element    @blobbies/element   <blobbies-avatar> web component
+platforms/swift     Blobbies            Swift engine + SVG renderer (SPM)
 packages/core/fixtures                  the conformance file (generated)
 packages/core/manifest.json             the capability data (generated)
 docs/PLATFORMS.md                       this plan
@@ -306,5 +310,5 @@ Future homes, when each step happens:
 
 ```
 packages/react-native   @blobbies/react-native  React Native renderer
-platforms/swift         Blobbies                SwiftUI package
+platforms/swift/Sources/BlobbiesUI              native SwiftUI Avatar view
 ```
