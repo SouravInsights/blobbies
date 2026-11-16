@@ -57,10 +57,6 @@ is verified without a device. The **component** needs a real device or
 simulator. The fastest way to see it:
 
 ```bash
-# 1. publish this package first (it is not on npm yet)
-pnpm --filter @blobbies/react-native publish --access public
-
-# 2. a fresh Expo app
 npx create-expo-app blobbies-try --template blank-typescript
 cd blobbies-try
 npx expo install react-native-svg react-native-reanimated
