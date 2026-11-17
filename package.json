@@ -15,7 +15,8 @@
     "build:packages": "pnpm -r --filter \"./packages/*\" build",
     "test:e2e": "playwright test",
     "lint": "eslint .",
-    "check:release": "node scripts/check-release.mjs"
+    "check:release": "node scripts/check-release.mjs",
+    "example": "node scripts/example.mjs"
   },
   "devDependencies": {
     "@eslint/compat": "^2.1.1",

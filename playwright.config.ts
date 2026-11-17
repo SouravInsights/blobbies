@@ -31,6 +31,12 @@ export default defineConfig({
   },
   webServer: [
     {
+      command: 'pnpm --filter blobbies-example-react dev',
+      url: 'http://localhost:5177',
+      reuseExistingServer: !process.env.CI,
+      cwd: '.',
+    },
+    {
       command: 'pnpm --filter blobbies-example-vue dev',
       url: 'http://localhost:5174',
       reuseExistingServer: !process.env.CI,
@@ -45,27 +51,40 @@ export default defineConfig({
   ],
   projects: [
     {
+      name: 'react',
+      testMatch: /picker\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:5177' },
+    },
+    {
       name: 'vue',
-      testMatch: /.*\.spec\.ts/,
+      testMatch: /picker\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:5174' },
     },
     {
       name: 'svelte',
-      testMatch: /.*\.spec\.ts/,
+      testMatch: /picker\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:5175' },
     },
     // WebKit as well as Chromium, because pointer capture is the one thing here
     // that engines genuinely disagree about, and it is load-bearing: it is what
     // keeps a drag owned by one finger when a second one touches down.
     {
+      name: 'react-webkit',
+      testMatch: /picker\.spec\.ts/,
+      use: { ...devices['Desktop Safari'], baseURL: 'http://localhost:5177' },
+    },
+    {
       name: 'vue-webkit',
-      testMatch: /.*\.spec\.ts/,
+      testMatch: /picker\.spec\.ts/,
       use: { ...devices['Desktop Safari'], baseURL: 'http://localhost:5174' },
     },
     {
       name: 'svelte-webkit',
-      testMatch: /.*\.spec\.ts/,
+      testMatch: /picker\.spec\.ts/,
       use: { ...devices['Desktop Safari'], baseURL: 'http://localhost:5175' },
     },
+    // The comparison itself, in one browser, rather than an inference from
+    // three suites passing separately.
+    { name: 'parity', testMatch: /parity\.spec\.ts/, use: { ...devices['Desktop Chrome'] } },
   ],
 });
