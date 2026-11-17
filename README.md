@@ -480,8 +480,10 @@ packages/svelte        @blobbies/svelte      – <Avatar>, <AvatarPicker>
 packages/element       @blobbies/element     – <blobbies-avatar> web component
 packages/react-native  @blobbies/react-native – <Avatar> over react-native-svg
 apps/site              blobbies-site         – Vite + React landing page
+examples/with-react    blobbies-example-react – a React app, picker included
 examples/with-vue      blobbies-example-vue  – a Vue app, picker included
 examples/with-svelte   blobbies-example-svelte – a Svelte app, picker included
+examples/with-html     blobbies-example-html – one tag, no framework
 ```
 
 ```bash

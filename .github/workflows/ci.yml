@@ -41,8 +41,8 @@ jobs:
       # jsdom tests cannot answer — the size of a cell once the panel has a real
       # width, whether the lens enlarges anything, whether a throw carries — is
       # answered here, in the place a finger would be.
-      - name: Install the browser
-        run: npx playwright install --with-deps chromium
+      - name: Install the browsers
+        run: npx playwright install --with-deps chromium webkit
 
       - name: End-to-end (Vue and Svelte)
         run: pnpm test:e2e

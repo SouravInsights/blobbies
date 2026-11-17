@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blobbies — plain HTML</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        padding: 48px 24px;
+        font: 14px/1.6 ui-sans-serif, system-ui, sans-serif;
+        background: #fafafa;
+        color: #18181b;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #0b0b0d;
+          color: #f4f4f5;
+        }
+      }
+      main {
+        width: min(480px, 100%);
+        margin-inline: auto;
+        display: grid;
+        gap: 24px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      p {
+        margin: 0;
+        color: #71717a;
+      }
+      label {
+        display: grid;
+        gap: 6px;
+        font-size: 12.5px;
+        color: #71717a;
+      }
+      input {
+        padding: 9px 12px;
+        border: 1px solid #e4e4e7;
+        border-radius: 8px;
+        font: inherit;
+        background: transparent;
+        color: inherit;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .sizes {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Blobbies in a plain HTML file</h1>
+      <p>
+        No framework and no component library. One import, one tag, and the
+        attributes you set are the options.
+      </p>
+
+      <label>
+        Name
+        <input id="name" value="Sourav Nanda" autocomplete="off" />
+      </label>
+
+      <div class="sizes">
+        <blobbies-avatar id="a1" name="Sourav Nanda" size="40" motion="all"></blobbies-avatar>
+        <blobbies-avatar id="a2" name="Sourav Nanda" size="64" motion="all"></blobbies-avatar>
+        <blobbies-avatar id="a3" name="Sourav Nanda" size="96" motion="all"></blobbies-avatar>
+      </div>
+    </main>
+
+    <script type="module">
+      // The whole integration. Importing the package registers the element.
+      import '@blobbies/element';
+
+      const input = document.querySelector('#name');
+      const avatars = [...document.querySelectorAll('blobbies-avatar')];
+
+      // Properties are sugar over the attributes, so setting one is the same as
+      // writing the attribute — and the element re-renders either way.
+      input.addEventListener('input', () => {
+        for (const avatar of avatars) avatar.name = input.value;
+      });
+    </script>
+  </body>
+</html>

@@ -54,12 +54,18 @@ export default defineConfig({
       testMatch: /.*\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:5175' },
     },
-    // Sonner runs WebKit alongside Chromium, and it is the one that catches
-    // pointer-capture differences. Uncomment once the Chromium run is trusted.
-    // {
-    //   name: 'vue-webkit',
-    //   testMatch: /.*\.spec\.ts/,
-    //   use: { ...devices['Desktop Safari'], baseURL: 'http://localhost:5174' },
-    // },
+    // WebKit as well as Chromium, because pointer capture is the one thing here
+    // that engines genuinely disagree about, and it is load-bearing: it is what
+    // keeps a drag owned by one finger when a second one touches down.
+    {
+      name: 'vue-webkit',
+      testMatch: /.*\.spec\.ts/,
+      use: { ...devices['Desktop Safari'], baseURL: 'http://localhost:5174' },
+    },
+    {
+      name: 'svelte-webkit',
+      testMatch: /.*\.spec\.ts/,
+      use: { ...devices['Desktop Safari'], baseURL: 'http://localhost:5175' },
+    },
   ],
 });
