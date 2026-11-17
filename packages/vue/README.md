@@ -55,6 +55,56 @@ Every option the core takes, plus `name`:
 Anything else you pass — `class`, `style`, `aria-*`, `data-*` — lands on the
 `<svg>`, and Vue merges `class` and `style` with the ones the component sets.
 
+## AvatarPicker
+
+The Look Map — the picker — as a Vue component. Drag across for colour, down
+for mood, then keep one.
+
+```vue
+<script setup>
+import { AvatarPicker } from '@blobbies/vue'
+
+const save = (look) => updateUser({ look })
+</script>
+
+<template>
+  <AvatarPicker
+    :name="user.name"
+    :default-value="saved"
+    @change="preview"
+    @save="save"
+    @cancel="close"
+  />
+</template>
+```
+
+Every part is a prop and every action is an event:
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `name` | `string` (required) | — |
+| `defaultValue` | `AvatarOptions` | the centre of the map |
+| `palette` | `string[]` | the built-in `PALETTE` |
+| `spotlight` | `boolean` | `true` |
+| `unstyled` | `boolean` | `false` |
+| `title` / `description` | `string` | "Choose an avatar" / "Drag across for colour…" |
+| `saveLabel` | `string` | `"Save"` |
+
+| Event | Payload | When |
+| --- | --- | --- |
+| `change` | `AvatarOptions` | the look changes — never on mount |
+| `save` | `AvatarOptions` | Save is pressed |
+| `cancel` | — | Cancel is pressed |
+
+`cancel` is only wired when you listen for it, which is what puts the Cancel
+button on screen. A Cancel that does nothing is worse than no Cancel.
+
+The behaviour is not in this package. The wrap-around map, the gesture machine,
+the glide, the lens and the value are `createPicker` in
+[`blobbies/picker`](https://www.npmjs.com/package/blobbies) — the same runtime
+React and `<blobbies-avatar>` use. Build your own layout on top of it and you
+get the same feel for nothing.
+
 ## Motion
 
 `blink` is pure CSS inside the markup, so it works even in an `<img>`.

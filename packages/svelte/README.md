@@ -53,6 +53,52 @@ Every option the core takes, plus `name`:
 Anything that is not a Blobbies option — `class`, `style`, `aria-*`, `data-*` —
 is passed through to the `<svg>`.
 
+## AvatarPicker
+
+The Look Map — the picker — as a Svelte component. Drag across for colour, down
+for mood, then keep one.
+
+```svelte
+<script>
+  import { AvatarPicker } from '@blobbies/svelte';
+
+  let saved = $state(null);
+</script>
+
+<AvatarPicker
+  name={user.name}
+  defaultValue={saved}
+  onchange={(look) => (preview = look)}
+  onsave={(look) => (saved = look)}
+  oncancel={close}
+/>
+```
+
+Every part is a prop and every action is a callback prop:
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `name` | `string` (required) | — |
+| `defaultValue` | `AvatarOptions` | the centre of the map |
+| `palette` | `string[]` | the built-in `PALETTE` |
+| `spotlight` | `boolean` | `true` |
+| `unstyled` | `boolean` | `false` |
+| `title` / `description` | `string` | "Choose an avatar" / "Drag across for colour…" |
+| `saveLabel` | `string` | `"Save"` |
+| `onchange` | `(look: AvatarOptions) => void` | the look changes — never on mount |
+| `onsave` | `(look: AvatarOptions) => void` | Save is pressed |
+| `oncancel` | `() => void` | Cancel is pressed |
+
+Passing `oncancel` is what puts the Cancel button on screen, because that is
+what tells the picker there is something to cancel. A Cancel that does nothing
+is worse than no Cancel.
+
+The behaviour is not in this package. The wrap-around map, the gesture machine,
+the glide, the lens and the value are `createPicker` in
+[`blobbies/picker`](https://www.npmjs.com/package/blobbies) — the same runtime
+React and Vue use. Build your own layout on top of it and you get the same feel
+for nothing.
+
 ## Motion
 
 `blink` is pure CSS inside the markup, so it works even in an `<img>`.
