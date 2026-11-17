@@ -50,7 +50,7 @@ jobs:
       - name: Install the browsers
         run: npx playwright install --with-deps chromium webkit
 
-      - name: End-to-end (Vue and Svelte)
+      - name: End-to-end (React, Vue and Svelte)
         run: pnpm test:e2e
 
       # The only check that can see a version skew, because it is the only one
