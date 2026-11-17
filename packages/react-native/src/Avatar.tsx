@@ -19,6 +19,15 @@ function eyeTransform(scale: number): string | undefined {
   return `translate(12 12) scale(1 ${scale}) translate(-12 -12)`;
 }
 
+/**
+ * `react-native-svg` types each prop separately, so no single bag type can
+ * satisfy every spread below. The cast lives here — the one place a node's props
+ * are handed to a component — rather than in `RNNode['props']`, where a bare
+ * `any` would erase the signature of everyone who reads the scene.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const spread = (props: RNNode['props']): any => props;
+
 function renderNode(
   node: RNNode,
   key: string,
@@ -33,20 +42,20 @@ function renderNode(
       const transform =
         node.name === 'bb-eye' && eyeBlink ? eyeBlink : node.props.transform;
       return (
-        <G key={key} {...node.props} transform={transform}>
+        <G key={key} {...spread(node.props)} transform={transform}>
           {children}
         </G>
       );
     }
     case 'Path':
-      return <Path key={key} {...node.props} />;
+      return <Path key={key} {...spread(node.props)} />;
     case 'Circle':
-      return <Circle key={key} {...node.props} />;
+      return <Circle key={key} {...spread(node.props)} />;
     case 'Ellipse':
-      return <Ellipse key={key} {...node.props} />;
+      return <Ellipse key={key} {...spread(node.props)} />;
     case 'Text':
       return (
-        <Text key={key} {...node.props}>
+        <Text key={key} {...spread(node.props)}>
           {node.text}
         </Text>
       );
@@ -54,7 +63,7 @@ function renderNode(
       return <Defs key={key}>{children}</Defs>;
     case 'ClipPath':
       return (
-        <ClipPath key={key} {...node.props}>
+        <ClipPath key={key} {...spread(node.props)}>
           {children}
         </ClipPath>
       );
@@ -70,9 +79,10 @@ function renderNode(
  */
 export function Avatar({ name, ...options }: AvatarProps): ReactElement {
   const key = `${name}\u0000${JSON.stringify(options)}`;
+  // Keyed on the resolved identity rather than on `name` and `options`: a
+  // re-render with the same input must not rebuild every node in the scene.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resolved = useMemo(() => resolveAvatar(name, options), [key]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const nodes = useMemo(() => sceneToNodes(resolved.scene), [resolved]);
   const blinkOn = wantsBlink(options);
 
@@ -148,8 +158,7 @@ export function Avatar({ name, ...options }: AvatarProps): ReactElement {
       if (frame) cancelAnimationFrame(frame);
       if (timer) clearTimeout(timer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blinkOn, resolved, reduceMotion]);
+    }, [blinkOn, resolved, reduceMotion]);
 
   // Reduce Motion must leave the eyes *open and still* — never caught mid-blink.
   const eyeScale = blinkOn && !reduceMotion ? scale : 1;

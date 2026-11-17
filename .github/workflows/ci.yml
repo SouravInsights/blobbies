@@ -31,6 +31,12 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # Before typecheck, because it is faster and it catches a different
+      # class: a hook called conditionally, an `any` in a public signature, a
+      # `console.log` left in a package.
+      - name: Lint
+        run: pnpm lint
+
       - name: Typecheck
         run: pnpm typecheck
 

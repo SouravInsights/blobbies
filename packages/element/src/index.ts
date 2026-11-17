@@ -104,6 +104,12 @@ function readOptions(element: HTMLElement): AvatarOptions {
  * below); this interface only teaches TypeScript about them, so `el.size = 32`
  * is typed without hand-writing an accessor for every option.
  */
+/*
+ * The class below is merged with this interface on purpose: it is how the
+ * reflected properties are typed without an accessor written out for each of
+ * the twelve. TypeScript cannot tell that this is deliberate.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface BlobbiesAvatar {
   name?: string;
   color?: string;
@@ -121,6 +127,8 @@ export interface BlobbiesAvatar {
   blush?: boolean;
 }
 
+// The other half of the merge: the rule flags both declarations.
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class BlobbiesAvatar extends HTMLElement {
   static get observedAttributes(): readonly string[] {
     return OBSERVED;

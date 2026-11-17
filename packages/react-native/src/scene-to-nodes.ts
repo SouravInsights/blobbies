@@ -20,7 +20,12 @@ export type RNNodeType =
 
 export interface RNNode {
   type: RNNodeType;
-  props: Record<string, any>;
+  /**
+   * SVG props, as `react-native-svg` takes them, narrowed to the kinds this
+   * engine actually writes. `any` here would leak into a public type and erase
+   * the signature of every consumer that spreads a node.
+   */
+  props: Record<string, string | number | undefined>;
   children?: RNNode[];
   /** Text content, for a `<Text>` node. */
   text?: string;
@@ -45,7 +50,7 @@ export function nodeToRN(node: SceneNode): RNNode {
         ],
       };
     case 'group': {
-      const props: Record<string, unknown> = {};
+      const props: Record<string, string | number | undefined> = {};
       if (node.transform) props.transform = serializeTransform(node.transform);
       if (node.clipId) props.clipPath = `url(#${node.clipId})`;
       const out: RNNode = { type: 'G', props, children: node.children.map(nodeToRN) };
@@ -58,7 +63,7 @@ export function nodeToRN(node: SceneNode): RNNode {
         props: { cx: node.cx, cy: node.cy, r: node.r, fill: node.fill },
       };
     case 'ellipse': {
-      const props: Record<string, unknown> = {
+      const props: Record<string, string | number | undefined> = {
         cx: node.cx,
         cy: node.cy,
         rx: node.rx,
@@ -69,7 +74,7 @@ export function nodeToRN(node: SceneNode): RNNode {
       return { type: 'Ellipse', props };
     }
     case 'path': {
-      const props: Record<string, unknown> = { d: node.d };
+      const props: Record<string, string | number | undefined> = { d: node.d };
       if (node.transform) props.transform = serializeTransform(node.transform);
       if (node.fill !== undefined) props.fill = node.fill;
       if (node.stroke !== undefined) props.stroke = node.stroke;

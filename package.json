@@ -13,14 +13,23 @@
     "preview:avatars": "pnpm --filter blobbies preview:avatars",
     "preview:blink": "pnpm --filter blobbies preview:blink",
     "build:packages": "pnpm -r --filter \"./packages/*\" build",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lint": "eslint ."
   },
   "devDependencies": {
+    "@eslint/compat": "^2.1.1",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.49.1",
     "@types/node": "^22.10.2",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-svelte": "^3.24.1",
+    "eslint-plugin-vue": "^10.12.1",
+    "globals": "^17.14.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8",
-    "@playwright/test": "^1.49.1"
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=18"

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 /**
  * The picker, in a real browser, against both example apps.
@@ -10,7 +11,7 @@ import { expect, test } from '@playwright/test';
  */
 
 /** The centre of the map, which is where the picker opens. */
-async function surfaceBox(page: import('@playwright/test').Page) {
+async function surfaceBox(page: Page) {
   const box = await page.locator('.bb-picker-surface').boundingBox();
   if (!box) throw new Error('the map has no box');
   return box;
@@ -75,7 +76,7 @@ test('picks the cell under a tap', async ({ page }) => {
  * wrap underneath it. So a colour drag moves the palette past a fixed mark, and
  * the way to see it is to read the face that is standing on the mark.
  */
-async function checkedColour(page: import('@playwright/test').Page): Promise<string | null> {
+async function checkedColour(page: Page): Promise<string | null> {
   return page
     .locator('.bb-picker-check[data-on]')
     .locator('xpath=..')
@@ -137,7 +138,7 @@ test('treats a wobble as a tap, not a drag', async ({ page }) => {
   await expect(page.locator('.bb-picker-check[data-on]')).toHaveCount(1);
 });
 
-test('keeps the map a whole number of cells across a reload', async ({ page, baseURL }) => {
+test('keeps the map a whole number of cells across a reload', async ({ page }) => {
   const box = await surfaceBox(page);
   const { x, y } = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 
