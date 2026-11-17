@@ -10,7 +10,7 @@ import {
   TYPES_SNIPPET,
 } from '../data';
 import { captureEvent } from '../analytics';
-import { Code, CopyButton, REPO } from '../ui';
+import { Code, CopyButton } from '../ui';
 import { Lead } from './Lead';
 
 /**

@@ -1,9 +1,6 @@
 import { defineComponent, getCurrentInstance, h, type PropType } from 'vue';
 import { useAvatarPicker } from './useAvatarPicker.js';
-import { createPicker, injectPickerStyles, staticSnapshot } from 'blobbies/picker';
-import type { PickerRuntime } from 'blobbies/picker';
 import type { AvatarAnimate, AvatarExpression, AvatarOptions } from 'blobbies';
-import { EXPRESSIONS } from 'blobbies';
 
 export type { AvatarOptions };
 
@@ -53,7 +50,7 @@ export const AvatarPicker = defineComponent({
     // The preset is a layout over `useAvatarPicker`, not a second
     // implementation of it — which is what keeps the preset and a custom layout
     // honest about being the same picker.
-    const { host, state, runtime } = useAvatarPicker({
+    const { host, state } = useAvatarPicker({
       name: props.name,
       defaultValue: props.defaultValue,
       palette: props.palette,

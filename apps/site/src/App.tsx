@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Toaster } from 'sonner';
 import { Avatar } from "@blobbies/react";
 import { Api } from "./sections/Api";
@@ -45,7 +45,7 @@ export function App(): JSX.Element {
   const [theme, setTheme] = useState<"dark" | "light">(() =>
     params.get("theme") === "light" ? "light" : "dark",
   );
-  const [stress, setStress] = useState(() => params.get("stress") === "1");
+  const [stress] = useState(() => params.get("stress") === "1");
   const [controls, setControls] = useState<Controls>(DEFAULTS);
   const [menu, setMenu] = useState(false);
 

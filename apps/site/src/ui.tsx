@@ -14,7 +14,6 @@ import {
   INK_COLOR,
   LETTER_PATHS,
   STROKE_WIDTH,
-  LETTER_BOX,
 } from "blobbies";
 import { captureEvent } from "./analytics";
 import { highlight, highlightShell } from "./highlight";

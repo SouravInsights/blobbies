@@ -154,10 +154,6 @@ export function renderAvatarBody(name: string, options: AvatarOptions = {}): Res
   };
 }
 
-function attr(name: string, value: string | number | undefined): string {
-  return value === undefined ? '' : ` ${name}="${value}"`;
-}
-
 /** Full standalone SVG string. Works as an <img src="data:...">. */
 export function renderAvatarSvg(name: string, options: AvatarOptions = {}): string {
   const resolved = renderAvatarBody(name, options);

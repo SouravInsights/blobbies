@@ -9,8 +9,8 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from 'react';
-import { EXPRESSIONS, EXPRESSION_COUNT, EXPRESSION_NAMES, PALETTE } from 'blobbies';
-import type { AvatarExpression, AvatarOptions } from 'blobbies';
+import { PALETTE } from 'blobbies';
+import type { AvatarOptions } from 'blobbies';
 import { createPicker, staticSnapshot } from 'blobbies/picker';
 import type { PickerRuntime, PickerSnapshot } from 'blobbies/picker';
 import { Avatar } from './Avatar.js';

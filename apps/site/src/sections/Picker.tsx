@@ -17,7 +17,7 @@ import {
   PALETTE,
 } from '@blobbies/react';
 import type { AvatarOptions } from '@blobbies/react';
-import { CheckCircle, EditPencil } from 'iconoir-react';
+import { EditPencil } from 'iconoir-react';
 import { captureEvent } from '../analytics';
 import { Code, CopyButton, Mark } from '../ui';
 import { Lead } from './Lead';
