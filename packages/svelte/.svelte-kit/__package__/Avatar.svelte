@@ -109,5 +109,9 @@
   data-blobbies={resolved.letters}
   {...attrs}
 >
+  <!-- The markup is the core's own output, built from the name and the resolved
+       traits. It is not caller markup, and it is the reason this component
+       server-renders at all. -->
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
   {@html resolved.body}
 </svg>

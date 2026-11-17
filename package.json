@@ -14,7 +14,8 @@
     "preview:blink": "pnpm --filter blobbies preview:blink",
     "build:packages": "pnpm -r --filter \"./packages/*\" build",
     "test:e2e": "playwright test",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:release": "node scripts/check-release.mjs"
   },
   "devDependencies": {
     "@eslint/compat": "^2.1.1",

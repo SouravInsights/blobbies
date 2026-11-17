@@ -52,3 +52,9 @@ jobs:
 
       - name: End-to-end (Vue and Svelte)
         run: pnpm test:e2e
+
+      # The only check that can see a version skew, because it is the only one
+      # that installs the real tarballs instead of resolving through the
+      # workspace — where there is one of everything and no skew is possible.
+      - name: Release check
+        run: pnpm check:release
