@@ -40,7 +40,7 @@ pnpm install
 pnpm test          # vitest across all packages (includes the conformance test)
 pnpm typecheck     # tsc across the workspace
 pnpm build         # tsup build of the packages
-pnpm dev           # the demo app at http://localhost:5173
+pnpm dev           # the site at http://localhost:5173
 ```
 
 ## The two generated files — do not hand-edit
@@ -68,8 +68,9 @@ fails after your change, that is the safety net working — do not delete the te
   a phone has no cursor, so the input differs. But the timings, the keyframes
   and the prop names are shared, not invented per platform. See *Parity is the
   product* above.
-- **`packages/react` is published and must keep its current API.** Add, do not
-  rename or remove.
+- **Every published package must keep its current API.** `packages/react`,
+  `packages/vue`, `packages/svelte`, `packages/element` and
+  `packages/react-native` are all on npm. Add, do not rename or remove.
 
 ## Where the value is
 
@@ -83,4 +84,8 @@ guarantees and keep the drawing simple.
 - `packages/core/src/parts.ts` — the authored data (shapes, expressions, layout).
 - `packages/core/src/render.ts` — `resolveAvatar`, `renderAvatarBody`, `renderAvatarSvg`.
 - `packages/react/src/AvatarPicker.tsx` — the picker.
-- `docs/PLATFORMS.md` — the plan for Vue, Svelte, React Native, SwiftUI and beyond.
+- `packages/vue/src/index.ts` — the Vue component. A render function, not an SFC,
+  so it needs no Vue compiler to build and server-renders as-is.
+- `packages/svelte/src/Avatar.svelte` — the Svelte component. `{@html}` is the
+  whole SSR story; the package ships it as source for the consumer to compile.
+- `docs/PLATFORMS.md` — the plan for React Native, SwiftUI and beyond.

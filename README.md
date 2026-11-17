@@ -470,7 +470,7 @@ Flat, bright and friendly. Every colour is verified to read well with the
 
 ## Development
 
-This is a pnpm workspace of published packages and a demo app.
+This is a pnpm workspace of published packages and the site.
 
 ```
 packages/core          blobbies              – hash, initials, SVG, animation runtimes
@@ -479,12 +479,12 @@ packages/vue           @blobbies/vue         – <Avatar> for Vue
 packages/svelte        @blobbies/svelte      – <Avatar> for Svelte
 packages/element       @blobbies/element     – <blobbies-avatar> web component
 packages/react-native  @blobbies/react-native – <Avatar> over react-native-svg
-apps/demo              blobbies-demo         – Vite + React landing page
+apps/site              blobbies-site         – Vite + React landing page
 ```
 
 ```bash
 pnpm install
-pnpm dev          # demo at http://localhost:5173
+pnpm dev          # the site at http://localhost:5173
 pnpm test         # vitest across packages
 pnpm build        # tsup build of both packages
 pnpm typecheck    # tsc across the workspace
@@ -504,9 +504,9 @@ Working with an AI agent? Point it at [`AGENTS.md`](AGENTS.md) and [`llms.txt`](
 Preview sheets (generated, then opened in a browser):
 
 ```bash
-pnpm preview:letters   # apps/demo/preview/letters.html
-pnpm preview:avatars   # apps/demo/preview/avatars.html
-pnpm preview:blink     # apps/demo/preview/blink-img.html
+pnpm preview:letters   # apps/site/preview/letters.html
+pnpm preview:avatars   # apps/site/preview/avatars.html
+pnpm preview:blink     # apps/site/preview/blink-img.html
 ```
 
 ---

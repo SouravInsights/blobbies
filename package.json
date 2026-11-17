@@ -8,7 +8,7 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "dev": "pnpm --filter blobbies-demo dev",
+    "dev": "pnpm --filter blobbies-site dev",
     "preview:letters": "pnpm --filter blobbies preview:letters",
     "preview:avatars": "pnpm --filter blobbies preview:avatars",
     "preview:blink": "pnpm --filter blobbies preview:blink",

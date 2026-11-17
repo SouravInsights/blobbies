@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-/** Repo-root apps/demo/preview directory. */
-export const PREVIEW_DIR = resolve(here, '../../../apps/demo/preview');
+/** Repo-root apps/site/preview directory. */
+export const PREVIEW_DIR = resolve(here, '../../../apps/site/preview');
 
 export function writePreview(fileName: string, html: string): string {
   mkdirSync(PREVIEW_DIR, { recursive: true });

@@ -5,7 +5,7 @@ The logo mark, exported as high-resolution PNGs for marketing use.
 The mark is not a drawing of an avatar — it **is** an avatar, built from the
 library's own geometry (the same egg path, the same clip disk, the same ink).
 It just leaves out the initials, because at small sizes a letterform is a
-smudge. Source of truth for the geometry is `apps/demo/src/ui.tsx` (`MARK_BLOB`,
+smudge. Source of truth for the geometry is `apps/site/src/ui.tsx` (`MARK_BLOB`,
 `MARK_FACE`) and `packages/core/src/palette.ts`.
 
 ## Colors
