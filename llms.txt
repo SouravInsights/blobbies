@@ -12,6 +12,8 @@ decisions. A shared conformance file proves the renderers agree.
 
 - `blobbies` — core. Hash, initials, trait decisions, scene, SVG string, data URI, DOM motion, CLI. Framework-agnostic, zero dependencies.
 - `@blobbies/react` — `<Avatar>`, `<AvatarPicker>`, `useAvatarMotion`. Peer: `react >= 18`.
+- `@blobbies/vue` — `<Avatar>` for Vue, server-rendered. Peer: `vue >= 3.3`.
+- `@blobbies/svelte` — `<Avatar>` for Svelte, server-rendered. Peer: `svelte >= 5`.
 - `@blobbies/element` — `<blobbies-avatar>` web component. Works in every web framework and plain HTML.
 - `@blobbies/react-native` — `<Avatar>` over `react-native-svg`. Peers: `react-native`, `react-native-svg`, `react-native-reanimated`.
 - `Blobbies` (Swift) — engine, SVG renderer and native `BlobbiesAvatar` SwiftUI view. SPM, no dependencies.

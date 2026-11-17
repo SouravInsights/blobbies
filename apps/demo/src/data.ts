@@ -206,7 +206,6 @@ export function Profile({ user }) {
       ['deps', 'vue'],
     ],
     install: 'npm i blobbies @blobbies/vue',
-    soon: true,
     file: 'Profile.vue',
     code: `<script setup>
 import { Avatar } from '@blobbies/vue'
@@ -231,7 +230,6 @@ import { Avatar } from '@blobbies/vue'
       ['deps', 'svelte'],
     ],
     install: 'npm i blobbies @blobbies/svelte',
-    soon: true,
     file: 'Profile.svelte',
     code: `<script>
   import { Avatar } from '@blobbies/svelte';

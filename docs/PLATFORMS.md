@@ -98,6 +98,8 @@ never quietly go stale. Commands to regenerate them are at the bottom.
 | Get the raw decisions | Any language that reads JSON | `resolveAvatar('Ira').traits` |
 | Drop in a React component | React apps | `<Avatar name="Ira" />` |
 | Open the full picker | React apps | `<AvatarPicker name="Ira" />` |
+| Drop in a Vue component | Vue apps | `<Avatar name="Ira" :size="40" />` from `@blobbies/vue` |
+| Drop in a Svelte component | Svelte apps | `<Avatar name="Ira" size={40} />` from `@blobbies/svelte` |
 | Use it without writing code | A terminal | `npx blobbies render "Ira"` |
 | Read what it can do | Ports and AI agents | `packages/core/manifest.json` |
 | Use one tag in any web framework | Plain HTML, React, Vue, Svelte, Solid, Angular | `<blobbies-avatar name="Ira">` |
@@ -305,6 +307,8 @@ npx blobbies shapes
 ```
 packages/core       blobbies            the decisions, the drawing, the contract
 packages/react      @blobbies/react     <Avatar>, <AvatarPicker>, hooks
+packages/vue        @blobbies/vue       <Avatar> for Vue
+packages/svelte     @blobbies/svelte    <Avatar> for Svelte
 packages/element    @blobbies/element   <blobbies-avatar> web component
 packages/react-native  @blobbies/react-native  <Avatar> over the scene
 platforms/swift     Blobbies            Swift engine, SVG renderer, SwiftUI view

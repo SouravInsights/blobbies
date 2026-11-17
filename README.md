@@ -5,6 +5,8 @@
 <p>
   <a href="https://www.npmjs.com/package/blobbies"><img alt="blobbies on npm" src="https://img.shields.io/npm/v/blobbies?label=blobbies&color=FFD43B&labelColor=1c1c1c"></a>
   <a href="https://www.npmjs.com/package/@blobbies/react"><img alt="@blobbies/react on npm" src="https://img.shields.io/npm/v/@blobbies/react?label=%40blobbies%2Freact&color=6CC8FF&labelColor=1c1c1c"></a>
+  <a href="https://www.npmjs.com/package/@blobbies/vue"><img alt="@blobbies/vue on npm" src="https://img.shields.io/npm/v/@blobbies/vue?label=%40blobbies%2Fvue&color=41B883&labelColor=1c1c1c"></a>
+  <a href="https://www.npmjs.com/package/@blobbies/svelte"><img alt="@blobbies/svelte on npm" src="https://img.shields.io/npm/v/@blobbies/svelte?label=%40blobbies%2Fsvelte&color=FF3E00&labelColor=1c1c1c"></a>
   <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-5FD068?labelColor=1c1c1c">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-B79CFF?labelColor=1c1c1c"></a>
 </p>
@@ -24,6 +26,8 @@ A small set of packages, and you only ship the one you use:
 | --- | --- | --- |
 | [`blobbies`](https://www.npmjs.com/package/blobbies) | Renderer, hash, glyphs, motion runtime, CLI. Framework-agnostic. | `npm i blobbies` |
 | [`@blobbies/react`](https://www.npmjs.com/package/@blobbies/react) | `<Avatar>`, the `<AvatarPicker>`, and React hooks. | `npm i @blobbies/react` |
+| [`@blobbies/vue`](https://www.npmjs.com/package/@blobbies/vue) | `<Avatar>` for Vue, server-rendered. | `npm i @blobbies/vue` |
+| [`@blobbies/svelte`](https://www.npmjs.com/package/@blobbies/svelte) | `<Avatar>` for Svelte, server-rendered. | `npm i @blobbies/svelte` |
 | `@blobbies/element` | `<blobbies-avatar>` — a web component that works in any framework. | `npm i @blobbies/element` |
 | `@blobbies/react-native` | `<Avatar>` for React Native and Expo, over `react-native-svg`. | `npm i @blobbies/react-native` |
 
@@ -46,11 +50,15 @@ import { Avatar } from '@blobbies/react';
 ```bash
 npm i blobbies            # framework-agnostic core
 npm i @blobbies/react     # React bindings (peer: react >= 18)
+npm i @blobbies/vue       # Vue bindings (peer: vue >= 3.3)
+npm i @blobbies/svelte    # Svelte bindings (peer: svelte >= 5)
 ```
 
-Both packages ship ESM + CJS, are fully typed, and declare `sideEffects: false`
-so bundlers drop whatever you do not import. `blobbies/motion` is a separate
-entry point, so static users never download the animation runtime.
+Every binding is fully typed and declares `sideEffects: false` so bundlers drop
+whatever you do not import. React, Vue and React Native ship ESM + CJS; Svelte
+ships its component as source, which your bundler compiles — that is what lets
+it server-render. `blobbies/motion` is a separate entry point, so static users
+never download the animation runtime.
 
 ### Without writing any code
 
@@ -462,12 +470,16 @@ Flat, bright and friendly. Every colour is verified to read well with the
 
 ## Development
 
-This is a pnpm workspace with two published packages and a demo app.
+This is a pnpm workspace of published packages and a demo app.
 
 ```
-packages/core     blobbies          – hash, initials, SVG, animation runtimes
-packages/react    @blobbies/react   – <Avatar>, <AvatarPicker>, hooks
-apps/demo         blobbies-demo     – Vite + React playground
+packages/core          blobbies              – hash, initials, SVG, animation runtimes
+packages/react         @blobbies/react       – <Avatar>, <AvatarPicker>, hooks
+packages/vue           @blobbies/vue         – <Avatar> for Vue
+packages/svelte        @blobbies/svelte      – <Avatar> for Svelte
+packages/element       @blobbies/element     – <blobbies-avatar> web component
+packages/react-native  @blobbies/react-native – <Avatar> over react-native-svg
+apps/demo              blobbies-demo         – Vite + React landing page
 ```
 
 ```bash
