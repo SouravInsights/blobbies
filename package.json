@@ -12,13 +12,15 @@
     "preview:letters": "pnpm --filter blobbies preview:letters",
     "preview:avatars": "pnpm --filter blobbies preview:avatars",
     "preview:blink": "pnpm --filter blobbies preview:blink",
-    "build:packages": "pnpm -r --filter \"./packages/*\" build"
+    "build:packages": "pnpm -r --filter \"./packages/*\" build",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "@playwright/test": "^1.49.1"
   },
   "engines": {
     "node": ">=18"
