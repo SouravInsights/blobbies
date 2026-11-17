@@ -72,7 +72,7 @@ export function Platforms({ name }: { name: string }): JSX.Element {
           <div className="plats-col">
             <h3 className="plats-claim">{platform.headline}</h3>
 
-            <dl className="plats-facts">
+            <dl className="plats-meta">
               {platform.meta.map(([term, value]) => (
                 <div key={term}>
                   <dt>{term}</dt>

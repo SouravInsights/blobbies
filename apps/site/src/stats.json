@@ -1,0 +1,39 @@
+{
+  "engine": {
+    "version": "0.7.0",
+    "contract": 1,
+    "shapes": 5,
+    "expressions": 22,
+    "palette": 9,
+    "letters": 36,
+    "builds": 7920,
+    "total": 10264320,
+    "avatarGzip": 563
+  },
+  "packages": {
+    "blobbies": {
+      "version": "0.7.0",
+      "gzip": 5797
+    },
+    "@blobbies/react": {
+      "version": "0.7.0",
+      "gzip": 2317
+    },
+    "@blobbies/vue": {
+      "version": "0.3.0",
+      "gzip": 2043
+    },
+    "@blobbies/svelte": {
+      "version": "0.3.0",
+      "gzip": 3926
+    },
+    "@blobbies/element": {
+      "version": "0.2.0",
+      "gzip": 1693
+    },
+    "@blobbies/react-native": {
+      "version": "0.2.0",
+      "gzip": 1843
+    }
+  }
+}

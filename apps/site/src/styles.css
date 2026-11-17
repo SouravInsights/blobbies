@@ -3489,26 +3489,26 @@ pre.code {
   text-wrap: balance;
 }
 
-/* The facts are a list, not a sentence wrapped around middots: the labels
+/* The details are a list, not a sentence wrapped around middots: the labels
    recede and the values line up, so the eye can drop straight down them. */
-.plats-facts {
+.plats-meta {
   display: grid;
   gap: 13px;
   margin: 0;
 }
-.plats-facts > div {
+.plats-meta > div {
   display: grid;
   grid-template-columns: 94px minmax(0, 1fr);
   gap: 16px;
   align-items: baseline;
 }
-.plats-facts dt {
+.plats-meta dt {
   color: var(--quaternary);
   font: 13.5px/1.5 var(--mono);
 }
-/* A package that is not installable yet says so here, in the facts, rather than
+/* A package that is not installable yet says so here, in the details, rather than
    as a badge on its tab — a badge breaks the bar's rhythm. */
-.plats-facts dd {
+.plats-meta dd {
   margin: 0;
   color: var(--secondary);
   font: 13.5px/1.5 var(--mono);

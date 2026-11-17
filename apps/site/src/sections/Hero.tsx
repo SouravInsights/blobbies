@@ -4,6 +4,7 @@ import { buildNames } from '../data';
 import { layoutField, type Blob } from '../motion/field';
 import { captureEvent } from '../analytics';
 import { CopyButton, GitHubIcon, REPO, Words } from '../ui';
+import stats from '../stats.json';
 
 const NAMES = buildNames(140);
 
@@ -123,7 +124,8 @@ export function Hero() {
           <i aria-hidden="true">·</i>
           <span>zero dependencies</span>
           <i aria-hidden="true">·</i>
-          <span>1.4 KB each</span>
+          {/* Measured from the built engine, not typed. */}
+          <span>{(stats.engine.avatarGzip / 1024).toFixed(1)} KB each</span>
         </p>
       </div>
 

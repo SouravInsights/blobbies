@@ -1,7 +1,12 @@
 /**
  * Content for the page. The name lists are generated with a fixed stride so
  * the page is byte-identical on every load (no Math.random anywhere).
+ *
+ * The numbers — sizes, counts, versions — are not here. They come from
+ * `stats.json`, which is measured from the built packages, because every one of
+ * them has gone stale at least once when it was typed by hand.
  */
+import stats from './stats.json';
 
 export const FIRST = [
   'Ada', 'Grace', 'Sourav', 'Ira', 'John', 'Jane', 'Linus', 'Maya', 'Nina', 'Omar',
@@ -28,10 +33,17 @@ export function buildNames(count: number): string[] {
 
 export const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
 
-export const PALETTE_SIZE = 9;
-export const BUILDS = 9 * 5 * 22 * 2 * 4; // colours × shapes × moods × blush × nudges
-export const EYE_PAIRS = GLYPHS.length * GLYPHS.length;
-export const TOTAL = BUILDS * EYE_PAIRS;
+/**
+ * How many faces the engine can draw, measured. The only one of the old four
+ * that the page actually showed: `PALETTE_SIZE`, `BUILDS` and `EYE_PAIRS` were
+ * exported and read by nothing, which a linter cannot see.
+ */
+export const TOTAL = stats.engine.total;
+
+/** The size of a package, as a reader would say it. */
+function sizeOf(pkg: keyof typeof stats.packages): string {
+  return `${(stats.packages[pkg].gzip / 1024).toFixed(1)} kB gz`;
+}
 
 export const INSTALL = 'npm i blobbies @blobbies/react';
 export const REPO = 'https://github.com/SouravInsights/blobbies';
@@ -70,11 +82,18 @@ getInitials(name): string
 // blobbies/motion — its own entry point
 attachAvatarMotion(el, options?): () => void
 
+// blobbies/picker — the Look Map, framework-free.
+// React, Vue and Svelte all run this one, so the picker cannot drift
+// between them.
+createPicker(options): PickerRuntime
+
 // @blobbies/react — Avatar, and the picker
 <Avatar name="Sourav Nanda" size={40} />  // every AvatarOption, and every svg prop
+<AvatarPicker name="Sourav Nanda" onSave={save} />
 
-// @blobbies/vue, @blobbies/svelte — the same component, server-rendered
+// @blobbies/vue, @blobbies/svelte — the same pair, server-rendered
 <Avatar name="Sourav Nanda" :size="40" />
+<AvatarPicker name="Sourav Nanda" onSave={save} />
 
 // @blobbies/react-native — Avatar, on the scene graph
 <Avatar name="Sourav Nanda" size={40} />
@@ -123,8 +142,11 @@ export const OPTIONS_SNIPPET = `type AvatarOptions = {
  * component, and everything else runs the same core. The HTTP row leads because
  * it is the one that needs nothing installed at all.
  *
- * `size` is the package's own gzipped ESM, with `blobbies` external. The core
- * itself is 5.7 kB gz and shared by every row that depends on it.
+ * `size` is the package's own gzipped ESM, with `blobbies` external, measured
+ * by `scripts/export-stats.mjs` rather than typed here. The core is shared by
+ * every row that depends on it — which is why React's size went *down* when the
+ * picker landed: the picker moved into the core, so React stopped shipping its
+ * own copy of it.
  */
 export interface Platform {
   id: string;
@@ -178,20 +200,19 @@ export const PLATFORMS: readonly Platform[] = [
     headline: 'Avatar and picker, in one import.',
     meta: [
       ['package', '@blobbies/react'],
-      ['size', '7.4 kB gz'],
+      ['size', sizeOf('@blobbies/react')],
       ['deps', 'react'],
     ],
     install: 'npm i blobbies @blobbies/react',
     file: 'Profile.tsx',
-    code: `import { Avatar } from '@blobbies/react'
+    code: `import { Avatar, AvatarPicker } from '@blobbies/react'
 
-export function Profile({ user }) {
+export function Profile({ user, onSave }) {
   return (
-    <Avatar
-      name={user.name}
-      size={40}
-      animate="all"
-    />
+    <>
+      <Avatar name={user.name} size={40} animate="all" />
+      <AvatarPicker name={user.name} onSave={onSave} />
+    </>
   )
 }`,
   },
@@ -199,57 +220,51 @@ export function Profile({ user }) {
     id: 'vue',
     label: 'vue',
     icon: 'vue',
-    headline: 'Server-rendered. In the first paint.',
+    headline: 'The same picker, in Vue.',
     meta: [
       ['package', '@blobbies/vue'],
-      ['size', '1.8 kB gz'],
+      ['size', sizeOf('@blobbies/vue')],
       ['deps', 'vue'],
     ],
     install: 'npm i blobbies @blobbies/vue',
     file: 'Profile.vue',
     code: `<script setup>
-import { Avatar } from '@blobbies/vue'
+import { Avatar, AvatarPicker } from '@blobbies/vue'
 </script>
 
 <template>
-  <Avatar
-    :name="user.name"
-    :size="40"
-    animate="all"
-  />
+  <Avatar :name="user.name" :size="40" animate="all" />
+  <AvatarPicker :name="user.name" @save="onSave" />
 </template>`,
   },
   {
     id: 'svelte',
     label: 'svelte',
     icon: 'svelte',
-    headline: 'The same component, server-rendered.',
+    headline: 'The same picker, in Svelte.',
     meta: [
       ['package', '@blobbies/svelte'],
-      ['size', '4.0 kB gz'],
+      ['size', sizeOf('@blobbies/svelte')],
       ['deps', 'svelte'],
     ],
     install: 'npm i blobbies @blobbies/svelte',
     file: 'Profile.svelte',
     code: `<script>
-  import { Avatar } from '@blobbies/svelte';
+  import { Avatar, AvatarPicker } from '@blobbies/svelte';
 </script>
 
-<Avatar
-  name={user.name}
-  size={40}
-  animate="all"
-/>`,
+<Avatar name={user.name} size={40} animate="all" />
+<AvatarPicker name={user.name} onsave={onSave} />`,
   },
   {
     id: 'native',
     label: 'react native',
     // React Native draws the same mark, and svgl has no separate one.
     icon: 'react',
-    headline: 'The same face, on the scene graph.',
+    headline: 'The same face, on a phone.',
     meta: [
       ['package', '@blobbies/react-native'],
-      ['size', '1.8 kB gz'],
+      ['size', sizeOf('@blobbies/react-native')],
       ['deps', 'react-native-svg'],
     ],
     install: 'npm i blobbies @blobbies/react-native',
@@ -272,7 +287,7 @@ export function Profile({ user }) {
     headline: 'One tag. Anywhere HTML runs.',
     meta: [
       ['package', '@blobbies/element'],
-      ['size', '1.7 kB gz'],
+      ['size', sizeOf('@blobbies/element')],
       ['works in', 'svelte · vue · solid · angular'],
     ],
     install: 'npm i @blobbies/element',
@@ -294,7 +309,7 @@ export function Profile({ user }) {
     headline: 'The engine, with nothing around it.',
     meta: [
       ['package', 'blobbies'],
-      ['size', '5.7 kB gz'],
+      ['size', sizeOf('blobbies')],
       ['deps', 'none'],
     ],
     install: 'npm i blobbies',
@@ -312,7 +327,7 @@ document.querySelector('#avatar').innerHTML = svg`,
     id: 'swift',
     label: 'swift',
     icon: 'swift',
-    headline: 'Byte-for-byte, in SwiftUI.',
+    headline: 'The same face, in SwiftUI.',
     meta: [
       ['package', 'Blobbies'],
       ['platforms', 'iOS · macOS'],

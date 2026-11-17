@@ -34,6 +34,14 @@ jobs:
       # Before typecheck, because it is faster and it catches a different
       # class: a hook called conditionally, an `any` in a public signature, a
       # `console.log` left in a package.
+      # The page quotes sizes and counts. They are measured, not typed, and
+      # this is what turns a stale one into a red build rather than a wrong
+      # sentence — the same arrangement the core uses for its manifest.
+      - name: The page's numbers are current
+        run: |
+          pnpm --filter blobbies-site export:stats
+          git diff --exit-code apps/site/src/stats.json
+
       - name: Lint
         run: pnpm lint
 
