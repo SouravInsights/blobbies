@@ -17,6 +17,7 @@ import { Picker } from "./sections/Picker";
 import { QuickStart } from "./sections/QuickStart";
 import { Steps } from "./sections/Steps";
 import { captureEvent } from "./analytics";
+import corePackage from "../../../packages/core/package.json";
 import { buildNames } from "./data";
 import { GitHubIcon, Mark, ThemeIcon, REPO } from "./ui";
 
@@ -118,7 +119,8 @@ export function App(): JSX.Element {
         <a className="brand" href="#top">
           <Mark />
           <span className="brand-word">blobbies</span>
-          <span className="brand-version">0.6.0</span>
+          {/* Read from the core, because a hand-written version has gone stale twice. */}
+          <span className="brand-version">{corePackage.version}</span>
         </a>
 
         <nav className="barnav" aria-label="Sections">
@@ -127,6 +129,9 @@ export function App(): JSX.Element {
               {label}
             </a>
           ))}
+          {/* A page, not a section: four links do not need a screen of the
+              landing page spent on them. */}
+          <a href="/examples">Examples</a>
         </nav>
 
         <div className="bar-end">
@@ -178,6 +183,9 @@ export function App(): JSX.Element {
                 {label}
               </a>
             ))}
+            <a href="/examples" onClick={() => setMenu(false)}>
+              Examples
+            </a>
           </nav>
           <div className="bar-menu-foot">
             <a

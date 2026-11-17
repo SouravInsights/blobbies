@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Blobbies in a React app — the Avatar, and the picker.",
+  "description": "Blobbies in a React app \u2014 the Avatar, and the picker.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "pnpm -r --filter 'blobbies-example-react^...' build && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

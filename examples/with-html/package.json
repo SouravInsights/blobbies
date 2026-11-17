@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Blobbies in a plain HTML file — one import, one tag, no framework.",
+  "description": "Blobbies in a plain HTML file \u2014 one import, one tag, no framework.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "pnpm -r --filter 'blobbies-example-html^...' build && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

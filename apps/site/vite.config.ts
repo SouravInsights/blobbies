@@ -16,4 +16,14 @@ export default defineConfig({
     },
   },
   server: { port: 5173, open: false },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        // A page rather than a section, so the landing page stays an argument
+        // and the list of examples stays a list.
+        examples: resolve(__dirname, 'examples/index.html'),
+      },
+    },
+  },
 });

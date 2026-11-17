@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Blobbies in a Vue app — the Avatar, and the picker.",
+  "description": "Blobbies in a Vue app \u2014 the Avatar, and the picker.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "pnpm -r --filter 'blobbies-example-vue^...' build && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
