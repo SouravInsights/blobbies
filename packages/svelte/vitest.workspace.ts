@@ -24,7 +24,7 @@ export default defineWorkspace([
     test: {
       name: 'dom',
       environment: 'jsdom',
-      include: ['test/dom.test.ts'],
+      include: ['test/dom.test.ts', 'test/*.dom.test.ts'],
     },
   },
   {
@@ -33,7 +33,7 @@ export default defineWorkspace([
     test: {
       name: 'ssr',
       environment: 'node',
-      include: ['test/ssr.test.ts'],
+      include: ['test/ssr.test.ts', 'test/*.ssr.test.ts'],
     },
   },
 ]);
