@@ -6,7 +6,7 @@
   "description": "Blobbies in a Vue app \u2014 the Avatar, and the picker.",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm -r --filter 'blobbies-example-vue^...' build && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

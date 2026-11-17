@@ -6,7 +6,7 @@
   "description": "Blobbies in a plain HTML file \u2014 one import, one tag, no framework.",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm -r --filter 'blobbies-example-html^...' build && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {

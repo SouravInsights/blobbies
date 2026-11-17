@@ -6,7 +6,7 @@
   "description": "Blobbies in a Svelte app \u2014 the Avatar, and the picker.",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm -r --filter 'blobbies-example-svelte^...' build && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json --threshold error"
   },
