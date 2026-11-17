@@ -11,8 +11,7 @@ import {
 } from 'react';
 import { EXPRESSIONS, EXPRESSION_COUNT, EXPRESSION_NAMES, PALETTE } from 'blobbies';
 import type { AvatarExpression, AvatarOptions } from 'blobbies';
-import { CENTER_COLUMN, CENTER_ROW } from 'blobbies/picker';
-import { createPicker } from 'blobbies/picker';
+import { createPicker, staticSnapshot } from 'blobbies/picker';
 import type { PickerRuntime, PickerSnapshot } from 'blobbies/picker';
 import { Avatar } from './Avatar.js';
 import type { AvatarProps } from './Avatar.js';
@@ -66,33 +65,6 @@ function Chevron({ dir }: { dir: 'l' | 'r' }) {
       <path d={dir === 'l' ? 'M7.5 2.5 4 6l3.5 3.5' : 'M4.5 2.5 8 6l-3.5 3.5'} />
     </svg>
   );
-}
-
-/** What the parts render where there is no runtime — that is, on the server. */
-function staticSnapshot(props: {
-  name: string;
-  defaultValue?: AvatarOptions;
-  palette: readonly string[];
-  spotlight: boolean;
-}): PickerSnapshot {
-  const color =
-    props.defaultValue?.color && props.palette.includes(props.defaultValue.color)
-      ? props.defaultValue.color
-      : (props.palette[CENTER_COLUMN] as string);
-  const expression = props.defaultValue?.expression ?? (EXPRESSIONS[CENTER_ROW] as AvatarExpression);
-  return {
-    name: props.name,
-    value: { color, expression, blush: props.defaultValue?.blush ?? true },
-    changed: false,
-    blush: props.defaultValue?.blush ?? true,
-    expressionName: EXPRESSION_NAMES[
-      Math.max(0, EXPRESSIONS.indexOf(expression))
-    ] as string,
-    spotlight: props.spotlight,
-    palette: props.palette,
-    dragging: false,
-    moving: false,
-  };
 }
 
 export interface AvatarPickerRootProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
@@ -161,8 +133,7 @@ export function AvatarPickerRoot(props: AvatarPickerRootProps) {
   // Recomputed on every render — a dozen fields — and a render only happens
   // when the runtime says something actually changed.
   const state: AvatarPickerState = {
-    ...(runtime?.getSnapshot() ??
-      staticSnapshot({ name, defaultValue, palette, spotlight })),
+    ...(runtime?.getSnapshot() ?? staticSnapshot({ name, defaultValue, palette, spotlight })),
     nextExpression: () => runtime?.nextExpression(),
     previousExpression: () => runtime?.previousExpression(),
     toggleBlush: () => runtime?.toggleBlush(),

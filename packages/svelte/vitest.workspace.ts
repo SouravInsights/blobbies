@@ -11,6 +11,7 @@ const alias = {
   // Test against the core sources directly so tests never depend on a prior
   // build step.
   'blobbies/motion': resolve(__dirname, '../core/src/motion.ts'),
+  'blobbies/picker': resolve(__dirname, '../core/src/picker.ts'),
   blobbies: resolve(__dirname, '../core/src/index.ts'),
 };
 

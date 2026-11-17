@@ -892,3 +892,37 @@ export function createPicker(options: PickerOptions): PickerRuntime | null {
     },
   };
 }
+
+/**
+ * The snapshot a binding renders before there is a runtime — that is, on the
+ * server, where the map cannot be built.
+ *
+ * Same shape and same defaults as the real one, so the chrome around the map
+ * does not change when the map arrives: a panel that reads out the wrong mood
+ * for one frame is worse than one that reads out nothing.
+ */
+export function staticSnapshot(options: {
+  name: string;
+  defaultValue?: AvatarOptions;
+  palette?: readonly string[];
+  spotlight?: boolean;
+}): PickerSnapshot {
+  const palette = options.palette ?? PALETTE;
+  const wanted = options.defaultValue?.color ? palette.indexOf(options.defaultValue.color) : -1;
+  const color = palette[wanted >= 0 ? wanted : CENTER_COLUMN] as string;
+  const expression =
+    options.defaultValue?.expression ?? (EXPRESSIONS[CENTER_ROW] as AvatarExpression);
+  const row = EXPRESSIONS.indexOf(expression);
+  const blush = options.defaultValue?.blush ?? true;
+  return {
+    name: options.name,
+    value: { color, expression, blush },
+    changed: false,
+    blush,
+    expressionName: EXPRESSION_NAMES[row >= 0 ? row : CENTER_ROW] as string,
+    spotlight: options.spotlight ?? true,
+    palette,
+    dragging: false,
+    moving: false,
+  };
+}

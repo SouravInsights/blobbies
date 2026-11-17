@@ -163,6 +163,8 @@ export const Avatar = defineComponent({
   },
 });
 
+export { AvatarPicker } from './AvatarPicker.js';
+
 /** The same component under its explicit name, for templates that prefer it. */
 export const BlobbiesAvatar = Avatar;
 
