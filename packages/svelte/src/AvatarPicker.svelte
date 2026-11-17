@@ -11,7 +11,7 @@
    * cells are rewritten every frame during a pan and that is not a job for a
    * renderer.
    */
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import { createPicker, injectPickerStyles, staticSnapshot } from 'blobbies/picker';
   import type { PickerRuntime, PickerSnapshot } from 'blobbies/picker';
   import type { AvatarOptions } from 'blobbies';
@@ -59,8 +59,10 @@
    * Seeded from the static snapshot so the chrome reads out the mood it will
    * open on, even on the server, where there is no map.
    */
+  // `untrack`: these props are the options the picker *opens* with, so reading
+  // them once is the intent, not an oversight.
   let snapshot: PickerSnapshot = $state.raw(
-    staticSnapshot({ name, defaultValue, palette, spotlight }),
+    untrack(() => staticSnapshot({ name, defaultValue, palette, spotlight })),
   );
   let runtime = $state<PickerRuntime | null>(null);
   let host = $state<HTMLElement | undefined>();

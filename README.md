@@ -26,8 +26,8 @@ A small set of packages, and you only ship the one you use:
 | --- | --- | --- |
 | [`blobbies`](https://www.npmjs.com/package/blobbies) | Renderer, hash, glyphs, motion runtime, CLI. Framework-agnostic. | `npm i blobbies` |
 | [`@blobbies/react`](https://www.npmjs.com/package/@blobbies/react) | `<Avatar>`, the `<AvatarPicker>`, and React hooks. | `npm i @blobbies/react` |
-| [`@blobbies/vue`](https://www.npmjs.com/package/@blobbies/vue) | `<Avatar>` for Vue, server-rendered. | `npm i @blobbies/vue` |
-| [`@blobbies/svelte`](https://www.npmjs.com/package/@blobbies/svelte) | `<Avatar>` for Svelte, server-rendered. | `npm i @blobbies/svelte` |
+| [`@blobbies/vue`](https://www.npmjs.com/package/@blobbies/vue) | `<Avatar>` and the `<AvatarPicker>`, server-rendered. | `npm i @blobbies/vue` |
+| [`@blobbies/svelte`](https://www.npmjs.com/package/@blobbies/svelte) | `<Avatar>` and the `<AvatarPicker>`, server-rendered. | `npm i @blobbies/svelte` |
 | `@blobbies/element` | `<blobbies-avatar>` — a web component that works in any framework. | `npm i @blobbies/element` |
 | `@blobbies/react-native` | `<Avatar>` for React Native and Expo, over `react-native-svg`. | `npm i @blobbies/react-native` |
 
@@ -475,11 +475,13 @@ This is a pnpm workspace of published packages and the site.
 ```
 packages/core          blobbies              – hash, initials, SVG, animation runtimes
 packages/react         @blobbies/react       – <Avatar>, <AvatarPicker>, hooks
-packages/vue           @blobbies/vue         – <Avatar> for Vue
-packages/svelte        @blobbies/svelte      – <Avatar> for Svelte
+packages/vue           @blobbies/vue         – <Avatar>, <AvatarPicker>
+packages/svelte        @blobbies/svelte      – <Avatar>, <AvatarPicker>
 packages/element       @blobbies/element     – <blobbies-avatar> web component
 packages/react-native  @blobbies/react-native – <Avatar> over react-native-svg
 apps/site              blobbies-site         – Vite + React landing page
+examples/with-vue      blobbies-example-vue  – a Vue app, picker included
+examples/with-svelte   blobbies-example-svelte – a Svelte app, picker included
 ```
 
 ```bash

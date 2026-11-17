@@ -1,0 +1,23 @@
+{
+  "name": "blobbies-example-vue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Blobbies in a Vue app — the Avatar, and the picker.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@blobbies/vue": "workspace:*",
+    "blobbies": "workspace:*",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.21"
+  }
+}
