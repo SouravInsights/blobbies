@@ -22,3 +22,6 @@ vite.config.ts.timestamp-*
 # Playwright
 playwright-report
 /test-results
+
+# svelte-package writes this beside the source it packages
+.svelte-kit
