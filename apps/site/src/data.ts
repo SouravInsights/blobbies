@@ -202,7 +202,7 @@ export function Profile({ user }) {
     headline: 'Server-rendered. In the first paint.',
     meta: [
       ['package', '@blobbies/vue'],
-      ['size', '0.9 kB gz'],
+      ['size', '1.8 kB gz'],
       ['deps', 'vue'],
     ],
     install: 'npm i blobbies @blobbies/vue',
@@ -226,7 +226,7 @@ import { Avatar } from '@blobbies/vue'
     headline: 'The same component, server-rendered.',
     meta: [
       ['package', '@blobbies/svelte'],
-      ['size', '1.5 kB gz'],
+      ['size', '4.0 kB gz'],
       ['deps', 'svelte'],
     ],
     install: 'npm i blobbies @blobbies/svelte',
