@@ -21,7 +21,8 @@
  * package that can be installed cheaply is in.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { readdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -126,8 +127,12 @@ async function collectSpecifiers(from) {
     let entries;
     try {
       entries = await readdir(dir, { withFileTypes: true });
-    } catch {
-      return;
+    } catch (error) {
+      // A package that is not installed is not a failure. Anything else is —
+      // a bare catch here swallowed a ReferenceError and quietly skipped every
+      // specifier check in this file.
+      if (error?.code === 'ENOENT') return;
+      throw error;
     }
     for (const entry of entries) {
       const path = join(dir, entry.name);
