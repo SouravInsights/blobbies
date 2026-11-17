@@ -9,6 +9,9 @@
 export interface Example {
   name: string;
   href: string;
+  /** A key in `logos.ts` — the framework's own mark, from svgl. */
+  icon: string;
+  /** The file you would be editing, which is the thing a reader is looking for. */
   file: string;
   what: string;
   /** True when the picker is in it — the thing most people come here for. */
@@ -19,29 +22,41 @@ export const EXAMPLES: readonly Example[] = [
   {
     name: 'React',
     href: 'https://blobbies-example-react.vercel.app',
+    icon: 'react',
     file: 'App.tsx',
-    what: 'The Avatar and the picker, as a React app uses them.',
+    what: 'The avatar and the picker, in one import.',
     picker: true,
   },
   {
     name: 'Vue',
     href: 'https://blobbies-example-vue.vercel.app',
+    icon: 'vue',
     file: 'App.vue',
-    what: 'The same pair, with a composable for your own layout.',
+    what: 'The same picker, in Vue.',
     picker: true,
   },
   {
     name: 'Svelte',
     href: 'https://blobbies-example-svelte.vercel.app',
+    icon: 'svelte',
     file: 'App.svelte',
-    what: 'The same pair, with a rune module for your own layout.',
+    what: 'The same picker, in Svelte.',
     picker: true,
   },
   {
     name: 'Plain HTML',
     href: 'https://blobbies-example-html.vercel.app',
+    icon: 'html5',
     file: 'index.html',
-    what: 'One tag and one import. No framework, and no picker — a custom element cannot server-render.',
+    what: 'One tag, and no framework at all. No picker — a custom element does not render on the server.',
     picker: false,
   },
 ];
+
+/**
+ * The face every card shows.
+ *
+ * The same name in all four, so the page makes its own point: the avatar does
+ * not depend on what is around it.
+ */
+export const SAMPLE = 'Ada Lovelace';

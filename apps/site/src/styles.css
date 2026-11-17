@@ -3427,11 +3427,11 @@ pre.code {
   background: var(--ink);
 }
 .plats-nav button > svg,
-.plats-nav button > .plats-logo {
+.plats-nav button > .brand-mark {
   flex: none;
 }
-/* svgl's marks keep their own viewBox and colours; this box sets the size. */
-.plats-logo svg {
+/* svgl's marks keep their own viewBox and colours; their box sets the size. */
+.brand-mark svg {
   display: block;
   width: 100%;
   height: 100%;
