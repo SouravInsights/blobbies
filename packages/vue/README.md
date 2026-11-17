@@ -105,6 +105,36 @@ the glide, the lens and the value are `createPicker` in
 React and `<blobbies-avatar>` use. Build your own layout on top of it and you
 get the same feel for nothing.
 
+### Your own layout
+
+`<AvatarPicker>` is the preset. When the panel it draws is not the panel you
+want, `useAvatarPicker` gives you the same map and the same state, and you write
+the chrome:
+
+```vue
+<script setup>
+import { Avatar, useAvatarPicker } from '@blobbies/vue'
+
+const { host, state } = useAvatarPicker({
+  name: user.name,
+  onSave: (look) => updateUser({ look }),
+})
+</script>
+
+<template>
+  <div class="mine">
+    <Avatar :name="user.name" v-bind="state.value" :size="64" animate="all" />
+    <div ref="host"></div>
+    <button @click="state.reset()">Reset</button>
+    <button @click="state.save()">Use this look</button>
+  </div>
+</template>
+```
+
+`state` carries the look, the blush, the mood name, whether anything has
+changed, and the actions. The map goes wherever you bind `host`. Nothing is
+reimplemented — it is the same runtime as React and the preset above.
+
 ## Motion
 
 `blink` is pure CSS inside the markup, so it works even in an `<img>`.

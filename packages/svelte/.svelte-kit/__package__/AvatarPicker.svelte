@@ -9,11 +9,11 @@
    *
    * The map element is built by the runtime and appended on mount, because 35
    * cells are rewritten every frame during a pan and that is not a job for a
-   * renderer.
+   * renderer. Everything else here is `createAvatarPicker`, which is also
+   * exported, so a custom layout is the same picker with different chrome.
    */
-  import { onMount, untrack } from 'svelte';
-  import { createPicker, injectPickerStyles, staticSnapshot } from 'blobbies/picker';
-  import type { PickerRuntime, PickerSnapshot } from 'blobbies/picker';
+  import { untrack } from 'svelte';
+  import { createAvatarPicker } from './picker.svelte.js';
   import type { AvatarOptions } from 'blobbies';
 
   interface Props {
@@ -51,25 +51,14 @@
     ...rest
   }: Props = $props();
 
-  /**
-   * `$state.raw`, not `$state`: the runtime hands back a new object on every
-   * real change and that is the granularity we want to re-render at. Deep
-   * reactivity over 35 cells' worth of snapshot would be work for nothing.
-   *
-   * Seeded from the static snapshot so the chrome reads out the mood it will
-   * open on, even on the server, where there is no map.
-   */
-  // `untrack`: these props are the options the picker *opens* with, so reading
-  // them once is the intent, not an oversight.
-  let snapshot: PickerSnapshot = $state.raw(
-    untrack(() => staticSnapshot({ name, defaultValue, palette, spotlight })),
-  );
-  let runtime = $state<PickerRuntime | null>(null);
-  let host = $state<HTMLElement | undefined>();
-
-  onMount(() => {
-    injectPickerStyles();
-    const created = createPicker({
+  // The preset is a layout over `createAvatarPicker`, not a second
+  // implementation of it — which is what keeps the preset and a custom layout
+  // honest about being the same picker.
+  // `untrack`: these are the options the picker *opens* with, so reading them
+  // once is the intent, not an oversight. The callbacks are read through
+  // closures so a later prop change still reaches them.
+  const picker = untrack(() =>
+    createAvatarPicker({
       name,
       defaultValue,
       palette,
@@ -80,22 +69,8 @@
       // decide whether it has anything to cancel, so wiring it unconditionally
       // puts a Cancel button on screen that does nothing.
       onCancel: oncancel ? () => oncancel?.() : undefined,
-    });
-    if (!created) return undefined;
-
-    runtime = created;
-    snapshot = created.getSnapshot();
-    const stop = created.subscribe(() => {
-      snapshot = created.getSnapshot();
-    });
-    host?.append(created.surface);
-    created.measure();
-
-    return () => {
-      stop();
-      created.destroy();
-    };
-  });
+    }),
+  );
 </script>
 
 <div class={unstyled ? undefined : 'bb-picker'} data-part="root" {...rest}>
@@ -106,25 +81,25 @@
     </div>
   {/if}
 
-  <div bind:this={host} data-part="surface-host"></div>
+  <div bind:this={picker.host} data-part="surface-host"></div>
 
   <div class="bb-picker-mood" data-part="mood">
     <button
       type="button"
       class="bb-picker-step"
       aria-label="Previous expression"
-      onclick={() => runtime?.previousExpression()}
+      onclick={() => picker.state.previousExpression()}
     >
       <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M7.5 2.5 4 6l3.5 3.5" />
       </svg>
     </button>
-    <span class="bb-picker-mood-name" aria-live="polite">{snapshot.expressionName}</span>
+    <span class="bb-picker-mood-name" aria-live="polite">{picker.state.expressionName}</span>
     <button
       type="button"
       class="bb-picker-step"
       aria-label="Next expression"
-      onclick={() => runtime?.nextExpression()}
+      onclick={() => picker.state.nextExpression()}
     >
       <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M4.5 2.5 8 6l-3.5 3.5" />
@@ -137,9 +112,9 @@
       type="button"
       class="bb-picker-blush"
       data-part="blush"
-      data-on={snapshot.blush ? '1' : undefined}
-      aria-pressed={snapshot.blush}
-      onclick={() => runtime?.toggleBlush()}
+      data-on={picker.state.blush ? '1' : undefined}
+      aria-pressed={picker.state.blush}
+      onclick={() => picker.state.toggleBlush()}
     >
       Blush
     </button>
@@ -147,9 +122,9 @@
       type="button"
       class="bb-picker-spotlight"
       data-part="spotlight"
-      data-on={snapshot.spotlight ? '1' : undefined}
-      aria-pressed={snapshot.spotlight}
-      onclick={() => runtime?.toggleSpotlight()}
+      data-on={picker.state.spotlight ? '1' : undefined}
+      aria-pressed={picker.state.spotlight}
+      onclick={() => picker.state.toggleSpotlight()}
     >
       Spotlight
     </button>
@@ -157,8 +132,8 @@
       type="button"
       class="bb-picker-reset"
       data-part="reset"
-      disabled={!snapshot.changed}
-      onclick={() => runtime?.reset()}
+      disabled={!picker.state.changed}
+      onclick={() => picker.state.reset()}
     >
       Reset
     </button>
@@ -168,7 +143,7 @@
         type="button"
         class="bb-picker-btn"
         data-part="cancel"
-        onclick={() => runtime?.cancel()}
+        onclick={() => picker.state.cancel()}
       >
         Cancel
       </button>
@@ -177,7 +152,7 @@
       type="button"
       class="bb-picker-btn bb-picker-primary"
       data-part="save"
-      onclick={() => runtime?.save()}
+      onclick={() => picker.state.save()}
     >
       {saveLabel}
     </button>

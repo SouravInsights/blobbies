@@ -1,8 +1,9 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import { createApp, h, nextTick } from 'vue';
+import { createApp, defineComponent, h, nextTick } from 'vue';
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { AvatarPicker } from '../src/AvatarPicker.js';
+import { useAvatarPicker } from '../src/useAvatarPicker.js';
 
 /**
  * The Vue half of the picker.
@@ -117,5 +118,51 @@ describe('AvatarPicker (Vue)', () => {
     expect(html).toContain('Choose an avatar');
     expect(html).toContain('Smirk');
     expect(html).toContain('data-part="surface-host"');
+  });
+});
+
+describe('useAvatarPicker (Vue)', () => {
+  it('gives a custom layout the map and the state', async () => {
+    const host = document.createElement('div');
+    document.body.append(host);
+    const changes: unknown[] = [];
+
+    // The whole point of the composable: the preset is a layout, and so is this.
+    // Same runtime, different chrome — nothing reimplemented.
+    const Custom = defineComponent({
+      setup() {
+        const { host: mapHost, state } = useAvatarPicker({
+          name: 'Sourav Nanda',
+          onChange: (value) => changes.push(value),
+        });
+        return () =>
+          h('div', { class: 'mine' }, [
+            h('span', { 'data-part': 'mood' }, state.value.expressionName),
+            h('div', { ref: mapHost, 'data-part': 'map' }),
+            h(
+              'button',
+              { 'data-part': 'blush', onClick: () => state.value.toggleBlush() },
+              'Blush',
+            ),
+            h('button', { 'data-part': 'reset', onClick: () => state.value.reset() }, 'Reset'),
+          ]);
+      },
+    });
+
+    createApp(Custom).mount(host);
+    await nextTick();
+
+    // The map it mounted is the same element the runtime builds.
+    expect(host.querySelector('.bb-picker-surface')).toBeTruthy();
+    expect(host.querySelectorAll('.bb-picker-cell')).toHaveLength(7 * 5);
+    expect(host.querySelector('[data-part="mood"]')?.textContent).toBe('Smirk');
+
+    (host.querySelector('[data-part="blush"]') as HTMLButtonElement).click();
+    await nextTick();
+    expect(changes.length).toBeGreaterThan(0);
+
+    (host.querySelector('[data-part="reset"]') as HTMLButtonElement).click();
+    await nextTick();
+    expect(host.querySelector('[data-part="mood"]')?.textContent).toBe('Smirk');
   });
 });

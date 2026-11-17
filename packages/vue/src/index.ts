@@ -164,6 +164,8 @@ export const Avatar = defineComponent({
 });
 
 export { AvatarPicker } from './AvatarPicker.js';
+export { useAvatarPicker } from './useAvatarPicker.js';
+export type { AvatarPickerState, UseAvatarPicker, UseAvatarPickerOptions } from './useAvatarPicker.js';
 
 /** The same component under its explicit name, for templates that prefer it. */
 export const BlobbiesAvatar = Avatar;

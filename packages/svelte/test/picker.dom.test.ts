@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/svelte';
 import AvatarPicker from '../src/AvatarPicker.svelte';
+import CustomPicker from './CustomPicker.svelte';
 
 /**
  * The Svelte half of the picker.
@@ -105,5 +106,28 @@ describe('AvatarPicker (Svelte)', () => {
       'false',
     );
     expect(getByText('Wink')).toBeTruthy();
+  });
+});
+
+describe('createAvatarPicker (Svelte)', () => {
+  it('gives a custom layout the map and the state', async () => {
+    const changes: unknown[] = [];
+    const { container, getByText } = render(CustomPicker, {
+      props: { onchange: (value: unknown) => changes.push(value) },
+    });
+
+    // The map it mounted is the same element the runtime builds.
+    const surface = container.querySelector('.bb-picker-surface');
+    expect(surface).toBeTruthy();
+    expect(container.querySelectorAll('.bb-picker-cell')).toHaveLength(7 * 5);
+
+    // And the state it reads is the runtime's, so a control built by hand
+    // behaves exactly like the preset's.
+    expect(getByText('Smirk')).toBeTruthy();
+    await fireEvent.click(container.querySelector('[data-part="blush"]') as HTMLElement);
+    expect(changes.length).toBeGreaterThan(0);
+
+    await fireEvent.click(container.querySelector('[data-part="reset"]') as HTMLElement);
+    expect(getByText('Smirk')).toBeTruthy();
   });
 });

@@ -26,8 +26,8 @@ A small set of packages, and you only ship the one you use:
 | --- | --- | --- |
 | [`blobbies`](https://www.npmjs.com/package/blobbies) | Renderer, hash, glyphs, motion runtime, CLI. Framework-agnostic. | `npm i blobbies` |
 | [`@blobbies/react`](https://www.npmjs.com/package/@blobbies/react) | `<Avatar>`, the `<AvatarPicker>`, and React hooks. | `npm i @blobbies/react` |
-| [`@blobbies/vue`](https://www.npmjs.com/package/@blobbies/vue) | `<Avatar>` and the `<AvatarPicker>`, server-rendered. | `npm i @blobbies/vue` |
-| [`@blobbies/svelte`](https://www.npmjs.com/package/@blobbies/svelte) | `<Avatar>` and the `<AvatarPicker>`, server-rendered. | `npm i @blobbies/svelte` |
+| [`@blobbies/vue`](https://www.npmjs.com/package/@blobbies/vue) | `<Avatar>`, the `<AvatarPicker>`, and a composable for your own layout. | `npm i @blobbies/vue` |
+| [`@blobbies/svelte`](https://www.npmjs.com/package/@blobbies/svelte) | `<Avatar>`, the `<AvatarPicker>`, and a rune module for your own layout. | `npm i @blobbies/svelte` |
 | `@blobbies/element` | `<blobbies-avatar>` — a web component that works in any framework. | `npm i @blobbies/element` |
 | `@blobbies/react-native` | `<Avatar>` for React Native and Expo, over `react-native-svg`. | `npm i @blobbies/react-native` |
 

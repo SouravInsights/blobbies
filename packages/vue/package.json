@@ -1,6 +1,6 @@
 {
   "name": "@blobbies/vue",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Vue bindings for Blobbies \u2014 deterministic, cute SVG avatars with blink and cursor-follow.",
   "license": "MIT",
   "type": "module",

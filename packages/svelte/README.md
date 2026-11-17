@@ -99,6 +99,34 @@ the glide, the lens and the value are `createPicker` in
 React and Vue use. Build your own layout on top of it and you get the same feel
 for nothing.
 
+### Your own layout
+
+`<AvatarPicker>` is the preset. When the panel it draws is not the panel you
+want, `createAvatarPicker` gives you the same map and the same state, and you
+write the chrome:
+
+```svelte
+<script>
+  import { Avatar, createAvatarPicker } from '@blobbies/svelte';
+
+  const picker = createAvatarPicker({
+    name: user.name,
+    onsave: (look) => updateUser({ look }),
+  });
+</script>
+
+<div class="mine">
+  <Avatar name={user.name} {...picker.state.value} size={64} animate="all" />
+  <div bind:this={picker.host}></div>
+  <button onclick={() => picker.state.reset()}>Reset</button>
+  <button onclick={() => picker.state.save()}>Use this look</button>
+</div>
+```
+
+`picker.state` carries the look, the blush, the mood name, whether anything has
+changed, and the actions. The map goes wherever you bind `picker.host`. Nothing
+is reimplemented — it is the same runtime as React and the preset above.
+
 ## Motion
 
 `blink` is pure CSS inside the markup, so it works even in an `<img>`.
