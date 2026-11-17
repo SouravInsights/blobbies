@@ -15,3 +15,6 @@ reference/
 .build/
 .swiftpm/
 Package.resolved
+
+# Vite writes these beside a config it has just loaded
+vite.config.ts.timestamp-*
