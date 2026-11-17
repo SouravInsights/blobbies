@@ -9,12 +9,17 @@
  * landed, React's after it left, the brand version twice, a conformance fixture
  * after a version bump. They are all derivable, so they should be derived.
  *
- * This writes `src/stats.json` from the built packages. A CI step regenerates
- * it and fails on any diff, which is how a stale number becomes a red build
- * instead of a wrong sentence — the same arrangement the core already uses for
- * its manifest and its conformance fixtures.
+ * This writes `src/stats.json` from the built packages.
  *
- *   pnpm --filter blobbies-site export:stats
+ *   pnpm --filter blobbies-site export:stats          # write
+ *   pnpm --filter blobbies-site export:stats --check  # is it still true?
+ *
+ * `--check` is what CI runs, and it compares two kinds of number differently,
+ * because they are two different kinds of thing. Versions and counts are exact
+ * and are compared exactly. Sizes are not: gzip's output moves by a few bytes
+ * between zlib versions, and the same file measured on Node 20 and Node 23
+ * differs enough to change the rounded figure. So a size is allowed a tenth and
+ * a version is not allowed anything.
  *
  * Run `pnpm build:packages` first: a size is a fact about the built artefact,
  * and an unbuilt package has no size to measure.
@@ -111,15 +116,53 @@ async function main() {
     packages,
   };
 
-  writeFileSync(join(here, '../src/stats.json'), `${JSON.stringify(stats, null, 2)}\n`);
+  const file = join(here, '../src/stats.json');
+
+  if (process.argv.includes('--check')) {
+    process.exit(check(stats, JSON.parse(readFileSync(file, 'utf8'))) ? 0 : 1);
+  }
+
+  writeFileSync(file, `${JSON.stringify(stats, null, 2)}\n`);
   console.log('wrote src/stats.json');
   for (const [name, info] of Object.entries(packages)) {
     console.log(`  ${name.padEnd(26)} ${info.version.padEnd(8)} ${(info.gzip / 1024).toFixed(1)} kB gz`);
   }
   console.log(`  ${'one avatar'.padEnd(26)} ${''.padEnd(8)} ${(avatarGzip / 1024).toFixed(1)} kB gz`);
-  console.log(
-    `  ${'the engine draws'.padEnd(26)} ${String(stats.engine.total).padEnd(8)} faces`,
-  );
+  console.log(`  ${'the engine draws'.padEnd(26)} ${String(stats.engine.total).padEnd(8)} faces`);
+}
+
+/** A tenth either way, because a compressed size is not a fact about our code. */
+const TOLERANCE = 0.1;
+
+function check(fresh, committed) {
+  const worse = [];
+  const exact = (what, a, b) => {
+    if (a !== b) worse.push(`${what}: page says ${b}, source says ${a}`);
+  };
+  const approx = (what, a, b) => {
+    if (b === undefined || Math.abs(a - b) > Math.max(a, b) * TOLERANCE) {
+      worse.push(`${what}: page says ${b}, source says ${a}`);
+    }
+  };
+
+  for (const key of ['version', 'contract', 'shapes', 'expressions', 'palette', 'letters', 'builds', 'total']) {
+    exact(`engine.${key}`, fresh.engine[key], committed.engine[key]);
+  }
+  approx('one avatar, in bytes', fresh.engine.avatarGzip, committed.engine.avatarGzip);
+
+  for (const [name, info] of Object.entries(fresh.packages)) {
+    exact(`${name}'s version`, info.version, committed.packages[name]?.version);
+    approx(`${name}'s size`, info.gzip, committed.packages[name]?.gzip);
+  }
+
+  if (worse.length === 0) {
+    console.log('\n  the page\'s numbers match the packages\n');
+    return true;
+  }
+  console.error('\n  The page quotes numbers the packages no longer support:\n');
+  for (const line of worse) console.error(`    ${line}`);
+  console.error('\n  Run: pnpm --filter blobbies-site export:stats\n');
+  return false;
 }
 
 await main();

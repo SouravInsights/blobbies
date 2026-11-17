@@ -38,9 +38,7 @@ jobs:
       # this is what turns a stale one into a red build rather than a wrong
       # sentence — the same arrangement the core uses for its manifest.
       - name: The page's numbers are current
-        run: |
-          pnpm --filter blobbies-site export:stats
-          git diff --exit-code apps/site/src/stats.json
+        run: pnpm --filter blobbies-site export:stats --check
 
       - name: Lint
         run: pnpm lint
