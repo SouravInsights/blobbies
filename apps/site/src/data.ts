@@ -49,6 +49,9 @@ export const INSTALL = 'npm i blobbies @blobbies/react';
 export const REPO = 'https://github.com/SouravInsights/blobbies';
 export const NPM = 'https://www.npmjs.com/package/blobbies';
 export const API_BASE = 'https://blobbies-api.souravinsights.com';
+export const API_REPO = 'https://github.com/SouravInsights/blobbies-api';
+export const API_SELF_HOST =
+  'docker run --rm -p 3000:3000 ghcr.io/souravinsights/blobbies-api';
 
 export const CORE_SNIPPET = `import { renderAvatarSvg } from 'blobbies'
 

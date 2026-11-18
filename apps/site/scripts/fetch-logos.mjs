@@ -24,6 +24,7 @@ const SOURCES = {
   swift: 'https://svgl.app/library/swift.svg',
   javascript: 'https://svgl.app/library/javascript.svg',
   html5: 'https://svgl.app/library/html5.svg',
+  docker: 'https://svgl.app/library/docker.svg',
 };
 
 /** Drop everything that does not affect drawing, and let CSS set the size. */

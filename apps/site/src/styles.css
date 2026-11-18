@@ -1562,7 +1562,8 @@ pre.code {
    elements do not exist, rather than fighting them. */
 @supports not selector(::-webkit-scrollbar) {
   .controls,
-  .api-panel .code {
+  .api-panel .code,
+  .select-viewport {
     scrollbar-width: thin;
     scrollbar-color: var(--line) transparent;
   }
@@ -1647,6 +1648,22 @@ pre.code {
 .select-viewport {
   display: grid;
   gap: 2px;
+  /* A menu is bounded. Twenty-three expressions in a viewport with no cap grew
+     to the full height of the screen instead of scrolling inside a menu. */
+  max-height: min(300px, var(--radix-select-content-available-height, 300px));
+  overflow-y: auto;
+}
+.select-viewport::-webkit-scrollbar {
+  width: 10px;
+}
+.select-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+.select-viewport::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 99px;
+  background-color: var(--line);
+  background-clip: padding-box;
 }
 .select-item {
   display: flex;
@@ -1660,6 +1677,12 @@ pre.code {
   color: var(--secondary);
   cursor: pointer;
   outline: none;
+}
+/* The global focus ring is drawn outside the item, and a scroll container
+   clips it — which is the half-ring at the menu's edge. The raised background
+   is the highlight here, and it cannot be clipped. */
+.select-item:focus-visible {
+  box-shadow: none;
 }
 .select-item[data-highlighted] {
   background: var(--raised);
@@ -1684,6 +1707,8 @@ pre.code {
   font: 12px/1 var(--mono);
   color: var(--secondary);
   font-variant-numeric: tabular-nums;
+  /* The label above it is uppercased; a unit is not an acronym. */
+  text-transform: none;
 }
 .slider {
   position: relative;
@@ -2179,6 +2204,359 @@ pre.code {
 @media (hover: hover) {
   .api-foot a:hover {
     color: var(--ink);
+  }
+}
+
+/* ---------------------------------------------------------------- live api */
+
+/* The API as a control panel, not a parameter table. Controls left, result
+   right, and the self-host row spanning the foot — the three things a reader
+   needs to go from "what is this" to a URL they can paste. */
+.lab {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  /* The preview row takes the slack the control column leaves, so the URL and
+     the code hug their own content instead of stretching to fill a gap. The
+     canvas is where extra room belongs. */
+  grid-template-rows: minmax(232px, 1fr) auto auto auto;
+  width: min(1040px, 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  /* `clip`, not `hidden`: a `hidden` overflow makes this a scroll container,
+     and the preview could never pin inside it. */
+  overflow: clip;
+}
+.lab-controls {
+  grid-column: 1;
+  /* All three rows of the result, so the column is as tall as the panel. */
+  grid-row: 1 / span 3;
+  display: grid;
+  align-content: start;
+  gap: 20px;
+  padding: 20px;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.lab-group {
+  display: grid;
+  gap: 11px;
+}
+.lab-group + .lab-group {
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+}
+/* A group's label row carries its one action, so an action does not need a row
+   of its own. */
+.lab-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 18px;
+}
+.lab-shuffle {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--tertiary);
+  transition:
+    color var(--fade),
+    border-color var(--fade);
+}
+@media (hover: hover) {
+  .lab-shuffle:hover {
+    color: var(--ink);
+    border-color: var(--tertiary);
+  }
+}
+/* Two dials to a row. Tilt and variant are both small integers; stacked they
+   were two rows of dead space on the right of a slider. */
+.lab-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.lab-input {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+.lab-input:focus-visible {
+  outline: none;
+  border-color: var(--tertiary);
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3.5px var(--tertiary);
+}
+
+/* A segmented control rather than three free buttons: contiguous cells divided
+   by the panel's own edge read as one control, not three tags. */
+.lab-seg {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg);
+}
+.lab-seg button {
+  flex: 1;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--tertiary);
+  font: 12px/1 var(--mono);
+  transition:
+    color var(--fade),
+    background-color var(--fade);
+}
+@media (hover: hover) {
+  .lab-seg button:hover {
+    color: var(--ink);
+  }
+}
+.lab-seg button[aria-pressed="true"] {
+  background: var(--raised);
+  color: var(--ink);
+  box-shadow: var(--control);
+}
+
+/* The colours are the palette itself, so the row is a legend as well as a
+   control. The first swatch is "seeded" — the API's own colour for the name. */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.swatch {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition:
+    transform var(--fade),
+    box-shadow var(--fade);
+}
+@media (hover: hover) {
+  .swatch:hover {
+    transform: scale(1.08);
+  }
+}
+.swatch[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 2px var(--panel),
+    0 0 0 3.5px var(--ink);
+}
+.swatch[data-auto] {
+  background:
+    linear-gradient(
+      135deg,
+      var(--raised) 0 44%,
+      var(--tertiary) 44% 56%,
+      var(--raised) 56%
+    );
+}
+
+.lab-stage {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  min-height: 232px;
+  /* A gutter of its own on the panel's open side; the left edge is the
+     control column's border. */
+  margin: 20px 20px 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      color-mix(in oklab, var(--raised) 55%, transparent),
+      transparent 72%
+    ),
+    var(--bg);
+}
+.lab-stage img {
+  display: block;
+  /* Scales with the canvas, up to a point: a 160px face in a 460px box reads
+     as a box with a face lost in it. */
+  width: min(40%, 208px);
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.lab-url,
+.lab-code {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.lab-url {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 16px 20px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+}
+.lab-code {
+  grid-column: 2;
+  grid-row: 3;
+  margin: 16px 20px 20px;
+}
+.lab-url figcaption,
+.lab-code figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lab-url code {
+  font: 12.5px/1.6 var(--mono);
+  color: var(--secondary);
+  overflow-wrap: anywhere;
+}
+.lab-code .code {
+  max-height: 240px;
+  overflow: auto;
+}
+
+/* The self-host row, on one line: the mark, the claim, the command, and the
+   source. The claim takes the slack so the command and link settle on the
+   right rather than leaving a hole under it. */
+.lab-host {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  padding: 15px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+.lab-host-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+.lab-host-copy {
+  display: grid;
+  flex: 1 1 190px;
+  gap: 1px;
+  min-width: 0;
+}
+.lab-host-title {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.lab-host-copy p {
+  color: var(--tertiary);
+  font-size: 13px;
+}
+/* The command is the button, as every other install line on the page is: the
+   box and its Copy button were two controls that only ever meant one thing. */
+.lab-host-install {
+  flex: none;
+  max-width: 100%;
+  font-size: 12px;
+}
+.lab-host-install .btn-label {
+  min-width: 0;
+}
+.lab-host-link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  color: var(--secondary);
+  font-size: 13.5px;
+  text-decoration: none;
+  transition: color var(--fade);
+}
+@media (hover: hover) {
+  .lab-host-link:hover {
+    color: var(--ink);
+  }
+}
+
+@media (max-width: 820px) {
+  .lab {
+    grid-template-columns: minmax(0, 1fr);
+    /* One column: the rows are the source order, not the desktop template. */
+    grid-template-rows: none;
+  }
+  /* One column, in source order: preview, controls, URL, code, self-host. */
+  .lab-stage,
+  .lab-controls,
+  .lab-url,
+  .lab-code,
+  .lab-host {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  /* The face pins while the dials scroll under it, the same bargain the
+     playground makes: the result is never a second scroll away. Borderless
+     and full-bleed, because a pinned card inside a card is two frames. */
+  .lab-stage {
+    position: sticky;
+    top: 64px;
+    z-index: 3;
+    min-height: 0;
+    margin: 0;
+    padding: 14px;
+    border-inline: 0;
+    border-top: 0;
+    border-radius: 0;
+  }
+  .lab-stage img {
+    width: min(160px, 34vw);
+    height: min(160px, 34vw);
+  }
+
+  .lab-controls {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .lab-url {
+    margin: 16px 16px 0;
+  }
+  .lab-code {
+    margin: 16px 16px;
+  }
+
+  /* The command wraps rather than scrolls on a phone — there is no one line to
+     keep it on, and a button that hides its own label is worse than a tall one. */
+  .lab-host-install {
+    width: 100%;
+    height: auto;
+    padding-block: 11px;
+    white-space: normal;
+    text-align: left;
   }
 }
 

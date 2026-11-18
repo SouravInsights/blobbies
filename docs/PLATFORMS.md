@@ -205,9 +205,12 @@ web surface. Those packages ship the `Avatar` component and nothing more.
 
 ### Parallel track — a hosted image API
 
-`https://…/v1/avatar.svg?name=Ira` is the lowest-friction way to use Blobbies:
-it works in an `<img>`, an email, a PDF, a terminal, or SwiftUI's `AsyncImage`
-with zero install. It is worth shipping eventually.
+`https://blobbies-api.souravinsights.com/v1/avatar/svg?name=Ira` is the
+lowest-friction way to use Blobbies: it works in an `<img>`, an email, a PDF, a
+terminal, or SwiftUI's `AsyncImage` with zero install. It has shipped, is open
+source, and self-hosts as one stateless container
+(<https://github.com/SouravInsights/blobbies-api>). The landing page has a live
+playground for it under **API**.
 
 But it is a **delivery channel, not the architecture.** It serves static and
 blinking avatars; it cannot do cursor-following or the picker, because a URL
@@ -320,7 +323,7 @@ AGENTS.md                               repo guide for AI agents
 llms.txt                                compact doc index for AI tools
 ```
 
-The remaining work: the hosted **HTTP API** — the zero-install delivery channel
-(`/v1/avatar.svg?name=Ira`, straight into an `<img>`, email, PDF or
-`AsyncImage`) — and a `<blobbies-picker>` web component. The native packages
-ship the `Avatar` and are considered done.
+The remaining work: a `<blobbies-picker>` web component. The native packages
+ship the `Avatar` and are considered done, and the hosted **HTTP API** — the
+zero-install delivery channel (`/v1/avatar/svg?name=Ira`, straight into an
+`<img>`, email, PDF or `AsyncImage`) — has shipped and is self-hostable.

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Toaster } from 'sonner';
 import { Avatar } from "@blobbies/react";
 import { Api } from "./sections/Api";
+import { HttpApi } from "./sections/HttpApi";
 import { Draws } from "./sections/Draws";
 import { Platforms } from "./sections/Platforms";
 import { Ending } from "./sections/Ending";
@@ -27,10 +28,11 @@ const STRESS = buildNames(200);
 const SECTIONS = [
   ["#start", "Quick start"],
   ["#platforms", "Platforms"],
+  ["#api", "API"],
   ["#playground", "Playground"],
   ["#picker", "Picker"],
   ["#draws", "Glyphs"],
-  ["#api", "API"],
+  ["#reference", "Reference"],
 ] as const;
 
 export function App(): JSX.Element {
@@ -243,6 +245,7 @@ export function App(): JSX.Element {
             <Steps />
             <QuickStart />
             <Platforms name={name} />
+            <HttpApi name={name} onAdopt={setName} />
             <Playground
               value={controls}
               onChange={setControls}

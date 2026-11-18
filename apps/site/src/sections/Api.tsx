@@ -67,7 +67,7 @@ export function Api() {
   };
 
   return (
-    <section className="section" id="api">
+    <section className="section" id="reference">
       <Lead title="The whole surface." note="Copy what you need; every option has a sensible default." />
 
       <div className="api">
