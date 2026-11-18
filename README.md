@@ -20,6 +20,8 @@ every decision comes from a seeded hash of the name. The core is zero
 dependencies, the React bindings depend only on the core, and one avatar is
 about **1.4 KB** of SVG.
 
+![The Blobbies landing page: a crowd of blobs blinking and following the cursor](assets/readme/hero.gif)
+
 A small set of packages, and you only ship the one you use:
 
 | Package | What it is | Install |
